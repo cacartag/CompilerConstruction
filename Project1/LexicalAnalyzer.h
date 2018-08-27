@@ -28,7 +28,7 @@ typedef struct terminal *terminalNode;
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine();
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer);
-
+void RetrieveTerminals(terminalNode *head);
 
 
 

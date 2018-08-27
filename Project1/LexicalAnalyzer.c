@@ -19,13 +19,12 @@ int main()
   // while(fgets(Hello,72,pFile) != NULL)
 
   terminalNode head;
-  RetrieveTerminals(head);
+  RetrieveTerminals(&head);
 
   printf("Terminal Linked List Printout:\n");
  
   int count = 1;
 
-  printf("Before while loop \n");
   while(head->next != NULL)
   {
     printf("%d %s", count, head->symbol);
@@ -152,7 +151,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer)
 }
 
 
-void RetrieveTerminals(terminalNode head)
+void RetrieveTerminals(terminalNode *head)
 {
   FILE *terminalFile;
   FILE *reservedFile;
@@ -182,6 +181,7 @@ void RetrieveTerminals(terminalNode head)
 
   terminalForward->next = NULL;
 
+/*
   printf("Terminal Linked List Printout:\n");
   terminalForward = terminalHead;
  
@@ -193,8 +193,9 @@ void RetrieveTerminals(terminalNode head)
     terminalForward = terminalForward->next; 
     count = count + 1;
   }
-  
-  head = terminalHead;
+*/ 
+
+  *head = terminalHead;
   
 }
 
