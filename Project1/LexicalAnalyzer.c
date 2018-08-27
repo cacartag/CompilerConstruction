@@ -19,10 +19,14 @@ int main()
   // while(fgets(Hello,72,pFile) != NULL)
 
   terminalNode head;
-  RetrieveTerminals(&head);
 
-  printf("Terminal Linked List Printout:\n");
- 
+  RetrieveReservedWords(&head);
+  // RetrieveTerminals(&head);
+
+  // used to check the values of the token linked list
+   
+  /*
+
   int count = 1;
 
   while(head->next != NULL)
@@ -32,6 +36,7 @@ int main()
     count = count + 1;
   }
 
+  */
   return 0;
 }
 
@@ -107,7 +112,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer)
   int other = 1;
   *fPosition = *bPosition;
 
-  // check if alphabetical letter
+  // check if first letter is an alphabetical letter
   // printf("Current index %i\n", *fPosition);
   // printf("Analyzing %c\n", buffer[*bPosition]);
   if(isalpha(buffer[*bPosition]) == 0)
@@ -124,14 +129,12 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer)
   // go through line looking for the rest of the identifier 
   while(other == 1)
   {
-    // printf("fPosition = %i, char is %c \n", *fPosition, buffer[*fPosition]);
-    
+   
+    // check if the next value is either an alphabetical letter or a digit 
     if(isalpha(buffer[*fPosition]) != 0 || isdigit(buffer[*fPosition]) != 0 )
     {
-      // printf("*bPosition - *fPosition = %i\n", (*fPosition - *bPosition));
       id[*fPosition - *bPosition] = buffer[*fPosition];
       *fPosition = *fPosition + 1;
-      // printf("Current character %c\n", buffer[*fPosition]);
     } else {
       other = 0;
       printf("Found token: %s\n",id);
@@ -151,15 +154,26 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer)
 }
 
 
+int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer)
+{
+
+  
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+// Retrieves terminal values from file, and plces them into a linked list
 void RetrieveTerminals(terminalNode *head)
 {
   FILE *terminalFile;
-  FILE *reservedFile;
 
-  printf("Reading in file \n");
-
+  // Change file name here if terminals in different file
   terminalFile = fopen("Terminal.txt","r+");
 
+  // Setup a structure for linked list creation
   terminalNode terminalHead;
   terminalNode terminalForward = (terminalNode)malloc(sizeof(struct terminal));
   char * currentSymbol = malloc(8);
@@ -167,10 +181,9 @@ void RetrieveTerminals(terminalNode *head)
  
   terminalHead = terminalForward;
 
-  printf("Found Terminals:\n");
+  // keep reading in terminals until eof is reached
   while(fgets(currentSymbol,7,terminalFile) != NULL)
   {
-    // printf("Single iteration\n");
     terminalForward->symbol = malloc(8);
     strcpy(terminalForward->symbol,currentSymbol);
     temp = (terminalNode)(malloc(sizeof(struct terminal)));
@@ -179,23 +192,51 @@ void RetrieveTerminals(terminalNode *head)
     terminalForward = temp;
   }
 
+  // sets last nodes next value to null to signify end of linked list
   terminalForward->next = NULL;
-
-/*
-  printf("Terminal Linked List Printout:\n");
-  terminalForward = terminalHead;
- 
-  int count = 1;
-
-  while(terminalForward->next != NULL)
-  {
-    printf("%d %s", count, terminalForward->symbol);
-    terminalForward = terminalForward->next; 
-    count = count + 1;
-  }
-*/ 
 
   *head = terminalHead;
   
 }
+
+void RetrieveReservedWords(terminalNode *head)
+{
+  FILE *reservedFile;
+
+  printf("Reading in file \n");
+
+  // Change file name here if reserved words in different file
+  reservedFile = fopen("Reserved.txt","r+");
+
+  // Setup a structure for linked list creation
+  terminalNode reservedHead;
+  terminalNode reservedForward = (terminalNode)malloc(sizeof(struct terminal));
+  char * currentSymbol = malloc(11);
+  terminalNode temp;  
+ 
+  reservedHead = reservedForward;
+
+  printf("Found Reserved Words:\n");
+
+  // keep reading in terminals until eof is reached
+  while(fgets(currentSymbol,11,reservedFile) != NULL)
+  {
+
+    reservedForward->symbol = malloc(11);
+    strcpy(reservedForward->symbol,currentSymbol);
+    temp = (terminalNode)(malloc(sizeof(struct terminal)));
+
+    reservedForward->next = temp; 
+    reservedForward = temp;
+  }
+
+  // sets last nodes next value to null to signify end of linked list
+  reservedForward->next = NULL;
+
+  *head = reservedHead;
+  
+}
+
+
+
 
