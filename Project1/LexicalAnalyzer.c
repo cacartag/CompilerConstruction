@@ -3,7 +3,7 @@
 int main()
 {
   FILE * pFile;
-  uint8_t Hello[73];
+  uint8_t sourceLine[73];
 
   // start by opening up file with program
   pFile = fopen("program1","r+");
@@ -18,30 +18,43 @@ int main()
   // AnalyzeLine(Hello);
   // while(fgets(Hello,72,pFile) != NULL)
 
-  terminalNode head;
+  fgets(sourceLine,72,pFile);
+  tokenNode reservedHead;
+  tokenNode sourceTokens; 
+  
+// terminalNode reservedHead;
+  
+  RetrieveReservedWords(&reservedHead);
+  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
-  RetrieveReservedWords(&head);
-  // RetrieveTerminals(&head);
+// RetrieveTerminals(&reservedHead);
 
   // used to check the values of the token linked list
    
-  /*
+ /* 
 
   int count = 1;
 
-  while(head->next != NULL)
+  while(reservedHead->next != NULL)
   {
-    printf("%d %s", count, head->symbol);
-    head = head->next; 
+    if (reservedHead->lexeme[strlen(reservedHead->lexeme)-1] == '\n')
+    {
+      // printf("%c, length is: %d\n", terminalHead->lexeme[2], strlen(terminalHead->lexeme));
+      // printf("last character is: %c", terminalHead->lexeme[strlen(terminalHead->lexeme)-1]);
+      reservedHead->lexeme[strlen(reservedHead->lexeme)-2] = '\0';
+    }
+
+    printf("%d %s %d %d \n", count, reservedHead->lexeme, reservedHead->type, reservedHead->attribute->attr);
+    reservedHead = reservedHead->next; 
     count = count + 1;
   }
-
-  */
+*/
+  
   return 0;
 }
 
 // processes buffer containing a single line of code
-int AnalyzeLine(uint8_t * buffer)
+int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buffer)
 {
   // base position keeps track of starting position
   // forward position moves to keep track of current processed character
@@ -153,11 +166,27 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer)
   }
 }
 
-
-int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer)
+// moves index past catch all terminals if possible, else does not move index
+// returns 0 if end of line reached, 1 otherwise
+int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead)
 {
+  int other = 1;
+  *fPosition = *bPosition;  
 
+  char * current = malloc(5);
   
+  while(other == 1)
+  {
+    
+    tokenNode reservedForward = *reservedHead; 
+    while(reservedForward->next != NULL)
+    {
+
+    }
+
+  }  
+ 
+ 
   if(buffer[*fPosition] == '\n') {
     return 0;
   } else {
@@ -165,13 +194,12 @@ int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer)
   }
 }
 
-// Retrieves terminal values from file, and plces them into a linked list
+// Retrieves terminal values from file, and places them into a linked list
+
+/*
 void RetrieveTerminals(terminalNode *head)
 {
   FILE *terminalFile;
-
-  // Change file name here if terminals in different file
-  terminalFile = fopen("Terminal.txt","r+");
 
   // Setup a structure for linked list creation
   terminalNode terminalHead;
@@ -179,6 +207,9 @@ void RetrieveTerminals(terminalNode *head)
   char * currentSymbol = malloc(8);
   terminalNode temp;  
  
+  // Change file name here if terminals in different file
+  terminalFile = fopen("Terminal.txt","r+");
+
   terminalHead = terminalForward;
 
   // keep reading in terminals until eof is reached
@@ -198,45 +229,51 @@ void RetrieveTerminals(terminalNode *head)
   *head = terminalHead;
   
 }
+*/
 
-void RetrieveReservedWords(terminalNode *head)
+
+void RetrieveReservedWords(tokenNode *rHead)
 {
   FILE *reservedFile;
 
-  printf("Reading in file \n");
-
+  // Setup a structure for linked list creation
+  tokenNode reservedHead;
+  tokenNode reservedForward = (tokenNode)malloc(sizeof(struct token));
+  char * currentSymbol = malloc(11);
+  tokenNode temp;  
+ 
   // Change file name here if reserved words in different file
   reservedFile = fopen("Reserved.txt","r+");
 
-  // Setup a structure for linked list creation
-  terminalNode reservedHead;
-  terminalNode reservedForward = (terminalNode)malloc(sizeof(struct terminal));
-  char * currentSymbol = malloc(11);
-  terminalNode temp;  
- 
   reservedHead = reservedForward;
 
-  printf("Found Reserved Words:\n");
-
   // keep reading in terminals until eof is reached
-  while(fgets(currentSymbol,11,reservedFile) != NULL)
+  while(fgets(currentSymbol,15,reservedFile) != NULL)
   {
 
-    reservedForward->symbol = malloc(11);
-    strcpy(reservedForward->symbol,currentSymbol);
-    temp = (terminalNode)(malloc(sizeof(struct terminal)));
+    reservedForward->lexeme = malloc(15);
+    strcpy(reservedForward->lexeme,currentSymbol);
 
-    reservedForward->next = temp; 
+    fgets(currentSymbol,15,reservedFile);
+    reservedForward->type = atoi(currentSymbol);
+
+//    printf("type %d\n", reservedForward->type);
+
+    reservedForward->attribute = (attributes)(malloc(sizeof(union attrib)));
+
+    fgets(currentSymbol,15,reservedFile);
+    reservedForward->attribute->attr = atoi(currentSymbol);
+
+//    printf("attribute %d \n",reservedForward->attribute->attr);
+
+    temp = (tokenNode)(malloc(sizeof(struct token)));
+
+    reservedForward->next = temp;
     reservedForward = temp;
   }
 
   // sets last nodes next value to null to signify end of linked list
   reservedForward->next = NULL;
 
-  *head = reservedHead;
-  
+  *rHead = reservedHead;
 }
-
-
-
-
