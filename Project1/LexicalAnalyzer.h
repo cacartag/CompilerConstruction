@@ -55,10 +55,15 @@ typedef struct token *tokenNode;
 typedef union attrib *attributes;
 
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
-int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buffer);
-int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer);
+int AnalyzeLine(tokenNode reservedHead, tokenNode sourceTokens, uint8_t *buffer);
+int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode reservedHead, tokenNode sourceTokens);
 int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead);
 void RetrieveTerminals(tokenNode *rHead);
 void RetrieveReservedWords(tokenNode *rHead);
+void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
+
+
+
+
 
 
