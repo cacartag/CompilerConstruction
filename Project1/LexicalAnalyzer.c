@@ -28,14 +28,16 @@ int main()
 
   int count = 1;
 
-  while(reservedHead->next != NULL)
+  tokenNode tempReservedHead = reservedHead;
+  while(tempReservedHead->next != NULL)
   {
-    if (reservedHead->lexeme[strlen(reservedHead->lexeme)-1] == '\n')
+    if (tempReservedHead->lexeme[strlen(tempReservedHead->lexeme)-1] == '\n')
     {
-      reservedHead->lexeme[strlen(reservedHead->lexeme)-2] = '\0';
+      tempReservedHead->lexeme[strlen(tempReservedHead->lexeme)-2] = '\0';
     }
-    reservedHead = reservedHead->next; 
+    tempReservedHead = tempReservedHead->next; 
   }
+
 /*
     printf("%d %s %d %d \n", count, reservedHead->lexeme, reservedHead->type, reservedHead->attribute->attr);
     reservedHead = reservedHead->next; 
@@ -43,7 +45,7 @@ int main()
   }
 */
 
-  AnalyzeLine(reservedHead, sourceTokens, sourceLine);
+  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
 // RetrieveTerminals(&reservedHead);
 
@@ -53,7 +55,7 @@ int main()
 }
 
 // processes buffer containing a single line of code
-int AnalyzeLine(tokenNode reservedHead, tokenNode sourceTokens, uint8_t * buffer)
+int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buffer)
 {
   // base position keeps track of starting position
   // forward position moves to keep track of current processed character
@@ -70,12 +72,12 @@ int AnalyzeLine(tokenNode reservedHead, tokenNode sourceTokens, uint8_t * buffer
 
   while((atEnd == 1) && (stuck == 0))
   {
-    tokenNode headSourceTokens = sourceTokens;
+    tokenNode headSourceTokens = *sourceTokens;
 
     stuck = basePosition;
 
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
-    atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, headSourceTokens);
+    atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
    
     if((basePosition - stuck) <= 0)
     {
@@ -85,20 +87,22 @@ int AnalyzeLine(tokenNode reservedHead, tokenNode sourceTokens, uint8_t * buffer
     }
   }
 
-  printf("Tokens:\n");
+
+//  printf("Tokens:\n");
  
   int count = 0;
 
 
-  sourceTokens = sourceTokens->next;
+  *sourceTokens = (*sourceTokens)->next;
 
-  while(sourceTokens->next != NULL)
+  while((*sourceTokens)->next != NULL)
   {
-    printf("%d %s \n", count, sourceTokens->lexeme );//, sourceTokens->type, sourceTokens->attribute->attr);
-    sourceTokens = sourceTokens->next; 
+    printf("%d %s %d %d\n", count, (*sourceTokens)->lexeme, (*sourceTokens)->type, (*sourceTokens)->attribute->attr);
+    *sourceTokens = (*sourceTokens)->next; 
     count = count + 1;
   }
 
+  printf("%d %s %d %d\n", count, (*sourceTokens)->lexeme, (*sourceTokens)->type, (*sourceTokens)->attribute->attr);
 
   return 0;
 }
@@ -135,24 +139,23 @@ int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer)
 
 // moves index past identifiers if possible, else does not move index
 // returns 0 if end of line reached, 1 otherwise
-int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode reservedHead, tokenNode sourceTokens)
+int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
+
+
   char * id = malloc(13);
 
   int other = 1;
   *fPosition = *bPosition;
 
   // check if first letter is an alphabetical letter
-  // printf("Current index %i\n", *fPosition);
-  // printf("Analyzing %c\n", buffer[*bPosition]);
-  if(isalpha(buffer[*bPosition]) == 0)
+  if(isalpha(buffer[*bPosition]) != 0)
   {
-    other = 0;
-  } else {
+    uint32_t type;
+    uint32_t attribute;
 
     id[0] = buffer[*fPosition];
     *fPosition = *fPosition + 1;
-  
   
     // go through line looking for the rest of the identifier 
     while(other == 1)
@@ -168,13 +171,14 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
       }
 
     }
+
+    id[(*bPosition - *fPosition) + 1] = '\0';
+    *bPosition = *fPosition;
+
+
+    CheckReservedList(id, reservedHead, &type, &attribute);
+    AddToTokenLinked(sourceTokens, id, type, attribute);
   }
-  
-
-  id[(*bPosition - *fPosition) + 1] = '\0';
-  *bPosition = *fPosition;
-
-  AddToTokenLinked(&sourceTokens, id, 0, 0);
 
   if(buffer[*fPosition] == '\n') {
     return 0;
@@ -297,7 +301,6 @@ void RetrieveReservedWords(tokenNode *rHead)
 
 void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute)
 {
-  
   tokenNode tempToken = (tokenNode)(malloc(sizeof(struct token)));
   tempToken-> attribute = (attributes)(malloc(sizeof(union attrib)));
   tempToken->lexeme = malloc(15);
@@ -315,4 +318,32 @@ void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, 
 
   (*sourceTokens)->next = tempToken;
 }
+
+
+// checks reserved list if lexeme exists
+// if true returns 1, along with the type and attribute values
+uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute)
+{
+  tokenNode forwardHead = *reservedHead;
+
+  while(forwardHead->next != NULL)
+  {
+
+    if(strcmp(lexeme,forwardHead->lexeme)  == 0)
+    {
+      *type = forwardHead->type;
+      *attribute = forwardHead->attribute->attr;
+ 
+      return 1;
+    }
+    forwardHead = forwardHead->next;
+  }
+
+  *type = 0;
+  *attribute = 0;
+
+  return 0;
+  
+}
+
 
