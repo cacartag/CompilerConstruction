@@ -30,6 +30,8 @@
 #define NOT 23
 
 #define LEXERR 24
+
+#define LONGSTRING 25
  
 struct terminal {                                                          
   char * symbol;                                                           

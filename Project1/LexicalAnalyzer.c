@@ -5,24 +5,10 @@ int main()
   FILE * pFile;
   uint8_t sourceLine[73];
 
-  // start by opening up file with program
-  pFile = fopen("program1","r+");
 
-  // read single line of code
-
-  // printf("\n\nExtracted: \n");
-
-  // read all lines of file
-  // fgets(Hello,72,pFile);
-  // printf("%s", Hello);
-  // AnalyzeLine(Hello);
-  // while(fgets(Hello,72,pFile) != NULL)
-
-  fgets(sourceLine,72,pFile);
   tokenNode reservedHead;
   tokenNode sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
   sourceTokens->next = NULL;  
-// terminalNode reservedHead;
   
   RetrieveReservedWords(&reservedHead);
 
@@ -45,9 +31,22 @@ int main()
   }
 */
 
-  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+  // start by opening up file with program
+  pFile = fopen("program1","r+");
 
-// RetrieveTerminals(&reservedHead);
+   fgets(sourceLine,72,pFile);
+   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+
+/*
+   while(fgets(sourceLine,72,pFile) != NULL)
+   {
+     //printf("%s",sourceLine);
+     AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+     printf("\n");
+   }
+*/
+
+  // RetrieveTerminals(&reservedHead);
 
   // used to check the values of the token linked list
    
@@ -141,8 +140,6 @@ int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer)
 // returns 0 if end of line reached, 1 otherwise
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
-
-
   char * id = malloc(13);
 
   int other = 1;
@@ -156,11 +153,10 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
     id[0] = buffer[*fPosition];
     *fPosition = *fPosition + 1;
-  
+ 
     // go through line looking for the rest of the identifier 
-    while(other == 1)
+    while(other == 1 && (*fPosition - *bPosition) <= 10)
     {
-     
       // check if the next value is either an alphabetical letter or a digit 
       if(isalpha(buffer[*fPosition]) != 0 || isdigit(buffer[*fPosition]) != 0 )
       {
@@ -171,13 +167,18 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
       }
 
     }
-
-    id[(*bPosition - *fPosition) + 1] = '\0';
-    *bPosition = *fPosition;
-
+    
+    id[(*fPosition - *bPosition) + 1] = '\0';
 
     CheckReservedList(id, reservedHead, &type, &attribute);
     AddToTokenLinked(sourceTokens, id, type, attribute);
+
+    if((*fPosition - *bPosition) > 10)
+    {
+      AddToTokenLinked(sourceTokens,"Id Too Long",LEXERR, LONGSTRING);
+    }
+
+    *bPosition = *fPosition;
   }
 
   if(buffer[*fPosition] == '\n') {
@@ -215,44 +216,6 @@ int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reserv
   }
 }
 
-// Retrieves terminal values from file, and places them into a linked list
-
-/*
-void RetrieveTerminals(terminalNode *head)
-{
-  FILE *terminalFile;
-
-  // Setup a structure for linked list creation
-  terminalNode terminalHead;
-  terminalNode terminalForward = (terminalNode)malloc(sizeof(struct terminal));
-  char * currentSymbol = malloc(8);
-  terminalNode temp;  
- 
-  // Change file name here if terminals in different file
-  terminalFile = fopen("Terminal.txt","r+");
-
-  terminalHead = terminalForward;
-
-  // keep reading in terminals until eof is reached
-  while(fgets(currentSymbol,7,terminalFile) != NULL)
-  {
-    terminalForward->symbol = malloc(8);
-    strcpy(terminalForward->symbol,currentSymbol);
-    temp = (terminalNode)(malloc(sizeof(struct terminal)));
-
-    terminalForward->next = temp; 
-    terminalForward = temp;
-  }
-
-  // sets last nodes next value to null to signify end of linked list
-  terminalForward->next = NULL;
-
-  *head = terminalHead;
-  
-}
-*/
-
-
 void RetrieveReservedWords(tokenNode *rHead)
 {
   FILE *reservedFile;
@@ -271,21 +234,16 @@ void RetrieveReservedWords(tokenNode *rHead)
   // keep reading in terminals until eof is reached
   while(fgets(currentSymbol,15,reservedFile) != NULL)
   {
-
     reservedForward->lexeme = malloc(15);
     strcpy(reservedForward->lexeme,currentSymbol);
 
     fgets(currentSymbol,15,reservedFile);
     reservedForward->type = atoi(currentSymbol);
 
-//    printf("type %d\n", reservedForward->type);
-
     reservedForward->attribute = (attributes)(malloc(sizeof(union attrib)));
 
     fgets(currentSymbol,15,reservedFile);
     reservedForward->attribute->attr = atoi(currentSymbol);
-
-//    printf("attribute %d \n",reservedForward->attribute->attr);
 
     temp = (tokenNode)(malloc(sizeof(struct token)));
 
