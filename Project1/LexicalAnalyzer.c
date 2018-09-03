@@ -34,17 +34,27 @@ int main()
   // start by opening up file with program
   pFile = fopen("program1","r+");
 
-   fgets(sourceLine,72,pFile);
-   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-
 /*
    while(fgets(sourceLine,72,pFile) != NULL)
    {
      //printf("%s",sourceLine);
      AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-     printf("\n");
+     currentLine = currentLine + 1;
    }
 */
+
+  fgets(sourceLine,72,pFile);
+  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+
+  sourceTokens = sourceTokens->next;
+
+  while(sourceTokens->next != NULL)
+  {
+    printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
+    sourceTokens = sourceTokens->next; 
+  }
+
+  printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
 
   // RetrieveTerminals(&reservedHead);
 
@@ -71,37 +81,23 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
   while((atEnd == 1) && (stuck == 0))
   {
+
     tokenNode headSourceTokens = *sourceTokens;
 
     stuck = basePosition;
 
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
-   
+    atEnd = CatchAll(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
+
     if((basePosition - stuck) <= 0)
     {
       stuck = 1;
     } else {
       stuck = 0;
     }
+     
   }
-
-
-//  printf("Tokens:\n");
- 
-  int count = 0;
-
-
-  *sourceTokens = (*sourceTokens)->next;
-
-  while((*sourceTokens)->next != NULL)
-  {
-    printf("%d %s %d %d\n", count, (*sourceTokens)->lexeme, (*sourceTokens)->type, (*sourceTokens)->attribute->attr);
-    *sourceTokens = (*sourceTokens)->next; 
-    count = count + 1;
-  }
-
-  printf("%d %s %d %d\n", count, (*sourceTokens)->lexeme, (*sourceTokens)->type, (*sourceTokens)->attribute->attr);
 
   return 0;
 }
@@ -190,25 +186,25 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
 // moves index past catch all terminals if possible, else does not move index
 // returns 0 if end of line reached, 1 otherwise
-int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead)
+int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
-  int other = 1;
   *fPosition = *bPosition;  
 
-  char * current = malloc(5);
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(2);
+  tempBuff[0] = buffer[*fPosition];
+  tempBuff[1] = '\0';
+
+  *fPosition = *fPosition + 1;
   
-  while(other == 1)
+  if(CheckReservedList(tempBuff,reservedHead, &type, &attribute))
   {
-    
-    tokenNode reservedForward = *reservedHead; 
-    while(reservedForward->next != NULL)
-    {
+    AddToTokenLinked(sourceTokens,tempBuff,type, attribute);
+  }
 
-    }
+  *bPosition = *fPosition;
 
-  }  
- 
- 
   if(buffer[*fPosition] == '\n') {
     return 0;
   } else {
@@ -264,17 +260,20 @@ void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, 
   tempToken->lexeme = malloc(15);
 
   // going to add some checking to this to handle > 15
+  tempToken->line = currentLine;
   strcpy(tempToken->lexeme,lexeme);
   tempToken->type = type;
   tempToken->attribute->attr = attribute;
   tempToken->next = NULL; 
 
-  while((*sourceTokens)->next != NULL)
+  tokenNode forwardToken = *sourceTokens;
+
+  while(forwardToken->next != NULL)
   {
-    *sourceTokens = (*sourceTokens)->next;
+    forwardToken = forwardToken->next;
   }
 
-  (*sourceTokens)->next = tempToken;
+  forwardToken->next = tempToken;
 }
 
 
@@ -301,7 +300,6 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
   *attribute = 0;
 
   return 0;
-  
 }
 
 
