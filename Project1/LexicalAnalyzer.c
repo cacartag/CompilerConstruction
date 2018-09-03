@@ -34,17 +34,17 @@ int main()
   // start by opening up file with program
   pFile = fopen("program1","r+");
 
-/*
+
    while(fgets(sourceLine,72,pFile) != NULL)
    {
      //printf("%s",sourceLine);
      AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
      currentLine = currentLine + 1;
    }
-*/
 
-  fgets(sourceLine,72,pFile);
-  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+
+//  fgets(sourceLine,72,pFile);
+//  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
   sourceTokens = sourceTokens->next;
 
@@ -88,7 +88,8 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
-    atEnd = CatchAll(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
+    atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
+    atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
 
     if((basePosition - stuck) <= 0)
     {
@@ -186,23 +187,106 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
 // moves index past catch all terminals if possible, else does not move index
 // returns 0 if end of line reached, 1 otherwise
-int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
+int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
   *fPosition = *bPosition;  
 
   int type = 0;
   int attribute = 0;
-  char * tempBuff = malloc(2);
+  char * tempBuff = malloc(3);
   tempBuff[0] = buffer[*fPosition];
   tempBuff[1] = '\0';
 
   *fPosition = *fPosition + 1;
   
-  if(CheckReservedList(tempBuff,reservedHead, &type, &attribute))
+  if(CheckReservedList(tempBuff, reservedHead, &type, &attribute))
   {
+    if((tempBuff[0] == ':') && (buffer[*fPosition] == '='))
+    {
+      tempBuff[1] = buffer[*fPosition];
+      tempBuff[2] = '\0';
+      *fPosition = *fPosition + 1;
+      CheckReservedList(tempBuff, reservedHead, &type, &attribute);
+    }
+    
     AddToTokenLinked(sourceTokens,tempBuff,type, attribute);
+  } else {
+    *fPosition = *fPosition - 1;
   }
 
+  *bPosition = *fPosition;
+
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  *fPosition = *bPosition;  
+
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(3);
+
+
+  if(buffer[*fPosition] == '<')
+  {
+    // check for superstring less than or equals to
+    // before settling for less than
+
+    tempBuff[0] = buffer[*fPosition];
+
+    *fPosition = *fPosition + 1;
+    
+    if(buffer[*fPosition] == '=')
+    {
+      tempBuff[1] = buffer[*fPosition];
+      *fPosition = *fPosition + 1;
+      type = LTE;
+    } else {
+      type = LT;
+    }
+    
+    tempBuff[*fPosition - *bPosition] = '\0';
+    
+  }else if(buffer[*fPosition] == '>')
+  {
+    // check for superstring greater than or equals to
+    // before settling for greater than
+
+    tempBuff[0] = buffer[*fPosition];  
+
+    *fPosition = *fPosition + 1;
+    
+    if(buffer[*fPosition] == '=')
+    {
+      tempBuff[1] = buffer[*fPosition];
+      *fPosition = *fPosition + 1;
+    }
+ 
+    tempBuff[*fPosition - *bPosition] = '\0';
+
+  } else if(buffer[*fPosition] == '=') 
+  {
+    // check for equality operator
+
+    tempBuff[0] = buffer[*fPosition];  
+
+    *fPosition = *fPosition + 1;
+ 
+    tempBuff[1] = '\0';
+  }
+
+  // if any of the above were found then the buffer 
+  // position will increase
+  if(*fPosition > *bPosition)
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, type, attribute); 
+  }
+ 
   *bPosition = *fPosition;
 
   if(buffer[*fPosition] == '\n') {

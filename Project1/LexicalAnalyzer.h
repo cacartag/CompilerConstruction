@@ -43,9 +43,15 @@
 #define CLBRACK 77
 #define PERIOD 78
 #define SEMICOLON 79
-#define EQUALSYM 80
 #define OPPARAN 81
 #define CLPARAN 82
+#define COMMA 83
+
+#define GT 120
+#define LT 121
+#define GTE 122
+#define LTE 123
+#define EQU 124
  
 struct terminal {                                                          
   char * symbol;                                                           
@@ -74,7 +80,8 @@ uint32_t currentLine = 1;
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens);
-int CatchAll(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
+int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
+int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 void RetrieveTerminals(tokenNode *reservedHead);
 void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
