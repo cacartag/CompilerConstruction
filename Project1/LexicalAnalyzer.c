@@ -34,19 +34,22 @@ int main()
   // start by opening up file with program
   pFile = fopen("program1","r+");
 
-
+/*
    while(fgets(sourceLine,72,pFile) != NULL)
    {
      //printf("%s",sourceLine);
      AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
      currentLine = currentLine + 1;
    }
+*/
 
+  fgets(sourceLine,72,pFile);
+  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
-//  fgets(sourceLine,72,pFile);
-//  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-
-  sourceTokens = sourceTokens->next;
+  if(sourceTokens->next != NULL)
+  {
+    sourceTokens = sourceTokens->next;
+  }
 
   while(sourceTokens->next != NULL)
   {
@@ -54,7 +57,7 @@ int main()
     sourceTokens = sourceTokens->next; 
   }
 
-  printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
+  // printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
 
   // RetrieveTerminals(&reservedHead);
 
@@ -86,12 +89,14 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
     stuck = basePosition;
 
+    atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
+/*
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
     atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
     atEnd = IntegerMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
-
+*/
     if((basePosition - stuck) <= 0)
     {
       stuck = 1;
@@ -169,12 +174,12 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
     
     id[(*fPosition - *bPosition) + 1] = '\0';
 
-    CheckReservedList(id, reservedHead, &type, &attribute);
-    AddToTokenLinked(sourceTokens, id, type, attribute);
-
     if((*fPosition - *bPosition) > 10)
     {
-      AddToTokenLinked(sourceTokens,"Id Too Long",LEXERR, LONGSTRING);
+      AddToTokenLinked(sourceTokens,id,LEXERR, LONGSTRING);
+    } else {
+      CheckReservedList(id, reservedHead, &type, &attribute);
+      AddToTokenLinked(sourceTokens, id, type, attribute);
     }
 
     *bPosition = *fPosition;
@@ -302,6 +307,69 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
   }
 }
 
+int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  *fPosition = *bPosition;  
+
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(40);  
+
+  int buffIndex = 0;
+
+  while(isdigit(buffer[*fPosition]) != 0)
+  { 
+    tempBuff[buffIndex] = buffer[*fPosition];
+    
+    *fPosition = *fPosition + 1;
+    buffIndex = *fPosition - *bPosition;
+  }
+  
+  if((buffer[*fPosition] == '.') && (isdigit(buffer[*fPosition + 1]) != 0))
+  {
+    tempBuff[buffIndex] = buffer[*fPosition];
+    *fPosition = *fPosition + 1;
+    buffIndex = *fPosition - *bPosition;
+
+    while(isdigit(buffer[*fPosition]) != 0)
+    {
+      tempBuff[buffIndex] = buffer[*fPosition];
+
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+    }
+  }
+
+  if((buffer[*fPosition] == 'E'))
+  {
+    tempBuff[buffIndex] = buffer[*fPosition];
+    *fPosition = *fPosition + 1;
+    buffIndex = *fPosition - *bPosition;
+
+    if((buffer[*fPosition] == '+') || (buffer[*fPosition] == '-'))
+    {
+      tempBuff[buffIndex] = buffer[*fPosition];
+
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+    }
+    
+    while(isdigit(buffer[*fPosition]) != 0)
+    {
+      tempBuff[buffIndex] = buffer[*fPosition];
+
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+    }
+  }
+
+  printf("%s\n",tempBuff);
+
+  *bPosition = *fPosition;
+
+  return 0;
+}
+
 int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
 {
   *fPosition = *bPosition;  
@@ -321,17 +389,47 @@ int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *
     *fPosition = *fPosition + 1; 
   }
 
-  if((*fPosition - *bPosition) > 0)
+  if((*fPosition - *bPosition) > 1 && (tempBuff[0] == '0'))
   {
-     AddToTokenLinked(sourceTokens,tempBuff,INTGR, 0);
-  }
-
-  if((*fPosition - *bPosition) > 10)
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,LEADINGZERO);
+  } else if((*fPosition - *bPosition) > 10)
   {
-      AddToTokenLinked(sourceTokens,"Id Too Long",LEXERR, LONGSTRING);
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONGSTRING);
+  } else if((*fPosition - *bPosition) > 0)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,INTGR, 0);
   }
 
   *bPosition = *fPosition;
+
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  *fPosition = *bPosition;  
+
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(13);
+  int buffIndex = 0;
+
+  while((isdigit(buffer[*fPosition]) != 0) && (buffIndex <= 5))
+  {
+    buffIndex = *fPosition - *bPosition;
+  }
+
+  if((buffIndex > 5) && (isdigit(buffer[*fPosition]) != 0))
+  {
+    while(isdigit(buffer[*fPosition]) != 0)
+    {
+      buffIndex = *fPosition - *bPosition;
+    } 
+  }
 
   if(buffer[*fPosition] == '\n') {
     return 0;
@@ -424,7 +522,7 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
     forwardHead = forwardHead->next;
   }
 
-  *type = 0;
+  *type = ID; 
   *attribute = 0;
 
   return 0;

@@ -7,32 +7,36 @@
 // Reserved Words
 #define IF 1
 #define THEN 2
-#define ID 3
-#define PROG 4
-#define VAR 5
-#define ARRA 6
-#define NUM 7
-#define OF 8
-#define INT 9
-#define REAL 10
-#define FUNC 11
-#define PROC 12
-#define BEGI 13
-#define END 14
-#define ASSIGN 15
-#define ELSE 16
-#define WHILE 17
-#define DO 18
-#define OR 19
-#define DIV 20
-#define MOD 21
-#define AND 22
-#define NOT 23
-#define INTGR 24
+#define PROG 3
+#define VAR 4
+#define ARRA 5
+#define NUM 6
+#define OF 7
+#define INT 8
+#define REAL 9
+#define FUNC 10
+#define PROC 11
+#define BEGI 12
+#define END 13
+#define ASSIGN 14
+#define ELSE 15
+#define WHILE 16
+#define DO 17
+#define OR 18
+#define DIV 19
+#define MOD 20
+#define AND 21
+#define NOT 22
+#define INTGR 23
+#define ID 24
 
 #define LEXERR 30
 
 #define LONGSTRING 31
+#define LEADINGZERO 32
+#define TRAILINGZERO 33
+#define LONGINT 34
+#define LONGREAL 35
 
 #define ASSIGNOP 70
 #define ADDSYM 71
@@ -83,13 +87,12 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffe
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens);
 int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
 int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 void RetrieveTerminals(tokenNode *reservedHead);
 void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
 void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
-
-
-
 
 
