@@ -90,6 +90,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
     atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
+    atEnd = IntegerMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
 
     if((basePosition - stuck) <= 0)
     {
@@ -135,6 +136,7 @@ int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer)
 
 // moves index past identifiers if possible, else does not move index
 // returns 0 if end of line reached, 1 otherwise
+// if any were found they will be added to provided token linked list
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
   char * id = malloc(13);
@@ -187,6 +189,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
 // moves index past catch all terminals if possible, else does not move index
 // returns 0 if end of line reached, 1 otherwise
+// if any were found they will be added to provided token linked list
 int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens)
 {
   *fPosition = *bPosition;  
@@ -223,6 +226,9 @@ int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode 
   }
 }
 
+// moves index past relation operators if possible, else does not move index
+// returns 0 if end of line reached, 1 otherwise
+// if any were found they will be added to provided token linked list
 int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
 {
   *fPosition = *bPosition;  
@@ -287,6 +293,44 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
     AddToTokenLinked(sourceTokens, tempBuff, type, attribute); 
   }
  
+  *bPosition = *fPosition;
+
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  *fPosition = *bPosition;  
+
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(11);
+
+  int buffIndex = 0;
+
+  while((isdigit(buffer[*fPosition]) != 0) && (buffIndex <= 10))
+  {
+    buffIndex = *fPosition - *bPosition;
+  
+    tempBuff[buffIndex] = buffer[*fPosition];
+ 
+    *fPosition = *fPosition + 1; 
+  }
+
+  if((*fPosition - *bPosition) > 0)
+  {
+     AddToTokenLinked(sourceTokens,tempBuff,INTGR, 0);
+  }
+
+  if((*fPosition - *bPosition) > 10)
+  {
+      AddToTokenLinked(sourceTokens,"Id Too Long",LEXERR, LONGSTRING);
+  }
+
   *bPosition = *fPosition;
 
   if(buffer[*fPosition] == '\n') {

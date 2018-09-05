@@ -28,10 +28,11 @@
 #define MOD 21
 #define AND 22
 #define NOT 23
+#define INTGR 24
 
-#define LEXERR 24
+#define LEXERR 30
 
-#define LONGSTRING 25
+#define LONGSTRING 31
 
 #define ASSIGNOP 70
 #define ADDSYM 71
@@ -82,6 +83,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffe
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens);
 int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
 int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 void RetrieveTerminals(tokenNode *reservedHead);
 void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
