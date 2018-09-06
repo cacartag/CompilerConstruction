@@ -176,7 +176,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
     if((*fPosition - *bPosition) > 10)
     {
-      AddToTokenLinked(sourceTokens,id,LEXERR, LONGSTRING);
+      AddToTokenLinked(sourceTokens,id,LEXERR, LONG_STRING);
     } else {
       CheckReservedList(id, reservedHead, &type, &attribute);
       AddToTokenLinked(sourceTokens, id, type, attribute);
@@ -391,13 +391,13 @@ int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *
 
   if((*fPosition - *bPosition) > 1 && (tempBuff[0] == '0'))
   {
-    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,LEADINGZERO);
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,LEADING_ZERO);
   } else if((*fPosition - *bPosition) > 10)
   {
-    AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONGSTRING);
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONG_STRING);
   } else if((*fPosition - *bPosition) > 0)
   {
-    AddToTokenLinked(sourceTokens,tempBuff,INTGR, 0);
+    AddToTokenLinked(sourceTokens,tempBuff,INT, 0);
   }
 
   *bPosition = *fPosition;
@@ -430,6 +430,24 @@ int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode
       buffIndex = *fPosition - *bPosition;
     } 
   }
+
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int LongRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  *fPosition = *bPosition;  
+
+  int type = 0;
+  int attribute = 0;
+  char * tempBuff = malloc(13);
+  int buffIndex = 0;
+
+
 
   if(buffer[*fPosition] == '\n') {
     return 0;
@@ -527,5 +545,74 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
 
   return 0;
 }
+
+char * NumberToString(int Number)
+{
+  if(0) return "NULL";
+  if(1) return "IF";
+  if(2) return "THEN"; 
+  if(3) return "PROGRAM";
+  if(4) return "VAR";
+  if(5) return "ARRAY";
+  if(6) return "OF";
+  if(7) return "INT";
+  if(8) return "REAL";
+  if(9) return "PROCEDURE";
+  if(10) return "BEGIN";
+  if(11) return "END";
+  if(12) return "ELSE";
+  if(13) return "WHILE";
+  if(14) return "DO";
+  if(15) return "OR";
+  if(16) return "DIV";
+  if(17) return "MOD";
+  if(18) return "AND";
+  if(19) return "NOT";
+  if(20) return "ID";
+  if(21) return "CALL";
+
+  if(30) return "LEXERR";
+
+  if(31) return "LONG_STRING";
+  if(32) return "LEADING_ZERO";
+  if(33) return "TRAILING_ZERO";
+  if(34) return "INT_TOO_LONG";
+  if(35) return "REAL_TOO_LONG";
+
+  if(71) return "ADD_SYMBOL";
+  if(72) return "SUB_SYMBOL";
+  if(73) return "MUL_SYMBOL";
+  if(74) return "DIV_SYMBOL";
+  if(75) return "COLON";
+  if(76) return "OPEN_BRACKET";
+  if(77) return "CLOSED_BRACKET";
+  if(78) return "PERIOD";
+  if(79) return "SEMICOLON";
+  if(80) return "OPEN_PARENTHESES";
+  if(81) return "CLOSED_PARENTHESES";
+  if(82) return "COMMA";
+  if(83) return "DOUBLE_PERIOD";
+
+  if(120) return "GT";
+  if(121) return "LT";
+  if(122) return "GTE";
+  if(123) return "LTE";
+  if(124) return "EQU";
+  if(125) return "NE";
+
+  if(160) return "RELOP";
+  if(161) return "ADDOP";
+  if(162) return "MULOP";
+  if(163) return "ASSIGNOP";
+}
+
+
+
+
+
+
+
+
+
 
 

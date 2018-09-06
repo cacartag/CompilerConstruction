@@ -7,56 +7,59 @@
 // Reserved Words
 #define IF 1
 #define THEN 2
-#define PROG 3
+#define PROGRAM 3
 #define VAR 4
-#define ARRA 5
-#define NUM 6
-#define OF 7
-#define INT 8
-#define REAL 9
-#define FUNC 10
-#define PROC 11
-#define BEGI 12
-#define END 13
-#define ASSIGN 14
-#define ELSE 15
-#define WHILE 16
-#define DO 17
-#define OR 18
-#define DIV 19
-#define MOD 20
-#define AND 21
-#define NOT 22
-#define INTGR 23
-#define ID 24
+#define ARRAY 5
+#define OF 6
+#define INTEGER 7
+#define REAL 8
+#define PROCEDURE 9
+#define BEGIN 10
+#define END 11
+#define ELSE 12
+#define WHILE 13
+#define DO 14
+#define OR 15
+#define DIV 16
+#define MOD 17
+#define AND 18
+#define NOT 19
+#define ID 20
+#define CALL 21
 
 #define LEXERR 30
 
-#define LONGSTRING 31
-#define LEADINGZERO 32
-#define TRAILINGZERO 33
-#define LONGINT 34
-#define LONGREAL 35
+#define LONG_STRING 31
+#define LEADING_ZERO 32
+#define TRAILING_ZERO 33
+#define INT_TOO_LONG 34
+#define REAL_TOO_LONG 35
 
-#define ASSIGNOP 70
-#define ADDSYM 71
-#define SUBSYM 72
-#define MULTSYM 73
-#define DIVSYM 74
+#define ADD_SYMBOL 71
+#define SUB_SYMBOL 72
+#define MUL_SYMBOL 73
+#define DIV_SYMBOL 74
 #define COLON 75
-#define OPBRACK 76
-#define CLBRACK 77
+#define OPEN_BRACKET 76
+#define CLOSED_BRACKET 77
 #define PERIOD 78
 #define SEMICOLON 79
-#define OPPARAN 81
-#define CLPARAN 82
-#define COMMA 83
+#define OPEN_PARENTHESES 80
+#define CLOSED_PARENTHESES 81
+#define COMMA 82
+#define DOUBLE_PERIOD 83
 
 #define GT 120
 #define LT 121
 #define GTE 122
 #define LTE 123
 #define EQU 124
+#define NE 125
+
+#define RELOP 160
+#define ADDOP 161
+#define MULOP 162
+#define ASSIGNOP 163
  
 struct terminal {                                                          
   char * symbol;                                                           
@@ -90,9 +93,10 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
 int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+int LongRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 void RetrieveTerminals(tokenNode *reservedHead);
 void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
 void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
-
+char * NumberToString(int Number);
 
