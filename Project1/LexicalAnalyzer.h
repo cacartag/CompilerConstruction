@@ -61,9 +61,9 @@
 #define MULOP 162
 #define ASSIGNOP 163
  
-struct terminal {                                                          
-  char * symbol;                                                           
-  struct terminal * next;                                                  
+struct terminal { 
+  char * symbol; 
+  struct terminal * next; 
 };
 
 union attrib 

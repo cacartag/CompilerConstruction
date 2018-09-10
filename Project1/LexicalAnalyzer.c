@@ -14,6 +14,7 @@ int main()
 
   int count = 1;
 
+  // removes the next character line at the end of the string
   tokenNode tempReservedHead = reservedHead;
   while(tempReservedHead->next != NULL)
   {
@@ -30,19 +31,19 @@ int main()
     count = count + 1;
   }
 */
-
   // start by opening up file with program
   pFile = fopen("program1","r+");
 
-/*
-   while(fgets(sourceLine,72,pFile) != NULL)
-   {
-     //printf("%s",sourceLine);
-     AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-     currentLine = currentLine + 1;
-   }
-*/
 
+ while(fgets(sourceLine,72,pFile) != NULL)
+ {
+   //printf("%s",sourceLine);
+   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+   currentLine = currentLine + 1;
+ }
+
+
+/*
   fgets(sourceLine,72,pFile);
   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
@@ -56,7 +57,7 @@ int main()
     printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
     sourceTokens = sourceTokens->next; 
   }
-
+*/
   // printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
 
   // RetrieveTerminals(&reservedHead);
@@ -316,15 +317,19 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
   char * tempBuff = malloc(40);  
 
   int buffIndex = 0;
+  int numType = 0;
 
+  // check that the next character is a digit
   while(isdigit(buffer[*fPosition]) != 0)
   { 
     tempBuff[buffIndex] = buffer[*fPosition];
     
     *fPosition = *fPosition + 1;
     buffIndex = *fPosition - *bPosition;
+    numType = 1;
   }
   
+  // check for number after decimal
   if((buffer[*fPosition] == '.') && (isdigit(buffer[*fPosition + 1]) != 0))
   {
     tempBuff[buffIndex] = buffer[*fPosition];
@@ -338,14 +343,17 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       *fPosition = *fPosition + 1;
       buffIndex = *fPosition - *bPosition;
     }
+    numType = numType + 1;
   }
 
+  // check for numbers after exponentials
   if((buffer[*fPosition] == 'E'))
   {
     tempBuff[buffIndex] = buffer[*fPosition];
     *fPosition = *fPosition + 1;
     buffIndex = *fPosition - *bPosition;
 
+    // check if there is a plus or a minus after 
     if((buffer[*fPosition] == '+') || (buffer[*fPosition] == '-'))
     {
       tempBuff[buffIndex] = buffer[*fPosition];
@@ -354,6 +362,7 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       buffIndex = *fPosition - *bPosition;
     }
     
+    // look for numbers after exponential
     while(isdigit(buffer[*fPosition]) != 0)
     {
       tempBuff[buffIndex] = buffer[*fPosition];
@@ -361,13 +370,42 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       *fPosition = *fPosition + 1;
       buffIndex = *fPosition - *bPosition;
     }
+  
+    numType = numType + 1;
   }
 
   printf("%s\n",tempBuff);
 
+  switch(numType)
+  {
+    case 0 :
+      printf("is at 0\n");
+    break;
+
+    case 1:
+      printf("detected an integer\n");
+    break;
+
+    case 2:
+      printf("detected a decimal\n");
+    break;
+
+    case 3:
+      printf("detected an exponential\n");  
+    break;
+
+    default:
+      printf("found nothing\n");
+    break;
+  }
+
   *bPosition = *fPosition;
 
-  return 0;
+  if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
 }
 
 int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
@@ -397,7 +435,7 @@ int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *
     AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONG_STRING);
   } else if((*fPosition - *bPosition) > 0)
   {
-    AddToTokenLinked(sourceTokens,tempBuff,INT, 0);
+    AddToTokenLinked(sourceTokens,tempBuff,INTEGER, 0);
   }
 
   *bPosition = *fPosition;
@@ -605,14 +643,3 @@ char * NumberToString(int Number)
   if(162) return "MULOP";
   if(163) return "ASSIGNOP";
 }
-
-
-
-
-
-
-
-
-
-
-
