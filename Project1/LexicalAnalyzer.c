@@ -35,18 +35,18 @@ int main()
   pFile = fopen("program1","r+");
 
 
- //while(fgets(sourceLine,72,pFile) != NULL)
- //{
+ while(fgets(sourceLine,72,pFile) != NULL)
+ {
    //printf("%s",sourceLine);
    //fgets(sourceLine,72,pFile);
-   //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
- // currentLine = currentLine + 1;
- //}
+   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+   currentLine = currentLine + 1;
+ }
 
 
 
-  fgets(sourceLine,72,pFile);
-  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+  //fgets(sourceLine,72,pFile);
+  //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
   if(sourceTokens->next != NULL)
   {
@@ -99,15 +99,13 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
     stuck = basePosition;
 
-    atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
-    
-/*
+ 
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
     atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
+    atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
-    atEnd = IntegerMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
-*/
+    
     if((basePosition - stuck) <= 0)
     {
       stuck = 1;
