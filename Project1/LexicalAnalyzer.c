@@ -637,6 +637,7 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
   return 0;
 }
 
+// converts macro numbers to string with description
 char * NumberToString(int Number)
 {
   if(Number == 0) return "NULL";
