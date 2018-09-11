@@ -26,6 +26,7 @@
 #define NOT 19
 #define ID 20
 #define CALL 21
+#define VALUE 22
 
 #define LEXERR 30
 
@@ -33,7 +34,11 @@
 #define LEADING_ZERO 32
 #define TRAILING_ZERO 33
 #define INT_TOO_LONG 34
-#define REAL_TOO_LONG 35
+#define REAL_BEFORE_DECIMAL_TOO_LONG 35
+#define REAL_AFTER_DECIMAL_TOO_LONG 36
+#define LONG_INT 37
+#define ENDING_ZEROS 38
+#define EXPONENT_TOO_LONG 39
 
 #define ADD_SYMBOL 71
 #define SUB_SYMBOL 72
@@ -91,9 +96,9 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
 int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
-int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
-int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
-int LongRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+void IntegerMachine(uint8_t * buffer, tokenNode *sourceTokens);
+void ShortRealMachine(uint8_t * buffer, tokenNode *sourceTokens);
+void LongRealMachine(uint8_t * buffer, tokenNode *sourceTokens);
 void RetrieveTerminals(tokenNode *reservedHead);
 void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);

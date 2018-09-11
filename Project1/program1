@@ -1,4 +1,4 @@
-158645.589652E-58497
+478.1566E12
 program example(input,output);
 var x, y: integer;
 function gcd(a, b: integer): integer;

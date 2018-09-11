@@ -35,15 +35,16 @@ int main()
   pFile = fopen("program1","r+");
 
 
- while(fgets(sourceLine,72,pFile) != NULL)
- {
+ //while(fgets(sourceLine,72,pFile) != NULL)
+ //{
    //printf("%s",sourceLine);
-   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-   currentLine = currentLine + 1;
- }
+   //fgets(sourceLine,72,pFile);
+   //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+ // currentLine = currentLine + 1;
+ //}
 
 
-/*
+
   fgets(sourceLine,72,pFile);
   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
@@ -54,12 +55,21 @@ int main()
 
   while(sourceTokens->next != NULL)
   {
-    printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
+    if(sourceTokens->attribute->attr == 0)
+    {
+      printf("%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+    } else {
+      printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+    }
     sourceTokens = sourceTokens->next; 
   }
-*/
-  // printf("%d %s %d %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, sourceTokens->attribute->attr);
 
+  if(sourceTokens->attribute->attr == 0)
+  {
+    printf("%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+  } else {
+    printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+  }
   // RetrieveTerminals(&reservedHead);
 
   // used to check the values of the token linked list
@@ -82,7 +92,6 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
   // while loop goes through each finite statemachine for processing
   // until the end of the buffer is reached or none of the machines can process
   // the current values. 
-
   while((atEnd == 1) && (stuck == 0))
   {
 
@@ -91,6 +100,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
     stuck = basePosition;
 
     atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
+    
 /*
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
@@ -314,7 +324,7 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
 
   int type = 0;
   int attribute = 0;
-  char * tempBuff = malloc(40);  
+  uint8_t * tempBuff = malloc(40);  
 
   int buffIndex = 0;
   int numType = 0;
@@ -374,33 +384,34 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
     numType = numType + 1;
   }
 
-  printf("%s\n",tempBuff);
 
+  //printf("%s\n",tempBuff);
+
+  // switch statement to handle any errors and add
+  // tokens for numbers found
   switch(numType)
   {
     case 0 :
-      printf("is at 0\n");
     break;
 
     case 1:
-      printf("detected an integer\n");
+      IntegerMachine(tempBuff, sourceTokens);
     break;
 
     case 2:
-      printf("detected a decimal\n");
+      ShortRealMachine(tempBuff, sourceTokens);
     break;
 
     case 3:
-      printf("detected an exponential\n");  
+      LongRealMachine(tempBuff, sourceTokens);
     break;
 
     default:
-      printf("found nothing\n");
     break;
   }
 
   *bPosition = *fPosition;
-
+  
   if(buffer[*fPosition] == '\n') {
     return 0;
   } else {
@@ -408,90 +419,134 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
   }
 }
 
-int IntegerMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+void IntegerMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
 {
-  *fPosition = *bPosition;  
-
   int type = 0;
   int attribute = 0;
-  char * tempBuff = malloc(11);
-
-  int buffIndex = 0;
-
-  while((isdigit(buffer[*fPosition]) != 0) && (buffIndex <= 10))
-  {
-    buffIndex = *fPosition - *bPosition;
+  int errors = 0;
   
-    tempBuff[buffIndex] = buffer[*fPosition];
- 
-    *fPosition = *fPosition + 1; 
-  }
-
-  if((*fPosition - *bPosition) > 1 && (tempBuff[0] == '0'))
+  // add token for leading zero error
+  if(strlen(tempBuff) > 1 && (tempBuff[0] == '0'))
   {
     AddToTokenLinked(sourceTokens,tempBuff,LEXERR,LEADING_ZERO);
-  } else if((*fPosition - *bPosition) > 10)
-  {
-    AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONG_STRING);
-  } else if((*fPosition - *bPosition) > 0)
-  {
-    AddToTokenLinked(sourceTokens,tempBuff,INTEGER, 0);
+    errors = errors + 1;
   }
 
-  *bPosition = *fPosition;
+  // add token for too long of an integer
+  if(strlen(tempBuff) > 10)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR, LONG_INT);
+    errors = errors + 1;
+  }
+  
+  // add integer if no errors
+  if(errors == 0)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,INTEGER, VALUE);
+  }
+  
+}
 
-  if(buffer[*fPosition] == '\n') {
-    return 0;
-  } else {
-    return 1;
+void ShortRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
+{
+  int type = 0;
+  int attribute = 0;
+  
+  int index = 0;
+  int beforeDecimal = 0;
+  int afterDecimal = 0;
+  int errors = 0;
+
+  while(isdigit(tempBuff[index]) != 0)
+  {
+    index = index + 1;
+    beforeDecimal = beforeDecimal + 1;
+  }
+  
+  index = index + 1;
+  
+  while(isdigit(tempBuff[index]) != 0)
+  {
+    index = index + 1;
+    afterDecimal = afterDecimal + 1;
+  }
+
+  if(beforeDecimal > 5)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,REAL_BEFORE_DECIMAL_TOO_LONG);
+    errors = errors + 1;
+  }
+  
+  if(afterDecimal > 5)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,REAL_AFTER_DECIMAL_TOO_LONG);
+    errors = errors + 1;
+  }
+  
+  if(errors == 0)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,REAL,VALUE);
   }
 }
 
-int ShortRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
+void LongRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
 {
-  *fPosition = *bPosition;  
+  int index = 0;
+  int beforeDecimal = 0;
+  int afterDecimal = 0;
+  int afterExponent = 0;
+  int errors = 0;
 
-  int type = 0;
-  int attribute = 0;
-  char * tempBuff = malloc(13);
-  int buffIndex = 0;
-
-  while((isdigit(buffer[*fPosition]) != 0) && (buffIndex <= 5))
+  while(isdigit(tempBuff[index]) != 0)
   {
-    buffIndex = *fPosition - *bPosition;
+    index = index + 1;
+    beforeDecimal = beforeDecimal + 1;
   }
-
-  if((buffIndex > 5) && (isdigit(buffer[*fPosition]) != 0))
+  
+  index = index + 1;
+  
+  while(isdigit(tempBuff[index]) != 0)
   {
-    while(isdigit(buffer[*fPosition]) != 0)
-    {
-      buffIndex = *fPosition - *bPosition;
-    } 
+    index = index + 1;
+    afterDecimal = afterDecimal + 1;
   }
-
-  if(buffer[*fPosition] == '\n') {
-    return 0;
-  } else {
-    return 1;
+  
+  index = index + 1;
+  
+  if(tempBuff[index] == '+' || tempBuff[index] == '-')
+  {
+    index = index + 1;
   }
-}
-
-int LongRealMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
-{
-  *fPosition = *bPosition;  
-
-  int type = 0;
-  int attribute = 0;
-  char * tempBuff = malloc(13);
-  int buffIndex = 0;
-
-
-
-  if(buffer[*fPosition] == '\n') {
-    return 0;
-  } else {
-    return 1;
+  
+  while(isdigit(tempBuff[index]) != 0)
+  {
+    index = index + 1;
+    afterExponent = afterExponent + 1;
   }
+  
+  if(beforeDecimal > 5)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,REAL_BEFORE_DECIMAL_TOO_LONG);
+    errors = errors + 1;
+  }
+  
+  if(afterDecimal > 5)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,LEXERR,REAL_AFTER_DECIMAL_TOO_LONG);
+    errors = errors + 1;
+  }
+  
+  if(afterExponent > 2)
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, EXPONENT_TOO_LONG);
+    errors = errors + 1;
+  }
+  
+  if(errors == 0)
+  {
+    AddToTokenLinked(sourceTokens,tempBuff,REAL,VALUE);
+  }
+  
 }
 
 void RetrieveReservedWords(tokenNode *rHead)
@@ -586,60 +641,65 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
 
 char * NumberToString(int Number)
 {
-  if(0) return "NULL";
-  if(1) return "IF";
-  if(2) return "THEN"; 
-  if(3) return "PROGRAM";
-  if(4) return "VAR";
-  if(5) return "ARRAY";
-  if(6) return "OF";
-  if(7) return "INT";
-  if(8) return "REAL";
-  if(9) return "PROCEDURE";
-  if(10) return "BEGIN";
-  if(11) return "END";
-  if(12) return "ELSE";
-  if(13) return "WHILE";
-  if(14) return "DO";
-  if(15) return "OR";
-  if(16) return "DIV";
-  if(17) return "MOD";
-  if(18) return "AND";
-  if(19) return "NOT";
-  if(20) return "ID";
-  if(21) return "CALL";
+  if(Number == 0) return "NULL";
+  if(Number == 1) return "IF";
+  if(Number == 2) return "THEN"; 
+  if(Number == 3) return "PROGRAM";
+  if(Number == 4) return "VAR";
+  if(Number == 5) return "ARRAY";
+  if(Number == 6) return "OF";
+  if(Number == 7) return "INT";
+  if(Number == 8) return "REAL";
+  if(Number == 9) return "PROCEDURE";
+  if(Number == 10) return "BEGIN";
+  if(Number == 11) return "END";
+  if(Number == 12) return "ELSE";
+  if(Number == 13) return "WHILE";
+  if(Number == 14) return "DO";
+  if(Number == 15) return "OR";
+  if(Number == 16) return "DIV";
+  if(Number == 17) return "MOD";
+  if(Number == 18) return "AND";
+  if(Number == 19) return "NOT";
+  if(Number == 20) return "ID";
+  if(Number == 21) return "CALL";
+  if(Number == 22) return "VALUE";
 
-  if(30) return "LEXERR";
+  if(Number == 30) return "LEXERR";
 
-  if(31) return "LONG_STRING";
-  if(32) return "LEADING_ZERO";
-  if(33) return "TRAILING_ZERO";
-  if(34) return "INT_TOO_LONG";
-  if(35) return "REAL_TOO_LONG";
+  if(Number == 31) return "LONG_STRING";
+  if(Number == 32) return "LEADING_ZERO";
+  if(Number == 33) return "TRAILING_ZERO";
+  if(Number == 34) return "INT_TOO_LONG";
+  if(Number == 35) return "REAL_BEFORE_DECIMAL_TOO_LONG";
+  if(Number == 36) return "REAL_AFTER_DECIMAL_TOO_LONG";
+  if(Number == 37) return "LONG_INT";
+  if(Number == 38) return "ENDING_ZEROS";
+  if(Number == 39) return "EXPONENT_TOO_LONG";
 
-  if(71) return "ADD_SYMBOL";
-  if(72) return "SUB_SYMBOL";
-  if(73) return "MUL_SYMBOL";
-  if(74) return "DIV_SYMBOL";
-  if(75) return "COLON";
-  if(76) return "OPEN_BRACKET";
-  if(77) return "CLOSED_BRACKET";
-  if(78) return "PERIOD";
-  if(79) return "SEMICOLON";
-  if(80) return "OPEN_PARENTHESES";
-  if(81) return "CLOSED_PARENTHESES";
-  if(82) return "COMMA";
-  if(83) return "DOUBLE_PERIOD";
+  if(Number == 71) return "ADD_SYMBOL";
+  if(Number == 72) return "SUB_SYMBOL";
+  if(Number == 73) return "MUL_SYMBOL";
+  if(Number == 74) return "DIV_SYMBOL";
+  if(Number == 75) return "COLON";
+  if(Number == 76) return "OPEN_BRACKET";
+  if(Number == 77) return "CLOSED_BRACKET";
+  if(Number == 78) return "PERIOD";
+  if(Number == 79) return "SEMICOLON";
+  if(Number == 80) return "OPEN_PARENTHESES";
+  if(Number == 81) return "CLOSED_PARENTHESES";
+  if(Number == 82) return "COMMA";
+  if(Number == 83) return "DOUBLE_PERIOD";
 
-  if(120) return "GT";
-  if(121) return "LT";
-  if(122) return "GTE";
-  if(123) return "LTE";
-  if(124) return "EQU";
-  if(125) return "NE";
+  if(Number == 120) return "GT";
+  if(Number == 121) return "LT";
+  if(Number == 122) return "GTE";
+  if(Number == 123) return "LTE";
+  if(Number == 124) return "EQU";
+  if(Number == 125) return "NE";
 
-  if(160) return "RELOP";
-  if(161) return "ADDOP";
-  if(162) return "MULOP";
-  if(163) return "ASSIGNOP";
+  if(Number == 160) return "RELOP";
+  if(Number == 161) return "ADDOP";
+  if(Number == 162) return "MULOP";
+  if(Number == 163) return "ASSIGNOP";
 }

@@ -1,4 +1,4 @@
 LexicalAnalyzer: LexicalAnalyzer.c 
-	gcc -o LexicalAnalyzer LexicalAnalyzer.c -I.
+	gcc -o LexicalAnalyzer LexicalAnalyzer.c 
 
 
