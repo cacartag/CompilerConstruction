@@ -28,6 +28,7 @@
 #define CALL 21
 #define VALUE 22
 
+// Lexical error
 #define LEXERR 30
 
 #define LONG_STRING 31
@@ -39,7 +40,9 @@
 #define LONG_INT 37
 #define ENDING_ZEROS 38
 #define EXPONENT_TOO_LONG 39
+#define UNIDENTIFIED_SYMBOL 40
 
+// Symbols
 #define ADD_SYMBOL 71
 #define SUB_SYMBOL 72
 #define MUL_SYMBOL 73
@@ -96,6 +99,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *terminalHead, tokenNode *sourceTokens);
 int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
 int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens);
+int UnidentifiedSymbol(int *bPosition, uint8_t * buffer, tokenNode *sourceTokens);
 void IntegerMachine(uint8_t * buffer, tokenNode *sourceTokens);
 void ShortRealMachine(uint8_t * buffer, tokenNode *sourceTokens);
 void LongRealMachine(uint8_t * buffer, tokenNode *sourceTokens);
@@ -104,4 +108,6 @@ void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
 void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
 char * NumberToString(int Number);
+
+// need to add detection for token types of mult, add, and assign
 

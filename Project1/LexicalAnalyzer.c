@@ -32,21 +32,21 @@ int main()
   }
 */
   // start by opening up file with program
-  pFile = fopen("program1","r+");
+  pFile = fopen("program2","r+");
 
 
- while(fgets(sourceLine,72,pFile) != NULL)
- {
-   //printf("%s",sourceLine);
-   //fgets(sourceLine,72,pFile);
-   AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
-   currentLine = currentLine + 1;
- }
+ //while(fgets(sourceLine,72,pFile) != NULL)
+ //{
+ //  //printf("%s",sourceLine);
+ //  //fgets(sourceLine,72,pFile);
+ //  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+ //  currentLine = currentLine + 1;
+ //}
 
 
 
-  //fgets(sourceLine,72,pFile);
-  //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+  fgets(sourceLine,72,pFile);
+  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
   if(sourceTokens->next != NULL)
   {
@@ -99,6 +99,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
     stuck = basePosition;
 
+    printf("Current basePosition: %i\n", basePosition);
  
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
@@ -106,11 +107,14 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
     atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
     
+    // change this to catch other symbols
     if((basePosition - stuck) <= 0)
     {
-      stuck = 1;
-    } else {
+      //stuck = 1;
       stuck = 0;
+      UnidentifiedSymbol(&basePosition, buffer, sourceTokens);
+    } else {
+      //stuck = 0;
     }
      
   }
@@ -226,6 +230,14 @@ int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode 
       CheckReservedList(tempBuff, reservedHead, &type, &attribute);
     }
     
+    if((tempBuff[0] == '.') && (buffer[*fPosition]) == '.')
+    {
+      tempBuff[1] = buffer[*fPosition];
+      tempBuff[2] = '\0';
+      *fPosition = *fPosition + 1;
+      CheckReservedList(tempBuff, reservedHead, &type, &attribute);
+    }
+    
     AddToTokenLinked(sourceTokens,tempBuff,type, attribute);
   } else {
     *fPosition = *fPosition - 1;
@@ -265,9 +277,16 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
     {
       tempBuff[1] = buffer[*fPosition];
       *fPosition = *fPosition + 1;
-      type = LTE;
+      type = RELOP;
+      attribute = LTE;
+    } else if(buffer[*fPosition] == '>') {
+      tempBuff[1] = buffer[*fPosition];
+      *fPosition = *fPosition + 1;
+      type = RELOP;
+      attribute = NE;
     } else {
-      type = LT;
+      type = RELOP;
+      attribute = LT;
     }
     
     tempBuff[*fPosition - *bPosition] = '\0';
@@ -285,6 +304,11 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
     {
       tempBuff[1] = buffer[*fPosition];
       *fPosition = *fPosition + 1;
+      type = RELOP;
+      attribute = GTE;
+    } else {
+      type = RELOP;
+      attribute = GT;
     }
  
     tempBuff[*fPosition - *bPosition] = '\0';
@@ -298,6 +322,9 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
     *fPosition = *fPosition + 1;
  
     tempBuff[1] = '\0';
+    
+    type = RELOP;
+    attribute = EQU;
   }
 
   // if any of the above were found then the buffer 
@@ -411,6 +438,24 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
   *bPosition = *fPosition;
   
   if(buffer[*fPosition] == '\n') {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int UnidentifiedSymbol(int *bPosition, uint8_t * buffer, tokenNode *sourceTokens)
+{
+  uint8_t * tempBuff = malloc(2);
+  
+  tempBuff[0] = buffer[*bPosition];
+  tempBuff[1] = '\0';
+  
+  AddToTokenLinked(sourceTokens,tempBuff,LEXERR,UNIDENTIFIED_SYMBOL);
+  
+  *bPosition = *bPosition + 1;
+    
+  if(buffer[*bPosition] == '\n') {
     return 0;
   } else {
     return 1;
@@ -625,7 +670,7 @@ uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *typ
     {
       *type = forwardHead->type;
       *attribute = forwardHead->attribute->attr;
- 
+      
       return 1;
     }
     forwardHead = forwardHead->next;
@@ -675,6 +720,7 @@ char * NumberToString(int Number)
   if(Number == 37) return "LONG_INT";
   if(Number == 38) return "ENDING_ZEROS";
   if(Number == 39) return "EXPONENT_TOO_LONG";
+  if(Number == 40) return "UNIDENTIFIED_SYMBOL";
 
   if(Number == 71) return "ADD_SYMBOL";
   if(Number == 72) return "SUB_SYMBOL";

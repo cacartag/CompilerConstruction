@@ -1,0 +1,11 @@
+abcdefg&^ 12345 0 10
+                1.0 1234.56789 1.0E+1 3.0E1
+   = <> < <= >= >
+ + - or
+ * / div mod and
+ :=
+ . .. ; : () []
+ program if then else var
+ array of procedure begin
+ end while do not call 
+ integer real
