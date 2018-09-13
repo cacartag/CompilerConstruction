@@ -1,6 +1,6 @@
 #include "LexicalAnalyzer.h"
 
-int main()
+int main(int argc, char * argv[])
 {
   FILE * pFile;
   uint8_t sourceLine[73];
@@ -11,9 +11,7 @@ int main()
   sourceTokens->next = NULL;  
   
   RetrieveReservedWords(&reservedHead);
-
-  int count = 1;
-
+  
   // removes the next character line at the end of the string
   tokenNode tempReservedHead = reservedHead;
   while(tempReservedHead->next != NULL)
@@ -25,28 +23,25 @@ int main()
     tempReservedHead = tempReservedHead->next; 
   }
 
-/*
-    printf("%d %s %d %d \n", count, reservedHead->lexeme, reservedHead->type, reservedHead->attribute->attr);
-    reservedHead = reservedHead->next; 
-    count = count + 1;
-  }
-*/
   // start by opening up file with program
-  pFile = fopen("program3","r+");
-
+  if(argc == 1)
+  {
+    pFile = fopen("program3","r+");
+  } else {
+    pFile = fopen(argv[1],"r+");
+  }
 
   while(fgets(sourceLine,72,pFile) != NULL)
   {
-   //printf("%s",sourceLine);
-    //fgets(sourceLine,72,pFile);
     AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
     currentLine = currentLine + 1;
   }
-   //
-   //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
-  //fgets(sourceLine,72,pFile);
-  //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+
+  AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
+
+//AddToTokenLinked(sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute)
+
 
   int tokenCount = 1;
   
@@ -77,7 +72,7 @@ int main()
   
   tokenCount = tokenCount + 1;
   
-  printf("Total number of tokens: %i\n", tokenCount);
+  // printf("Total number of tokens: %i\n", tokenCount);
 
   return 0;
 }
@@ -87,8 +82,8 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 {
   // base position keeps track of starting position
   // forward position moves to keep track of current processed character
-  // atend keeps track of if the end of the buffer has been reached
-  // stuck keeps track of wether anything new has been processed
+  // atEnd keeps track of if the end of the buffer has been reached
+  // stuck keeps track of whether anything new has been processed
   int basePosition = 0;
   int forwardPosition = 0;
   int atEnd = 1;
@@ -806,6 +801,9 @@ char * NumberToString(int Number)
   if(Number == 161) return "ADDOP";
   if(Number == 162) return "MULOP";
   if(Number == 163) return "ASSIGNOP";
+  if(Number == 200) return "EOF";
+  
+  return "NO_MATCH";
 }
 
 int TrailingZeroCheck(char tempBuff)

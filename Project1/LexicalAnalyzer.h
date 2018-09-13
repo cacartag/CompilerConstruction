@@ -73,6 +73,8 @@
 #define MULOP 162
 #define ASSIGNOP 163
  
+#define END_OF_FILE 200
+ 
 struct terminal { 
   char * symbol; 
   struct terminal * next; 
