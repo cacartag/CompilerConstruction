@@ -32,7 +32,7 @@ int main()
   }
 */
   // start by opening up file with program
-  pFile = fopen("program2","r+");
+  pFile = fopen("program3","r+");
 
 
   while(fgets(sourceLine,72,pFile) != NULL)
@@ -48,6 +48,8 @@ int main()
   //fgets(sourceLine,72,pFile);
   //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
+  int tokenCount = 1;
+  
   if(sourceTokens->next != NULL)
   {
     sourceTokens = sourceTokens->next;
@@ -62,6 +64,8 @@ int main()
       printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
     }
     sourceTokens = sourceTokens->next; 
+    
+    tokenCount = tokenCount + 1;
   }
 
   if(sourceTokens->attribute->attr == 0)
@@ -70,10 +74,11 @@ int main()
   } else {
     printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
   }
-  // RetrieveTerminals(&reservedHead);
+  
+  tokenCount = tokenCount + 1;
+  
+  printf("Total number of tokens: %i\n", tokenCount);
 
-  // used to check the values of the token linked list
-   
   return 0;
 }
 
@@ -110,7 +115,6 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
     {
       atEnd = UnidentifiedSymbol(&basePosition, buffer, sourceTokens);
     }
-     
   }
 
   return 0;
@@ -332,6 +336,9 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
   }
 }
 
+// Retrieves all numbers allowed by grammar,
+// this includes integers, shorts reals, and long reals
+// it then tokenizes the result into linked list
 int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *sourceTokens)
 {
   *fPosition = *bPosition;  
@@ -433,6 +440,8 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
   }
 }
 
+// retrieves symbol that was unable to be processed by other machines
+// and tokenizes it as unidentified,  does only one symbol at a time
 int UnidentifiedSymbol(int *bPosition, uint8_t * buffer, tokenNode *sourceTokens)
 {
   uint8_t * tempBuff = malloc(2);
@@ -451,6 +460,7 @@ int UnidentifiedSymbol(int *bPosition, uint8_t * buffer, tokenNode *sourceTokens
   }
 }
 
+// parses integers passed to it,
 void IntegerMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
 {
   int type = 0;
@@ -458,7 +468,7 @@ void IntegerMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
   int errors = 0;
   
   // add token for leading zero error
-  if(strlen(tempBuff) > 1 && (tempBuff[0] == '0'))
+  if(LeadingZeroCheck(tempBuff))
   {
     AddToTokenLinked(sourceTokens,tempBuff,LEXERR,LEADING_ZERO);
     errors = errors + 1;
@@ -479,6 +489,8 @@ void IntegerMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
   
 }
 
+// tokenizes and parses short reals for any errors, if none found
+// then value passed
 void ShortRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
 {
   int type = 0;
@@ -515,12 +527,30 @@ void ShortRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
     errors = errors + 1;
   }
   
+  char * subbuff = malloc(beforeDecimal + 1);
+  memcpy(subbuff, &tempBuff[0], beforeDecimal);
+  subbuff[beforeDecimal] = '\0';
+
+  if(LeadingZeroCheck(subbuff))
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, LEADING_ZERO);
+    errors = errors + 1;
+  }
+  
+  if(TrailingZeroCheck(tempBuff[strlen(tempBuff) - 1]))
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, TRAILING_ZERO);  
+    errors = errors + 1;
+  }
+  
   if(errors == 0)
   {
     AddToTokenLinked(sourceTokens,tempBuff,REAL,VALUE);
   }
 }
 
+// tokenizes and parses long reals for any errors, if none found
+// then value tokenized
 void LongRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
 {
   int index = 0;
@@ -574,6 +604,39 @@ void LongRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
     errors = errors + 1;
   }
   
+  char * subbuff = malloc(afterExponent + 1);
+  memcpy(subbuff, &tempBuff[index - afterExponent], afterExponent);
+  subbuff[afterExponent] = '\0';
+  
+  if(atoi(subbuff) == 0)
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, EXPONENT_IS_ZERO);
+    errors = errors + 1; 
+  }
+  
+  subbuff = malloc(beforeDecimal + 1);
+  memcpy(subbuff, &tempBuff[0], beforeDecimal);
+  subbuff[beforeDecimal] = '\0';
+  
+  if(LeadingZeroCheck(subbuff))
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, LEADING_ZERO);
+    errors = errors + 1;
+  }
+  
+  
+  if(TrailingZeroCheck(tempBuff[beforeDecimal+afterDecimal]))
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, TRAILING_ZERO);  
+    errors = errors + 1;
+  }
+  
+  if(afterExponent == 0)
+  {
+    AddToTokenLinked(sourceTokens, tempBuff, LEXERR, NO_EXPONENT_SPECIFIED);
+    errors = errors + 1;
+  }
+  
   if(errors == 0)
   {
     AddToTokenLinked(sourceTokens,tempBuff,REAL,VALUE);
@@ -581,6 +644,8 @@ void LongRealMachine(uint8_t * tempBuff, tokenNode *sourceTokens)
   
 }
 
+// retrieves reserved words from "Reserved.txt", file needs 
+// to be formatted where 3 lines is equal to one reserved token
 void RetrieveReservedWords(tokenNode *rHead)
 {
   FILE *reservedFile;
@@ -622,6 +687,7 @@ void RetrieveReservedWords(tokenNode *rHead)
   *rHead = reservedHead;
 }
 
+// adds new tokens to linked list
 void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute)
 {
   tokenNode tempToken = (tokenNode)(malloc(sizeof(struct token)));
@@ -710,6 +776,8 @@ char * NumberToString(int Number)
   if(Number == 38) return "ENDING_ZEROS";
   if(Number == 39) return "EXPONENT_TOO_LONG";
   if(Number == 40) return "UNIDENTIFIED_SYMBOL";
+  if(Number == 41) return "EXPONENT_IS_ZERO";
+  if(Number == 42) return "NO_EXPONENT_SPECIFIED";
 
   if(Number == 71) return "ADD_SYMBOL";
   if(Number == 72) return "SUB_SYMBOL";
@@ -738,4 +806,24 @@ char * NumberToString(int Number)
   if(Number == 161) return "ADDOP";
   if(Number == 162) return "MULOP";
   if(Number == 163) return "ASSIGNOP";
+}
+
+int TrailingZeroCheck(char tempBuff)
+{
+    if(atoi(&tempBuff) == 0)
+    {
+        return 1;
+    }
+    
+    return 0;
+}
+
+int LeadingZeroCheck(char * tempBuff)
+{
+    if(strlen(tempBuff) > 1 && (tempBuff[0] == '0'))
+    {
+        return 1;
+    }
+    
+    return 0;
 }

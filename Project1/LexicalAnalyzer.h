@@ -41,6 +41,8 @@
 #define ENDING_ZEROS 38
 #define EXPONENT_TOO_LONG 39
 #define UNIDENTIFIED_SYMBOL 40
+#define EXPONENT_IS_ZERO 41
+#define NO_EXPONENT_SPECIFIED 42
 
 // Symbols
 #define ADD_SYMBOL 71
@@ -110,6 +112,8 @@ void RetrieveReservedWords(tokenNode *reservedHead);
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute);
 void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
 char * NumberToString(int Number);
+int TrailingZeroCheck(char tempBuff);
+int LeadingZeroCheck(char * tempBuff);
 
 // need to add detection for token types of mult, add, and assign
 
