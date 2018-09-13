@@ -35,18 +35,18 @@ int main()
   pFile = fopen("program2","r+");
 
 
- //while(fgets(sourceLine,72,pFile) != NULL)
- //{
- //  //printf("%s",sourceLine);
- //  //fgets(sourceLine,72,pFile);
- //  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
- //  currentLine = currentLine + 1;
- //}
+  while(fgets(sourceLine,72,pFile) != NULL)
+  {
+   //printf("%s",sourceLine);
+    //fgets(sourceLine,72,pFile);
+    AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+    currentLine = currentLine + 1;
+  }
+   //
+   //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
-
-
-  fgets(sourceLine,72,pFile);
-  AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
+  //fgets(sourceLine,72,pFile);
+  //AnalyzeLine(&reservedHead, &sourceTokens, sourceLine);
 
   if(sourceTokens->next != NULL)
   {
@@ -91,30 +91,24 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
 
   // while loop goes through each finite statemachine for processing
   // until the end of the buffer is reached or none of the machines can process
-  // the current values. 
-  while((atEnd == 1) && (stuck == 0))
+  // the current values.
+  while((atEnd == 1) && (buffer[basePosition] != 13) && (buffer[basePosition] != 10) && (buffer[basePosition] != 0))
   {
 
     tokenNode headSourceTokens = *sourceTokens;
 
     stuck = basePosition;
 
-    printf("Current basePosition: %i\n", basePosition);
- 
     atEnd = WhiteSpaceMachine(&basePosition, &forwardPosition, buffer);
     atEnd = IdResolutionMachine(&basePosition, &forwardPosition, buffer, reservedHead, &headSourceTokens);
     atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
     atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
-    
+
     // change this to catch other symbols
     if((basePosition - stuck) <= 0)
     {
-      //stuck = 1;
-      stuck = 0;
-      UnidentifiedSymbol(&basePosition, buffer, sourceTokens);
-    } else {
-      //stuck = 0;
+      atEnd = UnidentifiedSymbol(&basePosition, buffer, sourceTokens);
     }
      
   }
@@ -130,9 +124,6 @@ int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer)
   *fPosition = *bPosition;
   while(other == 1)
   {
-
-    // printf("fPosition = %i, char is %c \n", *fPosition, buffer[*fPosition]);
-
     if((buffer[*fPosition] == '\b') || (buffer[*fPosition] == '\t') || (buffer[*fPosition] == '\n') || (buffer[*fPosition] == ' '))
     {
       *fPosition = *fPosition + 1;
@@ -295,7 +286,6 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
   {
     // check for superstring greater than or equals to
     // before settling for greater than
-
     tempBuff[0] = buffer[*fPosition];  
 
     *fPosition = *fPosition + 1;
@@ -316,7 +306,6 @@ int RelationalOperatorMachine(int *bPosition, int *fPosition, uint8_t * buffer, 
   } else if(buffer[*fPosition] == '=') 
   {
     // check for equality operator
-
     tempBuff[0] = buffer[*fPosition];  
 
     *fPosition = *fPosition + 1;
@@ -727,14 +716,16 @@ char * NumberToString(int Number)
   if(Number == 73) return "MUL_SYMBOL";
   if(Number == 74) return "DIV_SYMBOL";
   if(Number == 75) return "COLON";
-  if(Number == 76) return "OPEN_BRACKET";
-  if(Number == 77) return "CLOSED_BRACKET";
+  if(Number == 76) return "OPEN_CURLY_BRACKET";
+  if(Number == 77) return "CLOSED_CURLY_BRACKET";
   if(Number == 78) return "PERIOD";
   if(Number == 79) return "SEMICOLON";
   if(Number == 80) return "OPEN_PARENTHESES";
   if(Number == 81) return "CLOSED_PARENTHESES";
   if(Number == 82) return "COMMA";
   if(Number == 83) return "DOUBLE_PERIOD";
+  if(Number == 84) return "OPEN_BRACKET";
+  if(Number == 85) return "CLOSED_BRACKET";
 
   if(Number == 120) return "GT";
   if(Number == 121) return "LT";
