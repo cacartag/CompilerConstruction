@@ -116,6 +116,9 @@ void AddToTokenLinked(tokenNode * sourceTokens, uint8_t * lexeme, uint32_t type,
 char * NumberToString(int Number);
 int TrailingZeroCheck(char tempBuff);
 int LeadingZeroCheck(char * tempBuff);
+void OutputTokens(tokenNode sourceTokens);
+void OutputListings(tokenNode sourceTokens, FILE * pFile);
+void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile);
 
 // need to add detection for token types of mult, add, and assign
 

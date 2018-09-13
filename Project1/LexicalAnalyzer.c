@@ -37,43 +37,11 @@ int main(int argc, char * argv[])
     currentLine = currentLine + 1;
   }
 
-
   AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
-
-//AddToTokenLinked(sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute)
-
-
-  int tokenCount = 1;
   
-  if(sourceTokens->next != NULL)
-  {
-    sourceTokens = sourceTokens->next;
-  }
-
-  while(sourceTokens->next != NULL)
-  {
-    if(sourceTokens->attribute->attr == 0)
-    {
-      printf("%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
-    } else {
-      printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
-    }
-    sourceTokens = sourceTokens->next; 
-    
-    tokenCount = tokenCount + 1;
-  }
-
-  if(sourceTokens->attribute->attr == 0)
-  {
-    printf("%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
-  } else {
-    printf("%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
-  }
+  OutputTokens(sourceTokens);
+  OutputListings(sourceTokens, pFile);
   
-  tokenCount = tokenCount + 1;
-  
-  // printf("Total number of tokens: %i\n", tokenCount);
-
   return 0;
 }
 
@@ -824,4 +792,70 @@ int LeadingZeroCheck(char * tempBuff)
     }
     
     return 0;
+}
+
+void OutputTokens(tokenNode sourceTokens)
+{    
+  FILE * pFile = fopen("TokenOutput.txt","w+");
+    
+  if(sourceTokens->next != NULL)
+  {
+    sourceTokens = sourceTokens->next;
+  }
+
+  while(sourceTokens->next != NULL)
+  {
+    if(sourceTokens->attribute->attr == 0)
+    {
+      fprintf(pFile,"%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+    } else {
+      fprintf(pFile,"%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+    }
+    sourceTokens = sourceTokens->next; 
+    
+  }
+
+  if(sourceTokens->attribute->attr == 0)
+  {
+    fprintf(pFile,"%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+  } else {
+    fprintf(pFile,"%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+  }
+  
+  fclose(pFile);
+}
+
+void OutputListings(tokenNode sourceTokens, FILE * pFile)
+{
+  char * sourceLine = malloc(73);
+  FILE * tempFile = fopen("ListingOutput.txt","w+");
+  int tempLine = 1;
+      
+  rewind(pFile);
+
+  while(fgets(sourceLine,72,pFile) != NULL)
+  {
+    fprintf(tempFile,"%i    %s",tempLine,sourceLine);
+    PrintLexicalErrors(sourceTokens, tempLine, tempFile);
+    tempLine = tempLine + 1;
+  }
+
+}
+
+void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile)
+{
+  if(sourceTokens->next != NULL)
+  {
+    sourceTokens = sourceTokens->next;
+  }
+
+  while(sourceTokens->next != NULL && (sourceTokens->line <= tempLine) )
+  {
+    if((sourceTokens->type == LEXERR) && (sourceTokens->line == tempLine))
+    {
+      fprintf(pFile,"%i    %s: %s: %s\n", tempLine,NumberToString(sourceTokens->type),NumberToString(sourceTokens->attribute->attr),sourceTokens->lexeme);
+    }
+    
+    sourceTokens = sourceTokens->next;  
+  }
 }
