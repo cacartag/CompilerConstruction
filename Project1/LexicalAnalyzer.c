@@ -829,7 +829,7 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile)
 {
   char * sourceLine = malloc(73);
   FILE * tempFile = fopen("ListingOutput.txt","w+");
-  int tempLine = 1;
+  int tempLinef = 1;
       
   rewind(pFile);
 
