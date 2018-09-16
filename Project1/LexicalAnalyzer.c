@@ -312,88 +312,104 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
 
   int buffIndex = 0;
   int numType = 0;
+  int integer = 0;
+  int shortReal = 0;
+  int longReal = 0;
 
-  // check that the next character is a digit
-  while(isdigit(buffer[*fPosition]) != 0)
-  { 
-    tempBuff[buffIndex] = buffer[*fPosition];
+  if(isdigit(buffer[*fPosition]) != 0)
+  {
+    // check that the next character is a digit
+    while(isdigit(buffer[*fPosition]) != 0)
+    { 
+      integer = integer + 1;
+      tempBuff[buffIndex] = buffer[*fPosition];
+      
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+      numType = 1;
+      
+    }
+    // end of digits
     
-    *fPosition = *fPosition + 1;
-    buffIndex = *fPosition - *bPosition;
-    numType = 1;
+    // check for number after decimal
+    if((buffer[*fPosition] == '.') && (isdigit(buffer[*fPosition + 1]) != 0))
+    {
+      shortReal = shortReal + 2;
+      tempBuff[buffIndex] = buffer[*fPosition];
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+    
+      while(isdigit(buffer[*fPosition]) != 0)
+      {
+        tempBuff[buffIndex] = buffer[*fPosition];
+    
+        *fPosition = *fPosition + 1;
+        buffIndex = *fPosition - *bPosition;
+      }
+      numType =  2;
+    }
+
+    // end of short reals
+    //
+    //// check for numbers after exponentials
+    if((buffer[*fPosition] == 'E') && ((buffer[*fPosition + 1] == '+') || (buffer[*fPosition + 1] == '-')))
+    {
+      tempBuff[buffIndex] = buffer[*fPosition];
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+    
+      tempBuff[buffIndex] = buffer[*fPosition];
+    
+      *fPosition = *fPosition + 1;
+      buffIndex = *fPosition - *bPosition;
+      
+      // look for numbers after exponential
+      if(isdigit(buffer[*fPosition]) != 0)
+      {
+        while(isdigit(buffer[*fPosition]) != 0)
+        {
+          longReal = longReal + 1;
+            
+          tempBuff[buffIndex] = buffer[*fPosition];
+        
+          *fPosition = *fPosition + 1;
+          buffIndex = *fPosition - *bPosition;
+          numType = 3; 
+        }
+      } else {
+          *fPosition = *fPosition - 2;
+      }
+        
+    }
+    // end of long real
+    
+    // switch statement to handle any errors and add
+    // tokens for numbers found
+    switch(numType)
+    {
+      case 0 :
+      break;
+    
+      case 1:
+        tempBuff[integer + 1] = '\0';
+        IntegerMachine(tempBuff, sourceTokens);
+      break;
+    
+      case 2:
+        tempBuff[shortReal + 1] = '\0';
+        ShortRealMachine(tempBuff, sourceTokens);
+      break;
+    
+      case 3:
+        tempBuff[longReal+ 1] = '\0';
+        LongRealMachine(tempBuff, sourceTokens);
+      break;
+    
+      default:
+      break;
+    }
   }
   
-  // check for number after decimal
-  if((buffer[*fPosition] == '.') && (isdigit(buffer[*fPosition + 1]) != 0))
-  {
-    tempBuff[buffIndex] = buffer[*fPosition];
-    *fPosition = *fPosition + 1;
-    buffIndex = *fPosition - *bPosition;
-
-    while(isdigit(buffer[*fPosition]) != 0)
-    {
-      tempBuff[buffIndex] = buffer[*fPosition];
-
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
-    }
-    numType = numType + 1;
-  }
-
-  // check for numbers after exponentials
-  if((buffer[*fPosition] == 'E'))
-  {
-    tempBuff[buffIndex] = buffer[*fPosition];
-    *fPosition = *fPosition + 1;
-    buffIndex = *fPosition - *bPosition;
-
-    // check if there is a plus or a minus after 
-    if((buffer[*fPosition] == '+') || (buffer[*fPosition] == '-'))
-    {
-      tempBuff[buffIndex] = buffer[*fPosition];
-
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
-    }
-    
-    // look for numbers after exponential
-    while(isdigit(buffer[*fPosition]) != 0)
-    {
-      tempBuff[buffIndex] = buffer[*fPosition];
-
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
-    }
-  
-    numType = numType + 1;
-  }
-
-
-  //printf("%s\n",tempBuff);
-
-  // switch statement to handle any errors and add
-  // tokens for numbers found
-  switch(numType)
-  {
-    case 0 :
-    break;
-
-    case 1:
-      IntegerMachine(tempBuff, sourceTokens);
-    break;
-
-    case 2:
-      ShortRealMachine(tempBuff, sourceTokens);
-    break;
-
-    case 3:
-      LongRealMachine(tempBuff, sourceTokens);
-    break;
-
-    default:
-    break;
-  }
-
   *bPosition = *fPosition;
   
   if(buffer[*fPosition] == '\n') {
@@ -829,7 +845,7 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile)
 {
   char * sourceLine = malloc(73);
   FILE * tempFile = fopen("ListingOutput.txt","w+");
-  int tempLinef = 1;
+  int tempLine = 1;
       
   rewind(pFile);
 
