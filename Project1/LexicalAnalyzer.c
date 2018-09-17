@@ -320,7 +320,7 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
   {
     // check that the next character is a digit
     while(isdigit(buffer[*fPosition]) != 0)
-    { 
+    {
       integer = integer + 1;
       tempBuff[buffIndex] = buffer[*fPosition];
       
@@ -328,44 +328,46 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       buffIndex = *fPosition - *bPosition;
       numType = 1;
       
+      
     }
+    //printf("%s\n", tempBuff);
     // end of digits
     
     // check for number after decimal
     if((buffer[*fPosition] == '.') && (isdigit(buffer[*fPosition + 1]) != 0))
     {
-      shortReal = shortReal + 2;
-      tempBuff[buffIndex] = buffer[*fPosition];
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
-    
-      while(isdigit(buffer[*fPosition]) != 0)
-      {
+        shortReal = shortReal + 2;
         tempBuff[buffIndex] = buffer[*fPosition];
-    
         *fPosition = *fPosition + 1;
         buffIndex = *fPosition - *bPosition;
-      }
-      numType =  2;
-    }
-
-    // end of short reals
-    //
-    //// check for numbers after exponentials
-    if((buffer[*fPosition] == 'E') && ((buffer[*fPosition + 1] == '+') || (buffer[*fPosition + 1] == '-')))
-    {
-      tempBuff[buffIndex] = buffer[*fPosition];
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
-    
-      tempBuff[buffIndex] = buffer[*fPosition];
-    
-      *fPosition = *fPosition + 1;
-      buffIndex = *fPosition - *bPosition;
       
-      // look for numbers after exponential
-      if(isdigit(buffer[*fPosition]) != 0)
+        while(isdigit(buffer[*fPosition]) != 0)
+        {
+          tempBuff[buffIndex] = buffer[*fPosition];
+      
+          *fPosition = *fPosition + 1;
+          buffIndex = *fPosition - *bPosition;
+          shortReal = shortReal + 1;
+        }
+        
+        numType =  2;
+      
+      //printf("%s\n", tempBuff);
+      // end of short reals
+      //
+      //// check for numbers after exponentials
+      if((buffer[*fPosition] == 'E') && ((buffer[*fPosition + 1] == '+') || (buffer[*fPosition + 1] == '-')))
       {
+        tempBuff[buffIndex] = buffer[*fPosition];
+        *fPosition = *fPosition + 1;
+        buffIndex = *fPosition - *bPosition;
+      
+        tempBuff[buffIndex] = buffer[*fPosition];
+      
+        *fPosition = *fPosition + 1;
+        buffIndex = *fPosition - *bPosition;
+        
+        // look for numbers after exponential
         while(isdigit(buffer[*fPosition]) != 0)
         {
           longReal = longReal + 1;
@@ -376,11 +378,35 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
           buffIndex = *fPosition - *bPosition;
           numType = 3; 
         }
-      } else {
-          *fPosition = *fPosition - 2;
+
       }
         
+      if((buffer[*fPosition] == 'E') && (isdigit(buffer[*fPosition + 1]) != 0))
+      {
+        tempBuff[buffIndex] = buffer[*fPosition];
+        *fPosition = *fPosition + 1;
+        buffIndex = *fPosition - *bPosition;
+      
+        tempBuff[buffIndex] = buffer[*fPosition];
+      
+        *fPosition = *fPosition + 1;
+        buffIndex = *fPosition - *bPosition;
+        
+        // look for numbers after exponential
+        while(isdigit(buffer[*fPosition]) != 0)
+        {
+          longReal = longReal + 1;
+            
+          tempBuff[buffIndex] = buffer[*fPosition];
+        
+          *fPosition = *fPosition + 1;
+          buffIndex = *fPosition - *bPosition;
+          numType = 3; 
+        }          
+      }
     }
+
+
     // end of long real
     
     // switch statement to handle any errors and add
@@ -396,12 +422,12 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       break;
     
       case 2:
-        tempBuff[shortReal + 1] = '\0';
+        tempBuff[shortReal + integer + 1] = '\0';
         ShortRealMachine(tempBuff, sourceTokens);
       break;
     
       case 3:
-        tempBuff[longReal+ 1] = '\0';
+        tempBuff[longReal + shortReal + integer + 1] = '\0';
         LongRealMachine(tempBuff, sourceTokens);
       break;
     
