@@ -847,10 +847,15 @@ void OutputTokens(tokenNode sourceTokens)
 
   while(sourceTokens->next != NULL)
   {
-    if(sourceTokens->attribute->attr == 0)
+    if(sourceTokens->attribute->attr == 0 && (sourceTokens->type != ID))
     {
       fprintf(pFile,"%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
-    } else {
+    } else if(sourceTokens->type == ID)
+    {
+      fprintf(pFile,"%d %s %d (%s) %X\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), &(sourceTokens->attribute->attr));        
+    }
+    else
+    {
       fprintf(pFile,"%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
     }
     sourceTokens = sourceTokens->next; 
