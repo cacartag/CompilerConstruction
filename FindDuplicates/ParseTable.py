@@ -64,7 +64,7 @@ for nonterminal in parseTable[0:41] :
 
   epsilonArray = []
   
-  cCode += "\n switch( tok )\n  {\n"
+  cCode += "\n switch( tok.type )\n  {\n"
   
   for index,production in enumerate(nonterminal[1:len(nonterminal)]) :
     # checking that there is an actual production for that terminal
@@ -75,7 +75,7 @@ for nonterminal in parseTable[0:41] :
 
         #cCode += "\n    if(strcmp(\""+terminalArray[index]+"\",\"place\"))\n  {"
                         
-        cCode += "\n    case "+terminalArray[index]+":  "
+        cCode += "\n    case " + str(terminalAssociative[terminalArray[index]]) + ": // terminal is " + terminalArray[index]
                 
         for symbol in productionSplit :
         
@@ -83,33 +83,27 @@ for nonterminal in parseTable[0:41] :
             cCode += "\n      match(\"" + symbol + "\");"
           else :
             cCode += "\n      "+symbol + "();" 
-
+            
+        cCode += "\n    break;\n"
+        
       else :
         #print(terminalArray[index])
         epsilonArray.append(terminalArray[index])
  
     epTermExpress = ""
   
-  #switch statement end brace
-  cCode += "\n  }\n"
-    
   if len(epsilonArray) > 0 :
   
-    epTermExpress += "  if ("
     for index, terminal in enumerate(epsilonArray) :
       #epTermExpress += "strcmp(\"" + terminal + "\", \"place\")  "
-     
-      if index != len(epsilonArray) - 1 :
-        epTermExpress += "|| \n    "
-      else :
-        epTermExpress += ")"
-  
-    epTermExpress += "\n  {\n\n  }\n"       
+      epTermExpress += "    case " + str(terminalAssociative[terminal]) + " : // terminal is " + terminal + " \n    break;\n\n"
      
   cCode += "\n" + epTermExpress
-    
-  cCode += "\n}\n"
 
+  #switch statement end brace   
+  cCode += "\n  }\n}\n"
+
+  
 cCode += "\nvoid match(char * mat)\n{\n}\n\n"
   
 cCode += "\n\nint main()\n{\n  printf(\"working now\\n\");\n}\n\n"
@@ -121,22 +115,5 @@ for function in createdFunctions :
 cCodeProto += "\nvoid match();"
  
 f1.write(cCodeProto + cCode) 
- 
 
-      #print(production)
-
-#for x in range(1,40) :
-#  for y in range(0,42) :
-#    print(parseTable[x][y])
-    #print("{} and {}".format(x,y))
-  
-#  f1.write(sheet.cell_value(x,0) + "\n")
-#  f1.write('{\n')
-#  for x in range(10) :
-#    f1.write('\n')
-#  f1.write('}\n\n\n')
-  
 f1.close()
-
-#print(sheet.cell_value(2,0))
-#print(sheet.nrows)

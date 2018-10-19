@@ -59,10 +59,10 @@ void sgn();
 void match();
 void prgrm()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case prgrm:  
+    case 3: // terminal is prgrm
       match("prgrm");
       match("id");
       match("(");
@@ -70,124 +70,137 @@ void prgrm()
       match(")");
       match(";");
       prgrmp();
+    break;
+
+
   }
-
-
 }
 
 void prgrmp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case var:  
+    case 4: // terminal is var
       decls();
       prgrmpp();
-    case procdr:  
+    break;
+
+    case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
       match(".");
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       cmpnd_stmnt();
       match(".");
+    break;
+
+
   }
-
-
 }
 
 void prgrmpp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
       match(".");
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       cmpnd_stmnt();
       match(".");
+    break;
+
+
   }
-
-
 }
 
 void id_list()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       match("id");
       id_listp();
+    break;
+
+
   }
-
-
 }
 
 void id_listp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case ,:  
+    case 82: // terminal is ,
       match(",");
       match("id");
       id_listp();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void decls()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case var:  
+    case 4: // terminal is var
       match("var");
       match("id");
       match(":");
       type();
       match(";");
       declsp();
+    break;
+
+
   }
-
-
 }
 
 void declsp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case var:  
+    case 4: // terminal is var
       match("var");
       match("id");
       match(":");
       type();
       match(";");
       declsp();
+    break;
+
+    case 9 : // terminal is procdr 
+    break;
+
+    case 10 : // terminal is begin 
+    break;
+
+
   }
-
-  if (|| 
-    )
-  {
-
-  }
-
 }
 
 void type()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case arr:  
+    case 5: // terminal is arr
       match("arr");
       match("[");
       match("num");
@@ -196,647 +209,832 @@ void type()
       match("]");
       match("of");
       stndrd_type();
-    case int:  
+    break;
+
+    case 7: // terminal is int
       stndrd_type();
-    case real:  
+    break;
+
+    case 8: // terminal is real
       stndrd_type();
+    break;
+
+
   }
-
-
 }
 
 void stndrd_type()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case int:  
+    case 7: // terminal is int
       match("int");
-    case real:  
+    break;
+
+    case 8: // terminal is real
       match("real");
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_decls()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       subprgrm_decl();
       match(";");
       subprgrm_declsp();
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_declsp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       subprgrm_decl();
       match(";");
       subprgrm_declsp();
+    break;
+
+    case 10 : // terminal is begin 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void subprgrm_decl()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       subprgrm_decl();
       subprgrm_declp();
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_declp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case var:  
+    case 4: // terminal is var
       decls();
       subprgrm_declpp();
-    case procdr:  
+    break;
+
+    case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       cmpnd_stmnt();
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_declpp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       cmpnd_stmnt();
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_head()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case procdr:  
+    case 9: // terminal is procdr
       match("procdr");
       match("id");
       subprgrm_headp();
+    break;
+
+
   }
-
-
 }
 
 void subprgrm_headp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case (:  
+    case 80: // terminal is (
       args();
       match(";");
-    case ;:  
+    break;
+
+    case 79: // terminal is ;
       match(";");
+    break;
+
+
   }
-
-
 }
 
 void args()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case (:  
+    case 80: // terminal is (
       match("(");
       param_lst();
       match(")");
+    break;
+
+
   }
-
-
 }
 
 void param_lst()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       match("id");
       match(":");
       type();
       param_lstp();
+    break;
+
+
   }
-
-
 }
 
 void param_lstp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case ;:  
+    case 79: // terminal is ;
       match(";");
       match("id");
       match(":");
       type();
       param_lstp();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void cmpnd_stmnt()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case begin:  
+    case 10: // terminal is begin
       match("begin");
       cmpnd_stmntp();
+    break;
+
+
   }
-
-
 }
 
 void cmpnd_stmntp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       opt_stmnt();
       match("end");
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       opt_stmnt();
       match("end");
-    case end:  
+    break;
+
+    case 11: // terminal is end
       match("end");
-    case if:  
+    break;
+
+    case 1: // terminal is if
       opt_stmnt();
       match("end");
-    case while:  
+    break;
+
+    case 13: // terminal is while
       opt_stmnt();
       match("end");
-    case call:  
+    break;
+
+    case 21: // terminal is call
       opt_stmnt();
       match("end");
+    break;
+
+
   }
-
-
 }
 
 void opt_stmnt()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       stmnt_lst();
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       stmnt_lst();
-    case if:  
+    break;
+
+    case 1: // terminal is if
       stmnt_lst();
-    case while:  
+    break;
+
+    case 13: // terminal is while
       stmnt_lst();
-    case call:  
+    break;
+
+    case 21: // terminal is call
       stmnt_lst();
+    break;
+
+
   }
-
-
 }
 
 void stmnt_lst()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       stmnt();
       stmnt_lstp();
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       stmnt();
       stmnt_lstp();
-    case if:  
+    break;
+
+    case 1: // terminal is if
       stmnt();
       stmnt_lstp();
-    case while:  
+    break;
+
+    case 13: // terminal is while
       stmnt();
       stmnt_lstp();
-    case call:  
+    break;
+
+    case 21: // terminal is call
       stmnt();
       stmnt_lstp();
+    break;
+
+
   }
-
-
 }
 
 void stmnt_lstp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case ;:  
+    case 79: // terminal is ;
       match(";");
       stmnt();
       stmnt_lst();
+    break;
+
+    case 11 : // terminal is end 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void stmnt()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       variable();
       match("assignop");
       express();
-    case begin:  
+    break;
+
+    case 10: // terminal is begin
       cmpnd_stmnt();
-    case if:  
+    break;
+
+    case 1: // terminal is if
       match("if");
       express();
       match("then");
       stmnt();
       match("else");
       stmnt();
-    case while:  
+    break;
+
+    case 13: // terminal is while
       match("while");
       express();
       match("do");
       stmnt();
-    case call:  
+    break;
+
+    case 21: // terminal is call
       procdr_stmnt();
+    break;
+
+
   }
-
-
 }
 
 void variable()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       match("id");
       variablep();
+    break;
+
+
   }
-
-
 }
 
 void variablep()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case [:  
+    case 84: // terminal is [
       match("[");
       express();
       match("]");
+    break;
+
+    case -1 : // terminal is assignop 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void procdr_stmnt()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case call:  
+    case 21: // terminal is call
       match("call");
       match("id");
       procdr_stmntp();
+    break;
+
+
   }
-
-
 }
 
 void procdr_stmntp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case (:  
+    case 80: // terminal is (
       match("(");
       express_lst();
       match(")");
+    break;
+
+    case 78 : // terminal is . 
+    break;
+
+    case 12 : // terminal is else 
+    break;
+
+
   }
-
-  if (|| 
-    )
-  {
-
-  }
-
 }
 
 void express_lst()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       express();
       express_lstp();
-    case (:  
+    break;
+
+    case 80: // terminal is (
       express();
       express_lstp();
-    case num:  
+    break;
+
+    case 23: // terminal is num
       express();
       express_lstp();
-    case not:  
+    break;
+
+    case 19: // terminal is not
       express();
       express_lstp();
-    case +:  
+    break;
+
+    case 161: // terminal is +
       express();
       express_lstp();
-    case -:  
+    break;
+
+    case 161: // terminal is -
       express();
       express_lstp();
+    break;
+
+
   }
-
-
 }
 
 void express_lstp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case ,:  
+    case 82: // terminal is ,
       match(",");
       express();
       express_lst();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+
   }
-
-  if ()
-  {
-
-  }
-
 }
 
 void express()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       simp_express();
       expressp();
-    case (:  
+    break;
+
+    case 80: // terminal is (
       simp_express();
       expressp();
-    case num:  
+    break;
+
+    case 23: // terminal is num
       simp_express();
       expressp();
-    case not:  
+    break;
+
+    case 19: // terminal is not
       simp_express();
       expressp();
-    case +:  
+    break;
+
+    case 161: // terminal is +
       simp_express();
       expressp();
-    case -:  
+    break;
+
+    case 161: // terminal is -
       simp_express();
       expressp();
+    break;
+
+
   }
-
-
 }
 
 void expressp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case relop:  
+    case -1: // terminal is relop
       match("relop");
       simp_express();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+    case 79 : // terminal is ; 
+    break;
+
+    case 82 : // terminal is , 
+    break;
+
+    case 85 : // terminal is ] 
+    break;
+
+    case 11 : // terminal is end 
+    break;
+
+    case 2 : // terminal is then 
+    break;
+
+    case 14 : // terminal is do 
+    break;
+
+
   }
-
-  if (|| 
-    || 
-    || 
-    || 
-    || 
-    || 
-    )
-  {
-
-  }
-
 }
 
 void simp_express()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       term();
       simp_express();
-    case (:  
+    break;
+
+    case 80: // terminal is (
       term();
       simp_express();
-    case num:  
+    break;
+
+    case 23: // terminal is num
       term();
       simp_expressp();
-    case not:  
+    break;
+
+    case 19: // terminal is not
       term();
       simp_expressp();
-    case +:  
+    break;
+
+    case 161: // terminal is +
       sgn();
       term();
       simp_expressp();
-    case -:  
+    break;
+
+    case 161: // terminal is -
       sgn();
       term();
       simp_expressp();
+    break;
+
+
   }
-
-
 }
 
 void simp_expressp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case addop:  
+    case -1: // terminal is addop
       match("addop");
       term();
       simp_expressp();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+    case 79 : // terminal is ; 
+    break;
+
+    case 82 : // terminal is , 
+    break;
+
+    case 85 : // terminal is ] 
+    break;
+
+    case 11 : // terminal is end 
+    break;
+
+    case 2 : // terminal is then 
+    break;
+
+    case 12 : // terminal is else 
+    break;
+
+    case 14 : // terminal is do 
+    break;
+
+    case -1 : // terminal is relop 
+    break;
+
+
   }
-
-  if (|| 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    )
-  {
-
-  }
-
 }
 
 void term()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       factor();
       termp();
-    case (:  
+    break;
+
+    case 80: // terminal is (
       factor();
       termp();
-    case num:  
+    break;
+
+    case 23: // terminal is num
       factor();
       termp();
-    case not:  
+    break;
+
+    case 19: // terminal is not
       factor();
       termp();
+    break;
+
+
   }
-
-
 }
 
 void termp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case mulop:  
+    case -1: // terminal is mulop
       match("mulop");
       factor();
       termp();
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+    case 79 : // terminal is ; 
+    break;
+
+    case 82 : // terminal is , 
+    break;
+
+    case 85 : // terminal is ] 
+    break;
+
+    case 11 : // terminal is end 
+    break;
+
+    case 2 : // terminal is then 
+    break;
+
+    case 12 : // terminal is else 
+    break;
+
+    case 14 : // terminal is do 
+    break;
+
+    case -1 : // terminal is relop 
+    break;
+
+    case -1 : // terminal is addop 
+    break;
+
+
   }
-
-  if (|| 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    )
-  {
-
-  }
-
 }
 
 void factor()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case id:  
+    case 20: // terminal is id
       match("id");
       factorp();
-    case (:  
+    break;
+
+    case 80: // terminal is (
       match("(");
       express();
       match(")");
-    case num:  
+    break;
+
+    case 23: // terminal is num
       match("num");
-    case not:  
+    break;
+
+    case 19: // terminal is not
       match("not");
       factor();
+    break;
+
+
   }
-
-
 }
 
 void factorp()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case [:  
+    case 84: // terminal is [
       match("[");
       express();
       match("]");
+    break;
+
+    case 81 : // terminal is ) 
+    break;
+
+    case 79 : // terminal is ; 
+    break;
+
+    case 82 : // terminal is , 
+    break;
+
+    case 85 : // terminal is ] 
+    break;
+
+    case 11 : // terminal is end 
+    break;
+
+    case -1 : // terminal is assignop 
+    break;
+
+    case 2 : // terminal is then 
+    break;
+
+    case 12 : // terminal is else 
+    break;
+
+    case 14 : // terminal is do 
+    break;
+
+    case -1 : // terminal is relop 
+    break;
+
+    case -1 : // terminal is addop 
+    break;
+
+    case -1 : // terminal is mulop 
+    break;
+
+
   }
-
-  if (|| 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    || 
-    )
-  {
-
-  }
-
 }
 
 void sgn()
 {
- switch( tok )
+ switch( tok.type )
   {
 
-    case +:  
+    case 161: // terminal is +
       match("+");
-    case -:  
+    break;
+
+    case 161: // terminal is -
       match("-");
+    break;
+
+
   }
-
-
 }
 
 void match(char * mat)
