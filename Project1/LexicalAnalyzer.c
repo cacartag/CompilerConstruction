@@ -356,7 +356,7 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
       // end of short reals
       //
       //// check for numbers after exponentials
-      if((buffer[*fPosition] == 'E') && ((buffer[*fPosition + 1] == '+') || (buffer[*fPosition + 1] == '-')))
+      if((buffer[*fPosition] == 'E') && ((buffer[*fPosition + 1] == '+') || (buffer[*fPosition + 1] == '-')) && (isdigit(buffer[*fPosition + 2]) != 0))
       {
         tempBuff[buffIndex] = buffer[*fPosition];
         *fPosition = *fPosition + 1;
@@ -367,7 +367,7 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
         *fPosition = *fPosition + 1;
         buffIndex = *fPosition - *bPosition;
         
-        // look for numbers after exponential
+        // look for numbers after exponential=
         while(isdigit(buffer[*fPosition]) != 0)
         {
           longReal = longReal + 1;
@@ -378,7 +378,6 @@ int RetrieveAnyTypeNumber(int *bPosition, int *fPosition, uint8_t * buffer, toke
           buffIndex = *fPosition - *bPosition;
           numType = 3; 
         }
-
       }
         
       if((buffer[*fPosition] == 'E') && (isdigit(buffer[*fPosition + 1]) != 0))
@@ -839,24 +838,26 @@ int LeadingZeroCheck(char * tempBuff)
 void OutputTokens(tokenNode sourceTokens)
 {    
   FILE * pFile = fopen("TokenOutput.txt","w+");
+   
     
   if(sourceTokens->next != NULL)
   {
     sourceTokens = sourceTokens->next;
   }
 
+  fprintf(pFile,"%-5s %-15s %-23s %-10s\n", "Line","Lexeme", "Token Type", "Attribute");
   while(sourceTokens->next != NULL)
   {
     if(sourceTokens->attribute->attr == 0 && (sourceTokens->type != ID))
     {
-      fprintf(pFile,"%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, "NULL");
     } else if(sourceTokens->type == ID)
     {
-      fprintf(pFile,"%d %s %d (%s) %X\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), &(sourceTokens->attribute->attr));        
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10X %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), &(sourceTokens->attribute->attr), "NULL");        
     }
     else
     {
-      fprintf(pFile,"%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
     }
     sourceTokens = sourceTokens->next; 
     
@@ -864,9 +865,9 @@ void OutputTokens(tokenNode sourceTokens)
 
   if(sourceTokens->attribute->attr == 0)
   {
-    fprintf(pFile,"%d %s %d (%s) %d\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr);
+    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, "NULL");
   } else {
-    fprintf(pFile,"%d %s %d (%s) %d (%s)\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
   }
   
   fclose(pFile);

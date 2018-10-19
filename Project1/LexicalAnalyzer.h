@@ -29,6 +29,9 @@
 #define CALL 21
 #define VALUE 22
 
+// I don't know about this one
+#define NUM 23
+
 // Lexical error
 #define LEXERR 30
 
