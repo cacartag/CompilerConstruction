@@ -37,8 +37,10 @@ int main(int argc, char * argv[])
   {
     if (tempReservedHead->lexeme[strlen(tempReservedHead->lexeme)-1] == '\n')
     {
-      tempReservedHead->lexeme[strlen(tempReservedHead->lexeme)-2] = '\0';
+      // needed to change this to 1 in order not to mess up reserved word
+      tempReservedHead->lexeme[strlen(tempReservedHead->lexeme)-1] = '\0';
     }
+
     tempReservedHead = tempReservedHead->next; 
   }
 
@@ -91,7 +93,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
     atEnd = CatchAllMachine(&basePosition, &forwardPosition, buffer, reservedHead, sourceTokens);
     atEnd = RetrieveAnyTypeNumber(&basePosition, &forwardPosition, buffer, sourceTokens);
     atEnd = RelationalOperatorMachine(&basePosition, &forwardPosition, buffer, sourceTokens);
-
+    
     // change this to catch other symbols
     if((basePosition - stuck) <= 0)
     {
@@ -166,8 +168,10 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
 
     if((*fPosition - *bPosition) > 10)
     {
+      // check if size is greater than 10 to check for lexical error
       AddToTokenLinked(sourceTokens,id,LEXERR, LONG_STRING);
     } else {
+      // check if it's a reserved word
       CheckReservedList(id, reservedHead, &type, &attribute);
       AddToTokenLinked(sourceTokens, id, type, attribute);
     }
@@ -197,8 +201,10 @@ int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode 
 
   *fPosition = *fPosition + 1;
   
+
   if(CheckReservedList(tempBuff, reservedHead, &type, &attribute))
   {
+  //printf("Lexeme is: %s\n", tempBuff);
     if((tempBuff[0] == ':') && (buffer[*fPosition] == '='))
     {
       tempBuff[1] = buffer[*fPosition];
@@ -206,7 +212,7 @@ int CatchAllMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode 
       *fPosition = *fPosition + 1;
       CheckReservedList(tempBuff, reservedHead, &type, &attribute);
     }
-    
+     
     if((tempBuff[0] == '.') && (buffer[*fPosition]) == '.')
     {
       tempBuff[1] = buffer[*fPosition];
@@ -689,6 +695,7 @@ void RetrieveReservedWords(tokenNode *rHead)
   {
     reservedForward->lexeme = malloc(15);
     strcpy(reservedForward->lexeme,currentSymbol);
+    //printf("Lexeme got: %s", reservedForward->lexeme);
 
     fgets(currentSymbol,15,reservedFile);
     reservedForward->type = atoi(currentSymbol);
@@ -739,13 +746,20 @@ void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, 
 // if true returns 1, along with the type and attribute values
 uint32_t CheckReservedList(char * lexeme, tokenNode *reservedHead, uint32_t *type, uint32_t *attribute)
 {
+  //if(strcmp(lexeme, "(") == 0 )
+  //{
+  //  printf("Lexeme is: %s\n", lexeme);     
+  //}
+    
   tokenNode forwardHead = *reservedHead;
 
   while(forwardHead->next != NULL)
   {
 
+    //printf("Lexeme: %s Reserved: %s \n", lexeme, forwardHead->lexeme);
     if(strcmp(lexeme,forwardHead->lexeme)  == 0)
     {
+        
       *type = forwardHead->type;
       *attribute = forwardHead->attribute->attr;
       

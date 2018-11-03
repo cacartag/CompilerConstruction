@@ -25,6 +25,50 @@
 //typedef struct token *tokenNode;
 tokenNode tok;
 
+void prgrm();
+void prgrmp();
+void prgrmpp();
+void id_list();
+void id_listp();
+void decls();
+void declsp();
+void type();
+void stndrd_type();
+void subprgrm_decls();
+void subprgrm_declsp();
+void subprgrm_decl();
+void subprgrm_declp();
+void subprgrm_declpp();
+void subprgrm_head();
+void subprgrm_headp();
+void args();
+void param_lst();
+void param_lstp();
+void cmpnd_stmnt();
+void cmpnd_stmntp();
+void opt_stmnt();
+void stmnt_lst();
+void stmnt_lstp();
+void stmnt();
+void variable();
+void variablep();
+void procdr_stmnt();
+void procdr_stmntp();
+void express_lst();
+void express_lstp();
+void express();
+void expressp();
+void simp_express();
+void simp_expressp();
+void term();
+void termp();
+void factor();
+void factorp();
+void sgn();
+void match(const char * t);
+int checkSynch(int * synchSet, int tokenType, int length);
+tokenNode getToken();
+
 tokenNode getToken(){ 
   tokenNode tok;
 

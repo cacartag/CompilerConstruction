@@ -1,4 +1,4 @@
-gcc -o Compiler.exe LexicalAnalyzer.h SyntaxAnalyzer.c LexicalAnalyzer.c
+    gcc -o Compiler.exe LexicalAnalyzer.h SyntaxAnalyzer.c LexicalAnalyzer.c
 #Compiler.exe: SyntaxAnalyzer.o LexicalAnalyzer.o
 #	gcc -o Compiler.exe LexicalAnalyzer.o SyntaxAnalyzer.o
 #
