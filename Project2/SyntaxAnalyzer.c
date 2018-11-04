@@ -69,8 +69,18 @@ void match(const char * t);
 int checkSynch(int * synchSet, int tokenType, int length);
 tokenNode getToken();
 
+
 tokenNode getToken(){ 
   tokenNode tok;
+  
+  
+  if(sourceTokens->next != NULL)
+  {
+    tok = sourceTokens->next;
+    sourceTokens = sourceTokens->next;
+  }
+  
+  printf("Token Lexeme: %s\n", tok->lexeme);
 
   return tok;
 }
@@ -92,7 +102,7 @@ void prgrm()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of prgrm $");
+      printf("Syntax Error: Expecting one of prgrm $\n");
 
       int synchSet[] = {3,200};
 
@@ -125,7 +135,7 @@ void prgrmp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of var procdr begin $");
+      printf("Syntax Error: Expecting one of var procdr begin $\n");
 
       int synchSet[] = {4,9,10,200};
 
@@ -153,7 +163,7 @@ void prgrmpp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr begin $");
+      printf("Syntax Error: Expecting one of procdr begin $\n");
 
       int synchSet[] = {9,10,200};
 
@@ -175,7 +185,7 @@ void id_list()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id $");
+      printf("Syntax Error: Expecting one of id $\n");
 
       int synchSet[] = {20,200};
 
@@ -201,7 +211,7 @@ void id_listp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) , $");
+      printf("Syntax Error: Expecting one of ) , $\n");
 
       int synchSet[] = {81,82,200};
 
@@ -227,7 +237,7 @@ void decls()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of var $");
+      printf("Syntax Error: Expecting one of var $\n");
 
       int synchSet[] = {4,200};
 
@@ -259,7 +269,7 @@ void declsp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of var procdr begin $");
+      printf("Syntax Error: Expecting one of var procdr begin $\n");
 
       int synchSet[] = {4,9,10,200};
 
@@ -295,7 +305,7 @@ void type()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of arr int real $");
+      printf("Syntax Error: Expecting one of arr int real $\n");
 
       int synchSet[] = {5,7,8,200};
 
@@ -320,7 +330,7 @@ void stndrd_type()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of int real $");
+      printf("Syntax Error: Expecting one of int real $\n");
 
       int synchSet[] = {7,8,200};
 
@@ -343,7 +353,7 @@ void subprgrm_decls()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr $");
+      printf("Syntax Error: Expecting one of procdr $\n");
 
       int synchSet[] = {9,200};
 
@@ -369,7 +379,7 @@ void subprgrm_declsp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr begin $");
+      printf("Syntax Error: Expecting one of procdr begin $\n");
 
       int synchSet[] = {9,10,200};
 
@@ -391,7 +401,7 @@ void subprgrm_decl()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr $");
+      printf("Syntax Error: Expecting one of procdr $\n");
 
       int synchSet[] = {9,200};
 
@@ -422,7 +432,7 @@ void subprgrm_declp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of var procdr begin $");
+      printf("Syntax Error: Expecting one of var procdr begin $\n");
 
       int synchSet[] = {4,9,10,200};
 
@@ -448,7 +458,7 @@ void subprgrm_declpp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr begin $");
+      printf("Syntax Error: Expecting one of procdr begin $\n");
 
       int synchSet[] = {9,10,200};
 
@@ -471,7 +481,7 @@ void subprgrm_head()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of procdr $");
+      printf("Syntax Error: Expecting one of procdr $\n");
 
       int synchSet[] = {9,200};
 
@@ -497,7 +507,7 @@ void subprgrm_headp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ( ; $");
+      printf("Syntax Error: Expecting one of ( ; $\n");
 
       int synchSet[] = {80,79,200};
 
@@ -520,7 +530,7 @@ void args()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ( $");
+      printf("Syntax Error: Expecting one of ( $\n");
 
       int synchSet[] = {80,200};
 
@@ -544,7 +554,7 @@ void param_lst()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id $");
+      printf("Syntax Error: Expecting one of id $\n");
 
       int synchSet[] = {20,200};
 
@@ -572,7 +582,7 @@ void param_lstp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) ; $");
+      printf("Syntax Error: Expecting one of ) ; $\n");
 
       int synchSet[] = {81,79,200};
 
@@ -594,7 +604,7 @@ void cmpnd_stmnt()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of begin $");
+      printf("Syntax Error: Expecting one of begin $\n");
 
       int synchSet[] = {10,200};
 
@@ -640,7 +650,7 @@ void cmpnd_stmntp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id begin end if while call $");
+      printf("Syntax Error: Expecting one of id begin end if while call $\n");
 
       int synchSet[] = {20,10,11,1,13,21,200};
 
@@ -677,7 +687,7 @@ void opt_stmnt()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id begin if while call $");
+      printf("Syntax Error: Expecting one of id begin if while call $\n");
 
       int synchSet[] = {20,10,1,13,21,200};
 
@@ -719,7 +729,7 @@ void stmnt_lst()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id begin if while call $");
+      printf("Syntax Error: Expecting one of id begin if while call $\n");
 
       int synchSet[] = {20,10,1,13,21,200};
 
@@ -745,7 +755,7 @@ void stmnt_lstp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ; end $");
+      printf("Syntax Error: Expecting one of ; end $\n");
 
       int synchSet[] = {79,11,200};
 
@@ -792,7 +802,7 @@ void stmnt()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id begin if while call $");
+      printf("Syntax Error: Expecting one of id begin if while call $\n");
 
       int synchSet[] = {20,10,1,13,21,200};
 
@@ -814,7 +824,7 @@ void variable()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id $");
+      printf("Syntax Error: Expecting one of id $\n");
 
       int synchSet[] = {20,200};
 
@@ -840,7 +850,7 @@ void variablep()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of [ assignop $");
+      printf("Syntax Error: Expecting one of [ assignop $\n");
 
       int synchSet[] = {84,163,200};
 
@@ -863,7 +873,7 @@ void procdr_stmnt()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of call $");
+      printf("Syntax Error: Expecting one of call $\n");
 
       int synchSet[] = {21,200};
 
@@ -892,7 +902,7 @@ void procdr_stmntp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ( . else $");
+      printf("Syntax Error: Expecting one of ( . else $\n");
 
       int synchSet[] = {80,78,12,200};
 
@@ -934,7 +944,7 @@ void express_lst()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id ( num not + - $");
+      printf("Syntax Error: Expecting one of id ( num not + - $\n");
 
       int synchSet[] = {20,80,23,19,161,161,200};
 
@@ -960,7 +970,7 @@ void express_lstp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) , $");
+      printf("Syntax Error: Expecting one of ) , $\n");
 
       int synchSet[] = {81,82,200};
 
@@ -1002,7 +1012,7 @@ void express()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id ( num not + - $");
+      printf("Syntax Error: Expecting one of id ( num not + - $\n");
 
       int synchSet[] = {20,80,23,19,161,161,200};
 
@@ -1045,7 +1055,7 @@ void expressp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) ; , ] end then do relop $");
+      printf("Syntax Error: Expecting one of ) ; , ] end then do relop $\n");
 
       int synchSet[] = {81,79,82,85,11,2,14,160,200};
 
@@ -1088,7 +1098,7 @@ void simp_express()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id ( num not + - $");
+      printf("Syntax Error: Expecting one of id ( num not + - $\n");
 
       int synchSet[] = {20,80,23,19,161,161,200};
 
@@ -1138,7 +1148,7 @@ void simp_expressp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) ; , ] end then else do relop addop $");
+      printf("Syntax Error: Expecting one of ) ; , ] end then else do relop addop $\n");
 
       int synchSet[] = {81,79,82,85,11,2,12,14,160,161,200};
 
@@ -1175,7 +1185,7 @@ void term()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id ( num not $");
+      printf("Syntax Error: Expecting one of id ( num not $\n");
 
       int synchSet[] = {20,80,23,19,200};
 
@@ -1228,7 +1238,7 @@ void termp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $");
+      printf("Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $\n");
 
       int synchSet[] = {81,79,82,85,11,2,12,14,160,161,162,200};
 
@@ -1265,7 +1275,7 @@ void factor()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of id ( num not $");
+      printf("Syntax Error: Expecting one of id ( num not $\n");
 
       int synchSet[] = {20,80,23,19,200};
 
@@ -1324,7 +1334,7 @@ void factorp()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of ) ; , [ ] end assignop then else do relop addop mulop $");
+      printf("Syntax Error: Expecting one of ) ; , [ ] end assignop then else do relop addop mulop $\n");
 
       int synchSet[] = {81,79,82,84,85,11,163,2,12,14,160,161,162,200};
 
@@ -1349,7 +1359,7 @@ void sgn()
     break;
 
     default:
-      printf("Syntax Error: Expecting one of + - $");
+      printf("Syntax Error: Expecting one of + - $\n");
 
       int synchSet[] = {161,161,200};
 
@@ -1362,20 +1372,43 @@ void sgn()
 
 void match(const char * t)
 {
-  if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
+  if(!strcmp(t,"id"))
   {
+    if(tok->type == ID)
+      tok = getToken();
+    else
+      printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+  }
+  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
+  {
+    printf("One Token parsed\n");
     tok = getToken();
   }
-  
-  if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
+  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
   {
     printf( "Successfully parsed !\n ");
   }
-  
-  if ( strcmp((const char *)(tok->lexeme), t) )
+  else if ( strcmp((const char *)(tok->lexeme), t) )
   {
-      printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+    printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+    tok = getToken();
   }
+    
+    
+  //if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
+  //{
+  //  printf("One Token parsed\n");
+  //  tok = getToken();
+  //}
+  //else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
+  //{
+  //  printf( "Successfully parsed !\n ");
+  //}
+  //else if ( strcmp((const char *)(tok->lexeme), t) )
+  //{
+  //  printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+  //  tok = getToken();
+  //}
 }
 
 int checkSynch(int * synchSet, int tokenType, int length)
@@ -1391,6 +1424,13 @@ int checkSynch(int * synchSet, int tokenType, int length)
     }
     
     return found; 
+}
+
+void parse()
+{
+    tok = getToken();
+    prgrm();
+    match("$");
 }
 
 //int main()

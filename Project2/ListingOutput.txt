@@ -8,4 +8,4 @@
 8    begin
 9    	read(x, y);
 10    	write(gcd(x, y));
-11    end.
+11    end.$

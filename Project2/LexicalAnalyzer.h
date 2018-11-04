@@ -104,6 +104,7 @@ struct token
 
 typedef struct token *tokenNode;
 typedef union attrib *attributes;
+tokenNode sourceTokens;
 
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
@@ -126,6 +127,7 @@ void OutputTokens(tokenNode sourceTokens);
 void OutputListings(tokenNode sourceTokens, FILE * pFile);
 void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile);
 
+void parse();
 void prgrm();
 void prgrmp();
 void prgrmpp();

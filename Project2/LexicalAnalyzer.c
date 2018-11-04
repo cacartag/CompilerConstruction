@@ -26,7 +26,7 @@ int main(int argc, char * argv[])
 
 
   tokenNode reservedHead;
-  tokenNode sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
+  sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
   sourceTokens->next = NULL;  
   
   RetrieveReservedWords(&reservedHead);
@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
   // start by opening up file with program
   if(argc == 1)
   {
-    pFile = fopen("program3","r+");
+    pFile = fopen("program1","r+");
   } else {
     pFile = fopen(argv[1],"r+");
   }
@@ -62,6 +62,9 @@ int main(int argc, char * argv[])
   
   OutputTokens(sourceTokens);
   OutputListings(sourceTokens, pFile);
+  
+  parse();
+  //getToken();
   
   return 0;
 }
