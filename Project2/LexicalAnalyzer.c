@@ -58,7 +58,7 @@ int main(int argc, char * argv[])
     currentLine = currentLine + 1;
   }
 
-  AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
+  //AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
   
   OutputTokens(sourceTokens);
   OutputListings(sourceTokens, pFile);
@@ -871,39 +871,39 @@ int LeadingZeroCheck(char * tempBuff)
     return 0;
 }
 
-void OutputTokens(tokenNode sourceTokens)
+void OutputTokens(tokenNode tempSourceTokens)
 {    
   FILE * pFile = fopen("TokenOutput.txt","w+");
    
     
-  if(sourceTokens->next != NULL)
+  if(tempSourceTokens->next != NULL)
   {
-    sourceTokens = sourceTokens->next;
+    tempSourceTokens = tempSourceTokens->next;
   }
 
   fprintf(pFile,"%-5s %-15s %-23s %-10s\n", "Line","Lexeme", "Token Type", "Attribute");
-  while(sourceTokens->next != NULL)
+  while(tempSourceTokens->next != NULL)
   {
-    if(sourceTokens->attribute->attr == 0 && (sourceTokens->type != ID))
+    if(tempSourceTokens->attribute->attr == 0 && (tempSourceTokens->type != ID))
     {
-      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, "NULL");
-    } else if(sourceTokens->type == ID)
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", tempSourceTokens->line, tempSourceTokens->lexeme, tempSourceTokens->type, NumberToString(tempSourceTokens->type), tempSourceTokens->attribute->attr, "NULL");
+    } else if(tempSourceTokens->type == ID)
     {
-      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10X %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), &(sourceTokens->attribute->attr), "NULL");        
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10X %s\n", tempSourceTokens->line, tempSourceTokens->lexeme, tempSourceTokens->type, NumberToString(tempSourceTokens->type), &(tempSourceTokens->attribute->attr), "NULL");        
     }
     else
     {
-      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+      fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", tempSourceTokens->line, tempSourceTokens->lexeme, tempSourceTokens->type, NumberToString(tempSourceTokens->type), tempSourceTokens->attribute->attr, NumberToString(tempSourceTokens->attribute->attr));        
     }
-    sourceTokens = sourceTokens->next; 
+    tempSourceTokens = tempSourceTokens->next; 
     
   }
 
-  if(sourceTokens->attribute->attr == 0)
+  if(tempSourceTokens->attribute->attr == 0)
   {
-    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, "NULL");
+    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", tempSourceTokens->line, tempSourceTokens->lexeme, tempSourceTokens->type, NumberToString(tempSourceTokens->type), tempSourceTokens->attribute->attr, "NULL");
   } else {
-    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", sourceTokens->line, sourceTokens->lexeme, sourceTokens->type, NumberToString(sourceTokens->type), sourceTokens->attribute->attr, NumberToString(sourceTokens->attribute->attr));        
+    fprintf(pFile,"%-5d %-15s %-3d %-20s %-10d %s\n", tempSourceTokens->line, tempSourceTokens->lexeme, tempSourceTokens->type, NumberToString(tempSourceTokens->type), tempSourceTokens->attribute->attr, NumberToString(tempSourceTokens->attribute->attr));        
   }
   
   fclose(pFile);
@@ -914,32 +914,33 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile)
   char * sourceLine = malloc(73);
   FILE * tempFile = fopen("ListingOutput.txt","w+");
   int tempLine = 1;
+  tokenNode tempSourceTokens = sourceTokens;
       
   rewind(pFile);
 
   while(fgets(sourceLine,72,pFile) != NULL)
   {
     fprintf(tempFile,"%i    %s",tempLine,sourceLine);
-    PrintLexicalErrors(sourceTokens, tempLine, tempFile);
+    PrintLexicalErrors(tempSourceTokens, tempLine, tempFile);
     tempLine = tempLine + 1;
   }
 
 }
 
-void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile)
+void PrintLexicalErrors(tokenNode tempSourceTokens, int tempLine, FILE * pFile)
 {
-  if(sourceTokens->next != NULL)
+  if(tempSourceTokens->next != NULL)
   {
-    sourceTokens = sourceTokens->next;
+    tempSourceTokens = tempSourceTokens->next;
   }
 
-  while(sourceTokens->next != NULL && (sourceTokens->line <= tempLine) )
+  while(tempSourceTokens->next != NULL && (tempSourceTokens->line <= tempLine) )
   {
-    if((sourceTokens->type == LEXERR) && (sourceTokens->line == tempLine))
+    if((tempSourceTokens->type == LEXERR) && (tempSourceTokens->line == tempLine))
     {
-      fprintf(pFile,"%i    %s: %s: %s\n", tempLine,NumberToString(sourceTokens->type),NumberToString(sourceTokens->attribute->attr),sourceTokens->lexeme);
+      fprintf(pFile,"%i    %s: %s: %s\n", tempLine,NumberToString(tempSourceTokens->type),NumberToString(tempSourceTokens->attribute->attr),tempSourceTokens->lexeme);
     }
     
-    sourceTokens = sourceTokens->next;  
+    tempSourceTokens = tempSourceTokens->next;  
   }
 }

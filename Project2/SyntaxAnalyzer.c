@@ -854,9 +854,11 @@ void variablep()
 
       int synchSet[] = {84,163,200};
 
+      printf("Reached \n");
       while( checkSynch(synchSet, tok->type, 3) )
       {
         tok = getToken();
+        printf("Retrieved: %s\n",tok->lexeme);
       }
   }
 }
@@ -1016,8 +1018,10 @@ void express()
 
       int synchSet[] = {20,80,23,19,161,161,200};
 
+        printf("inside default express\n");
       while( checkSynch(synchSet, tok->type, 7) )
       {
+
         tok = getToken();
       }
   }
@@ -1375,9 +1379,37 @@ void match(const char * t)
   if(!strcmp(t,"id"))
   {
     if(tok->type == ID)
-      tok = getToken();
+    {
+      printf("ID Token Parsed\n");
+      tok = getToken(); 
+    }
     else
+    {
       printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+    }
+  }
+  else if (!strcmp(t,"assignop") || !strcmp(t,"relop") || !strcmp(t,"addop") || !strcmp(t,"mulop"))
+  {
+      if(!strcmp(t,"assignop") && (tok->type == ASSIGNOP))
+      {
+        printf("Assignop Token Parsed\n");
+        tok = getToken();
+      } else if(!strcmp(t,"relop") && (tok->type == RELOP))
+      {
+        printf("Relop Token Parsed\n");
+        tok = getToken();
+      } else if(!strcmp(t,"addop") && (tok->type == ADDOP))
+      {
+        printf("Addop Token Parsed\n");
+        tok = getToken();
+      } else if(!strcmp(t,"mulop") && (tok->type == MULOP))
+      {
+        printf("Mulop Token Parsed\n");
+        tok = getToken();
+      } else {
+        printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+      }
+
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
   {
@@ -1411,15 +1443,17 @@ void match(const char * t)
   //}
 }
 
+// returns 0 if found in synchset 
 int checkSynch(int * synchSet, int tokenType, int length)
 {
-    int found = 0;
+    int found = 1;
 
     for(int index = 0; index < length; index++)
     {
       if(synchSet[index] == tokenType)
       {
-          found = 1;
+          found = 0;
+          printf("In Synch set\n");
       }
     }
     

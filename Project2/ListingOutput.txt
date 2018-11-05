@@ -1,11 +1,5 @@
-1    prgrm example(input,output);
-2    var x, y: int;
-3    procdr gcd(a, b: int): int;
-4    begin
-5    	if b = 0 then gcd := a
-6    	else gcd := gcd(b, a mod b)
-7    end;
-8    begin
-9    	read(x, y);
-10    	write(gcd(x, y));
-11    end.$
+1    prgrm example(one);
+2    begin
+3      uly := -ulp
+4    end .
+5    $

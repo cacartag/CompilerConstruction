@@ -1,11 +1,11 @@
 prgrm example(input,output);
-var x, y: int;
+var x: int;
 procdr gcd(a, b: int): int;
 begin
 	if b = 0 then gcd := a
 	else gcd := gcd(b, a mod b)
 end;
 begin
-	read(x, y);
-	write(gcd(x, y));
+	read(x);
+	write(gcd(x));
 end.$
