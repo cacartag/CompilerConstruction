@@ -1077,12 +1077,12 @@ void simp_express()
 
     case 20: // terminal is id
       term();
-      simp_express();
+      simp_expressp();
     break;
 
     case 80: // terminal is (
       term();
-      simp_express();
+      simp_expressp();
     break;
 
     case 23: // terminal is num

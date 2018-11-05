@@ -1,15 +1,14 @@
 Line  Lexeme          Token Type              Attribute 
 1     prgrm           3   PROGRAM              0          NULL
-1     example         20  ID                   769F00     NULL
+1     example         20  ID                   CA140      NULL
 1     (               80  OPEN_PARENTHESES     0          NULL
-1     one             20  ID                   76A200     NULL
+1     one             20  ID                   C9EB0      NULL
 1     )               81  CLOSED_PARENTHESES   0          NULL
 1     ;               79  SEMICOLON            0          NULL
 2     begin           10  BEGIN                0          NULL
-3     uly             20  ID                   76A060     NULL
+3     uly             20  ID                   CA190      NULL
 3     :=              163 ASSIGNOP             0          NULL
-3     -               161 ADDOP                72         SUB_SYMBOL
-3     ulp             20  ID                   769F10     NULL
+3     ulp             20  ID                   CA070      NULL
 4     end             11  END                  0          NULL
 4     .               78  PERIOD               0          NULL
 5     $               200 EOF                  0          NULL

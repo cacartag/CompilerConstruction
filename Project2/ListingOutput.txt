@@ -1,5 +1,5 @@
 1    prgrm example(one);
 2    begin
-3      uly := -ulp
+3      uly := ulp
 4    end .
 5    $
