@@ -10,5 +10,5 @@
 10    end;
 11    begin
 12      first := second
-13    end .
+13    en .
 14    $

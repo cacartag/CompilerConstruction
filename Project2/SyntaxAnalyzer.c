@@ -6,23 +6,6 @@
 #include <stdbool.h>
 #include "LexicalAnalyzer.h"
  
-
-//union attrib
-//{
-//  uint32_t attr;
-//  uint32_t * attr_memory;
-//};
-//
-//struct token
-//{
-//  uint32_t line;
-//  uint8_t * lexeme;
-//  uint32_t type;
-//  union attrib * attribute;
-//  struct token * next;
-//};
-//
-//typedef struct token *tokenNode;
 tokenNode tok;
 
 void prgrm();
@@ -73,11 +56,12 @@ tokenNode getToken();
 tokenNode getToken(){ 
   tokenNode tok;
   
-  
   if(sourceTokens->next != NULL)
   {
     tok = sourceTokens->next;
     sourceTokens = sourceTokens->next;
+  } else {
+    tok = sourceTokens; 
   }
   
   printf("Token Lexeme: %s\n", tok->lexeme);
