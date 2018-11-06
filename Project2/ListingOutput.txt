@@ -1,5 +1,14 @@
 1    prgrm example(one);
-2    begin
-3      uly := ulp
-4    end .
-5    $
+2    var first : int; 
+3    var second : real;
+4    var third : int; 
+5    procdr FirstTest (primary: int; secondary: real);
+6    var fourth : int;
+7    var fifth : real;
+8    begin
+9      fourth := primary 
+10    end;
+11    begin
+12      first := second
+13    end .
+14    $

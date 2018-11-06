@@ -396,7 +396,8 @@ void subprgrm_decl()
   {
 
     case 9: // terminal is procdr
-      subprgrm_decl();
+      printf("Right before procedure\n");
+      subprgrm_head();
       subprgrm_declp();
     break;
 
