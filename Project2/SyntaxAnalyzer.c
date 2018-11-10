@@ -56,9 +56,9 @@ tokenNode getToken();
 tokenNode getToken(){ 
   tokenNode tok;
   
-  if(sourceTokens->next != NULL)
+  if(sourceTokens != NULL)
   {
-    tok = sourceTokens->next;
+    tok = sourceTokens;
     sourceTokens = sourceTokens->next;
   } else {
     tok = sourceTokens; 
@@ -380,7 +380,7 @@ void subprgrm_decl()
   {
 
     case 9: // terminal is procdr
-      printf("Right before procedure\n");
+      // printf("Right before procedure\n");
       subprgrm_head();
       subprgrm_declp();
     break;
@@ -839,11 +839,11 @@ void variablep()
 
       int synchSet[] = {84,163,200};
 
-      printf("Reached \n");
+      // printf("Reached \n");
       while( checkSynch(synchSet, tok->type, 3) )
       {
         tok = getToken();
-        printf("Retrieved: %s\n",tok->lexeme);
+        // printf("Retrieved: %s\n",tok->lexeme);
       }
   }
 }
@@ -1003,7 +1003,7 @@ void express()
 
       int synchSet[] = {20,80,23,19,161,161,200};
 
-        printf("inside default express\n");
+      // printf("inside default express\n");
       while( checkSynch(synchSet, tok->type, 7) )
       {
 
@@ -1365,7 +1365,7 @@ void match(const char * t)
   {
     if(tok->type == ID)
     {
-      printf("ID Token Parsed\n");
+      // printf("ID Token Parsed\n");
       tok = getToken(); 
     }
     else
@@ -1373,32 +1373,44 @@ void match(const char * t)
       printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
     }
   }
+  else if(!strcmp(t,"num"))
+  {
+    if(tok->type == INTEGER)
+    {
+      // printf("Num Token Parsed\n");
+      tok = getToken();
+    } 
+    else
+    {
+      printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+    }
+  }
   else if (!strcmp(t,"assignop") || !strcmp(t,"relop") || !strcmp(t,"addop") || !strcmp(t,"mulop"))
   {
-      if(!strcmp(t,"assignop") && (tok->type == ASSIGNOP))
-      {
-        printf("Assignop Token Parsed\n");
-        tok = getToken();
-      } else if(!strcmp(t,"relop") && (tok->type == RELOP))
-      {
-        printf("Relop Token Parsed\n");
-        tok = getToken();
-      } else if(!strcmp(t,"addop") && (tok->type == ADDOP))
-      {
-        printf("Addop Token Parsed\n");
-        tok = getToken();
-      } else if(!strcmp(t,"mulop") && (tok->type == MULOP))
-      {
-        printf("Mulop Token Parsed\n");
-        tok = getToken();
-      } else {
-        printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
-      }
+    if(!strcmp(t,"assignop") && (tok->type == ASSIGNOP))
+    {
+      // printf("Assignop Token Parsed\n");
+      tok = getToken();
+    } else if(!strcmp(t,"relop") && (tok->type == RELOP))
+    {
+      // printf("Relop Token Parsed\n");
+      tok = getToken();
+    } else if(!strcmp(t,"addop") && (tok->type == ADDOP))
+    {
+      // printf("Addop Token Parsed\n");
+      tok = getToken();
+    } else if(!strcmp(t,"mulop") && (tok->type == MULOP))
+    {
+      // printf("Mulop Token Parsed\n");
+      tok = getToken();
+    } else {
+      printf("Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
+    }
 
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
   {
-    printf("One Token parsed\n");
+    // printf("One Token parsed\n");
     tok = getToken();
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
@@ -1438,7 +1450,7 @@ int checkSynch(int * synchSet, int tokenType, int length)
       if(synchSet[index] == tokenType)
       {
           found = 0;
-          printf("In Synch set\n");
+          // printf("In Synch set\n");
       }
     }
     
@@ -1449,6 +1461,7 @@ void parse()
 {
     tok = getToken();
     prgrm();
+    printf("Reached of end parse\n");
     match("$");
 }
 

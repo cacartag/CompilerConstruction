@@ -105,6 +105,8 @@ struct token
 typedef struct token *tokenNode;
 typedef union attrib *attributes;
 tokenNode sourceTokens;
+tokenNode symbolTable;
+tokenNode symbolTableHead;
 
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
@@ -126,6 +128,8 @@ int LeadingZeroCheck(char * tempBuff);
 void OutputTokens(tokenNode sourceTokens);
 void OutputListings(tokenNode sourceTokens, FILE * pFile);
 void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile);
+void AddToSymbolTable(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
+
 
 void parse();
 void prgrm();

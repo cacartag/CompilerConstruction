@@ -29,6 +29,10 @@ int main(int argc, char * argv[])
   sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
   sourceTokens->next = NULL;  
   
+  symbolTable = (tokenNode)(malloc(sizeof(struct token)));
+  symbolTable->next = NULL;
+  symbolTableHead = symbolTable;
+  
   RetrieveReservedWords(&reservedHead);
   
   // removes the next character line at the end of the string
@@ -63,11 +67,21 @@ int main(int argc, char * argv[])
   OutputTokens(sourceTokens);
   OutputListings(sourceTokens, pFile);
   
+  sourceTokens = sourceTokens->next;
   parse();
-  //getToken();
+  
+  //FILE * sFile = fopen("SymbolTable.txt","w");
+  //
+  //while (symbolTableHead->next != NULL)
+  //{
+  //  symbolTableHead = symbolTableHead->next;
+  //  fprintf(sFile,"%s\n",symbolTableHead->lexeme);
+  //}
+
+  //  getToken();
   
   return 0;
-}
+} 
 
 // processes buffer containing a single line of code
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buffer)
@@ -79,7 +93,7 @@ int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t * buff
   int basePosition = 0;
   int forwardPosition = 0;
   int atEnd = 1;
-  int stuck = 0;  
+  int stuck = 0;
 
   // while loop goes through each finite statemachine for processing
   // until the end of the buffer is reached or none of the machines can process
@@ -177,6 +191,12 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
       // check if it's a reserved word
       CheckReservedList(id, reservedHead, &type, &attribute);
       AddToTokenLinked(sourceTokens, id, type, attribute);
+      
+      if (type == ID)
+      {
+        // printf("ID is %s\n",id);
+        AddToSymbolTable(&symbolTable, id, type, attribute);
+      }
     }
 
     *bPosition = *fPosition;
@@ -744,6 +764,50 @@ void AddToTokenLinked(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, 
   forwardToken->next = tempToken;
 }
 
+int InSymbolTable(uint8_t * lexeme)
+{    
+  int found = 0;
+  tokenNode tempHead = symbolTableHead;
+  
+
+  while (tempHead != NULL)
+  {
+    if(!strcmp(tempHead->lexeme, lexeme))
+    {
+      found = 1;
+    }
+    tempHead = tempHead->next;
+  }
+  
+  return found;
+}
+
+// adds new tokens to linked list
+void AddToSymbolTable(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute)
+{
+  if(!InSymbolTable(lexeme))
+  {
+    tokenNode tempToken = (tokenNode)(malloc(sizeof(struct token)));
+    tempToken-> attribute = (attributes)(malloc(sizeof(union attrib)));
+    tempToken->lexeme = malloc(15);
+    
+    // going to add some checking to this to handle > 15
+    tempToken->line = currentLine;
+    strcpy(tempToken->lexeme,lexeme);
+    tempToken->type = type;
+    tempToken->attribute->attr = attribute;
+    tempToken->next = NULL; 
+    
+    tokenNode forwardToken = *sourceTokens;
+    
+    while(forwardToken->next != NULL)
+    {
+      forwardToken = forwardToken->next;
+    }
+    
+    forwardToken->next = tempToken;
+  }
+}
 
 // checks reserved list if lexeme exists
 // if true returns 1, along with the type and attribute values
