@@ -102,11 +102,22 @@ struct token
   struct token * next;
 };
 
+struct syntaxError
+{
+  uint32_t line;
+  char * syntaxErr;
+  struct syntaxError * next;
+};
+
 typedef struct token *tokenNode;
 typedef union attrib *attributes;
+typedef struct syntaxError *syntax;
+
 tokenNode sourceTokens;
 tokenNode symbolTable;
 tokenNode symbolTableHead;
+syntax syntaxErrors;
+syntax syntaxHead;
 
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
@@ -175,6 +186,7 @@ void sgn();
 void match(const char * t);
 int checkSynch(int * synchSet, int tokenType, int length);
 tokenNode getToken();
+void listingPrintf(char * synTempStr);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

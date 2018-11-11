@@ -65,11 +65,11 @@ int main(int argc, char * argv[])
   //AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
   
   OutputTokens(sourceTokens);
-  OutputListings(sourceTokens, pFile);
-  
+  tokenNode tempHead = sourceTokens;
   sourceTokens = sourceTokens->next;
   parse();
   
+  OutputListings(tempHead, pFile);  
   //FILE * sFile = fopen("SymbolTable.txt","w");
   //
   //while (symbolTableHead->next != NULL)
@@ -938,8 +938,7 @@ int LeadingZeroCheck(char * tempBuff)
 void OutputTokens(tokenNode tempSourceTokens)
 {    
   FILE * pFile = fopen("TokenOutput.txt","w+");
-   
-    
+
   if(tempSourceTokens->next != NULL)
   {
     tempSourceTokens = tempSourceTokens->next;

@@ -8,7 +8,7 @@
 8    begin
 9      fourth := primary 
 10    end;
-11    procdr Second Test (tertiary : int; quarteary: arr [0 .. 5] of real);
+11    procdr SecondTest (tertiary : int; quarteary: arr [0 .. 5] of real);
 12    var seventh : real;
 13    begin
 14      seventh := seconds + second 

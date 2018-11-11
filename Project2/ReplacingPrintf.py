@@ -9,7 +9,7 @@ for line in syntaxSource:
   if index == -1:
     syntaxTarget.write(line.rstrip() + "\n")
   else:
-    syntaxTarget.write("      ;\nchar synTempStr[100];\n")
+    syntaxTarget.write("      ;\n      char synTempStr[100];\n")
     syntaxTarget.write("      sprintf(synTempStr,"+ line.rstrip()[index + 7:len(line.rstrip())] + "\n")
     syntaxTarget.write("      listingPrintf(synTempStr);\n")
     
