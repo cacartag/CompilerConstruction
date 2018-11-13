@@ -985,9 +985,27 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile)
   {
     fprintf(tempFile,"%i    %s",tempLine,sourceLine);
     PrintLexicalErrors(tempSourceTokens, tempLine, tempFile);
+    PrintSyntaxErrors(tempLine, tempFile);
+    
     tempLine = tempLine + 1;
   }
 
+}
+
+void PrintSyntaxErrors(int tempLine, FILE * pFile)
+{
+  syntax tempHead = syntaxHead;
+  
+  while(tempHead->next != NULL)
+  {
+    tempHead = tempHead->next;
+    
+    if(tempLine == tempHead->line)
+    {
+      fprintf(pFile,"    %s", tempHead->syntaxErr);
+    }
+   
+  }
 }
 
 void PrintLexicalErrors(tokenNode tempSourceTokens, int tempLine, FILE * pFile)
@@ -1001,7 +1019,7 @@ void PrintLexicalErrors(tokenNode tempSourceTokens, int tempLine, FILE * pFile)
   {
     if((tempSourceTokens->type == LEXERR) && (tempSourceTokens->line == tempLine))
     {
-      fprintf(pFile,"%i    %s: %s: %s\n", tempLine,NumberToString(tempSourceTokens->type),NumberToString(tempSourceTokens->attribute->attr),tempSourceTokens->lexeme);
+      fprintf(pFile,"\n    %s: %s: %s\n",NumberToString(tempSourceTokens->type),NumberToString(tempSourceTokens->attribute->attr),tempSourceTokens->lexeme);
     }
     
     tempSourceTokens = tempSourceTokens->next;  

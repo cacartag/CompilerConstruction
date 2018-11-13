@@ -15,5 +15,3 @@ for line in syntaxSource:
     
 #char * synTempStr;
 #sprintf(synTempStr, );
-
-

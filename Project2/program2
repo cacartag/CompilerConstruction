@@ -8,7 +8,7 @@ var fifth : real;
 begin
   fourth := primary 
 end;
-procdr SecondTest (tertiary : int; quarteary: arr [0 .. 5] of real);
+procdr Secondistoolong Test (tertiary : int; quarteary: arr [0 .. 5] of real);
 var seventh : real;
 begin
   seventh := seconds + second 

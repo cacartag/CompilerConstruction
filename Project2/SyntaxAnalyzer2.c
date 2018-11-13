@@ -1525,12 +1525,14 @@ void parse()
     tok = getToken();
     prgrm();
     match("$");
-    printf("reached end\n");
+    //printf("reached end\n");
 
-    while(syntaxHead->next != NULL)
+    syntax tempSyntax = syntaxHead;
+    
+    while(tempSyntax->next != NULL)
     {
-      syntaxHead = syntaxHead->next;
-      printf("%i %s\n",syntaxHead->line, syntaxHead->syntaxErr);
+      tempSyntax = tempSyntax->next;
+      printf("%i %s",tempSyntax->line, tempSyntax->syntaxErr);
     }
 }
 
