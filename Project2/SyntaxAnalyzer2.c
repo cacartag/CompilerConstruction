@@ -18,6 +18,8 @@ tokenNode getToken(){
   } else {
     tok = sourceTokens;
   }
+  
+  //printf("retrieved %s\n", tok->lexeme);
 
   return tok;
 }
@@ -593,6 +595,7 @@ void cmpnd_stmnt()
   {
 
     case 10: // terminal is begin
+      //printf("reached compound statement\n");
       match("begin");
       cmpnd_stmntp();
     break;
@@ -781,25 +784,44 @@ void stmnt()
   {
 
     case 20: // terminal is id
+      printf("%s\n", tok->lexeme);
+      printf("inside terminal id\n");
       variable();
       match("assignop");
+      printf("%s\n", tok->lexeme);
       express();
     break;
 
     case 10: // terminal is begin
+      printf("first\n");
       cmpnd_stmnt();
     break;
 
     case 1: // terminal is if
+      //printf("Reached inside statement\n");
       match("if");
+      //printf("processed if \n");
       express();
+      //printf("processed express\n");
+      //printf("current lexeme %s\n",tok->lexeme);
+      printf("%s\n",tok->lexeme);
+      printf("before matching then\n");
       match("then");
+      //printf("processed then\n");
+      printf("before processing then statement\n");
       stmnt();
+      //printf("processed statement\n");
+      printf("%s\n",tok->lexeme);
       match("else");
+      printf("else matched\n");
+      //printf("processed else\n");
       stmnt();
+      printf("Hello World\n");
+      //printf("after else statement\n");
     break;
 
     case 13: // terminal is while
+      printf("third\n");
       match("while");
       express();
       match("do");
@@ -807,11 +829,14 @@ void stmnt()
     break;
 
     case 21: // terminal is call
+      printf("second\n");
       procdr_stmnt();
     break;
 
     default:
       ;
+      printf("did not match any statement\n");
+      printf("%s\n",tok->lexeme);
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
       listingPrintf(synTempStr);
@@ -832,6 +857,7 @@ void variable()
 
     case 20: // terminal is id
       match("id");
+      printf("variable: %s\n",tok->lexeme);
       variablep();
     break;
 
@@ -862,6 +888,8 @@ void variablep()
     break;
 
     case 163 : // terminal is assignop, epsilon do nothing
+    printf("broke for assignop\n");
+    printf("%s\n", tok->lexeme);
     break;
 
     default:
@@ -952,7 +980,7 @@ void express_lst()
       express_lstp();
     break;
 
-    case 23: // terminal is num
+    case INTEGER: // terminal is num, changing to INTEGER
       express();
       express_lstp();
     break;
@@ -1026,8 +1054,10 @@ void express()
       expressp();
     break;
 
-    case 23: // terminal is num
+    case INTEGER: // terminal is num, changing to INTEGER
+      printf("reached in num\n");
       simp_express();
+      printf("after simp_express, %s\n",tok->lexeme);
       expressp();
     break;
 
@@ -1063,7 +1093,10 @@ void expressp()
   {
 
     case 160: // terminal is relop
+      //printf("evaluating for relop\n");
+      //printf("current lexeme is %s\n", tok->lexeme);
       match("relop");
+      //printf("current lexeme is %s\n", tok->lexeme);
       simp_express();
     break;
 
@@ -1086,6 +1119,10 @@ void expressp()
     break;
 
     case 14 : // terminal is do, epsilon do nothing
+    break;
+    
+    case 12 : // terminal is else, epsilon do nothing
+    printf("broke for else\n");
     break;
 
     default:
@@ -1118,8 +1155,10 @@ void simp_express()
       simp_expressp();
     break;
 
-    case 23: // terminal is num
+    case INTEGER: // terminal is num, changing to INTEGER
+      printf("inside simp_express\n");
       term();
+      printf("after term, %s\n",tok->lexeme);
       simp_expressp();
     break;
 
@@ -1179,6 +1218,7 @@ void simp_expressp()
     break;
 
     case 12 : // terminal is else, epsilon do nothing
+    printf("broke for else\n");
     break;
 
     case 14 : // terminal is do, epsilon do nothing
@@ -1217,8 +1257,10 @@ void term()
       termp();
     break;
 
-    case 23: // terminal is num
+    case INTEGER: // terminal is num, changing to INTEGER
+      printf("inside term\n");
       factor();
+      printf("after factor, %s\n", tok->lexeme);
       termp();
     break;
 
@@ -1272,6 +1314,7 @@ void termp()
     break;
 
     case 12 : // terminal is else, epsilon do nothing
+    printf("broke for else\n");
     break;
 
     case 14 : // terminal is do, epsilon do nothing
@@ -1314,8 +1357,9 @@ void factor()
       match(")");
     break;
 
-    case 23: // terminal is num
+    case INTEGER: // terminal is num, changing to int
       match("num");
+      printf("%s\n", tok->lexeme);
     break;
 
     case 19: // terminal is not
@@ -1430,6 +1474,11 @@ void sgn()
 
 void match(const char * t)
 {
+    if(!strcmp(tok->lexeme,"else"))
+    {
+      printf("processed else\n");
+    }
+    
   if(!strcmp(t,"id"))
   {
     if(tok->type == ID)
@@ -1482,6 +1531,11 @@ void match(const char * t)
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
   {
+    if(!strcmp(tok->lexeme,"else"))
+    {
+      printf("processed else\n");
+    }
+    
     tok = getToken();
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
@@ -1490,6 +1544,7 @@ void match(const char * t)
       char synTempStr[100];
       sprintf(synTempStr, "Successfully parsed !\n ");
       listingPrintf(synTempStr);
+      
   }
   else if ( strcmp((const char *)(tok->lexeme), t) )
   {
@@ -1525,28 +1580,28 @@ void parse()
     tok = getToken();
     prgrm();
     match("$");
-    //printf("reached end\n");
 
     syntax tempSyntax = syntaxHead;
     
-    while(tempSyntax->next != NULL)
-    {
-      tempSyntax = tempSyntax->next;
-      printf("%i %s",tempSyntax->line, tempSyntax->syntaxErr);
-    }
+    //while(tempSyntax->next != NULL)
+    //{
+    //  tempSyntax = tempSyntax->next;
+    //  printf("%i %s %s",tempSyntax->line, tempSyntax->lexemeTest, tempSyntax->syntaxErr);
+    //}
+
 }
 
 void listingPrintf(char * synTempStr)
 {
     syntax tempSyntax = (syntax)malloc(sizeof(struct syntaxError));
     tempSyntax->line = tok->line;
-    tempSyntax->syntaxErr = malloc(strlen(synTempStr));
-    
+    tempSyntax->lexemeTest = malloc(strlen(tok->lexeme));
+    tempSyntax->syntaxErr = malloc(100);
+    strcpy(tempSyntax->lexemeTest, tok->lexeme);
     strcpy(tempSyntax->syntaxErr, synTempStr);
     tempSyntax->next = NULL;
     
     syntaxErrors->next = tempSyntax;
     syntaxErrors = syntaxErrors->next;
-
 }
 

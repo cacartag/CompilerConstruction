@@ -68,8 +68,9 @@ int main(int argc, char * argv[])
   tokenNode tempHead = sourceTokens;
   sourceTokens = sourceTokens->next;
   parse();
-  
+  //printf("back to main\n");
   OutputListings(tempHead, pFile);  
+  //printf("done listing\n");
   //FILE * sFile = fopen("SymbolTable.txt","w");
   //
   //while (symbolTableHead->next != NULL)
@@ -975,11 +976,15 @@ void OutputTokens(tokenNode tempSourceTokens)
 void OutputListings(tokenNode sourceTokens, FILE * pFile)
 {
   char * sourceLine = malloc(73);
+  //printf("second\n");
   FILE * tempFile = fopen("ListingOutput.txt","w+");
+  //printf("third\n");
   int tempLine = 1;
   tokenNode tempSourceTokens = sourceTokens;
       
   rewind(pFile);
+  
+  //printf("first flag\n");
 
   while(fgets(sourceLine,72,pFile) != NULL)
   {

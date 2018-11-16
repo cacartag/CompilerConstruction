@@ -106,6 +106,7 @@ struct syntaxError
 {
   uint32_t line;
   char * syntaxErr;
+  char * lexemeTest;
   struct syntaxError * next;
 };
 

@@ -2,27 +2,22 @@
 2    var first : int; 
 3    var second : real;
 4    var third : int; 
-5    procdr FirstTest (primary: int; secondary: real);
+5    procdr gcd (primary: int; secondary: real);
 6    var fourth : int;
 7    var fifth : real;
 8    begin
-9      fourth := primary 
-10    end;
-11    procdr Secondistoolong Test (tertiary : int; quarteary: arr [0 .. 5] of
-    LEXERR: LONG_STRING: Secondistoo
-    Syntax Error: Expecting id, Received Secondistoo 
-    Syntax Error: Expecting one of ( ; $
-    Syntax Error: Expecting one of var procdr begin $
-12     real);
-13    var seventh : real;
-    Syntax Error: Expecting ;, Received var 
-    Syntax Error: Expecting one of procdr begin $
-14    begin
-15      seventh := seconds + second 
-16    end;
-    Syntax Error: Expecting ., Received ; 
-17    begin
-    Syntax Error: Expecting $, Received begin 
-18      first := second
-19    end .
-20    $
+9      if fourth = 0
+10      then 
+11      sizt := 5
+12      else unique := 9
+13    end;
+14    procdr SecondTest (tertiary : int; quarteary: arr [0 .. 5] of real);
+15    var seventh : real;
+16    begin
+17      seventh := seconds + second 
+18    end;
+19    begin
+20      first := second
+21    end .
+22    $    Successfully parsed !
+ 
