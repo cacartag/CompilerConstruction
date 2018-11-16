@@ -691,6 +691,7 @@ void opt_stmnt()
 
     default:
       ;
+      printf("reached inside of opt_stmnt\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
       listingPrintf(synTempStr);
@@ -736,6 +737,7 @@ void stmnt_lst()
 
     default:
       ;
+      printf("Inside statement list\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
       listingPrintf(synTempStr);
@@ -757,7 +759,7 @@ void stmnt_lstp()
     case 79: // terminal is ;
       match(";");
       stmnt();
-      stmnt_lst();
+      stmnt_lstp();
     break;
 
     case 11 : // terminal is end, epsilon do nothing
@@ -784,16 +786,16 @@ void stmnt()
   {
 
     case 20: // terminal is id
-      printf("%s\n", tok->lexeme);
-      printf("inside terminal id\n");
+      //printf("%s\n", tok->lexeme);
+      //printf("inside terminal id\n");
       variable();
       match("assignop");
-      printf("%s\n", tok->lexeme);
+      //printf("%s\n", tok->lexeme);
       express();
     break;
 
     case 10: // terminal is begin
-      printf("first\n");
+      //printf("first\n");
       cmpnd_stmnt();
     break;
 
@@ -804,24 +806,17 @@ void stmnt()
       express();
       //printf("processed express\n");
       //printf("current lexeme %s\n",tok->lexeme);
-      printf("%s\n",tok->lexeme);
-      printf("before matching then\n");
+      //printf("%s\n",tok->lexeme);
+      //printf("before matching then\n");
       match("then");
       //printf("processed then\n");
-      printf("before processing then statement\n");
+      //printf("before processing then statement\n");
       stmnt();
-      //printf("processed statement\n");
-      printf("%s\n",tok->lexeme);
-      match("else");
-      printf("else matched\n");
-      //printf("processed else\n");
-      stmnt();
-      printf("Hello World\n");
-      //printf("after else statement\n");
+      stmntp();
     break;
 
     case 13: // terminal is while
-      printf("third\n");
+      //printf("third\n");
       match("while");
       express();
       match("do");
@@ -829,14 +824,14 @@ void stmnt()
     break;
 
     case 21: // terminal is call
-      printf("second\n");
+      //printf("second\n");
       procdr_stmnt();
     break;
 
     default:
       ;
-      printf("did not match any statement\n");
-      printf("%s\n",tok->lexeme);
+      //printf("did not match any statement\n");
+      //printf("%s\n",tok->lexeme);
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
       listingPrintf(synTempStr);
@@ -850,6 +845,28 @@ void stmnt()
   }
 }
 
+void stmntp()
+{
+  switch( tok->type )
+  {
+    case 12: // terminal is else
+      match("else");
+      stmnt();
+    break; 
+    
+    case 79:
+    break;
+    
+    case 11:
+    break;
+   
+    default:
+    
+    ;
+    
+  }
+}
+
 void variable()
 {
  switch( tok->type )
@@ -857,7 +874,7 @@ void variable()
 
     case 20: // terminal is id
       match("id");
-      printf("variable: %s\n",tok->lexeme);
+      //printf("variable: %s\n",tok->lexeme);
       variablep();
     break;
 
@@ -888,8 +905,8 @@ void variablep()
     break;
 
     case 163 : // terminal is assignop, epsilon do nothing
-    printf("broke for assignop\n");
-    printf("%s\n", tok->lexeme);
+    //printf("broke for assignop\n");
+    //printf("%s\n", tok->lexeme);
     break;
 
     default:
@@ -1055,9 +1072,9 @@ void express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      printf("reached in num\n");
+      //printf("reached in num\n");
       simp_express();
-      printf("after simp_express, %s\n",tok->lexeme);
+      //printf("after simp_express, %s\n",tok->lexeme);
       expressp();
     break;
 
@@ -1122,7 +1139,7 @@ void expressp()
     break;
     
     case 12 : // terminal is else, epsilon do nothing
-    printf("broke for else\n");
+    //printf("broke for else\n");
     break;
 
     default:
@@ -1156,9 +1173,9 @@ void simp_express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      printf("inside simp_express\n");
+      //printf("inside simp_express\n");
       term();
-      printf("after term, %s\n",tok->lexeme);
+      //printf("after term, %s\n",tok->lexeme);
       simp_expressp();
     break;
 
@@ -1218,7 +1235,7 @@ void simp_expressp()
     break;
 
     case 12 : // terminal is else, epsilon do nothing
-    printf("broke for else\n");
+    //printf("broke for else\n");
     break;
 
     case 14 : // terminal is do, epsilon do nothing
@@ -1258,9 +1275,9 @@ void term()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      printf("inside term\n");
+      //printf("inside term\n");
       factor();
-      printf("after factor, %s\n", tok->lexeme);
+      //printf("after factor, %s\n", tok->lexeme);
       termp();
     break;
 
@@ -1314,7 +1331,7 @@ void termp()
     break;
 
     case 12 : // terminal is else, epsilon do nothing
-    printf("broke for else\n");
+    //printf("broke for else\n");
     break;
 
     case 14 : // terminal is do, epsilon do nothing
@@ -1359,7 +1376,7 @@ void factor()
 
     case INTEGER: // terminal is num, changing to int
       match("num");
-      printf("%s\n", tok->lexeme);
+      //printf("%s\n", tok->lexeme);
     break;
 
     case 19: // terminal is not
@@ -1474,10 +1491,6 @@ void sgn()
 
 void match(const char * t)
 {
-    if(!strcmp(tok->lexeme,"else"))
-    {
-      printf("processed else\n");
-    }
     
   if(!strcmp(t,"id"))
   {
@@ -1531,11 +1544,6 @@ void match(const char * t)
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
   {
-    if(!strcmp(tok->lexeme,"else"))
-    {
-      printf("processed else\n");
-    }
-    
     tok = getToken();
   }
   else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )

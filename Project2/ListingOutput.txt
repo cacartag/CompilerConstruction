@@ -1,23 +1,41 @@
 1    prgrm example(one);
 2    var first : int; 
 3    var second : real;
-4    var third : int; 
-5    procdr gcd (primary: int; secondary: real);
+4    var thirdisthelongest : int; 
+
+    LEXERR: LONG_STRING: thirdisthel
+    Syntax Error: Expecting id, Received thirdisthel 
+    Syntax Error: Expecting :, Received thirdisthel 
+    Syntax Error: Expecting one of arr int real $
+    Syntax Error: Expecting ;, Received int 
+    Syntax Error: Expecting one of var procdr begin $
+5    procdr gcdmaxnumberoferrors (primary: int; secondary: real);
+
+    LEXERR: LONG_STRING: gcdmaxnumbe
+    Syntax Error: Expecting id, Received gcdmaxnumbe 
+    Syntax Error: Expecting one of ( ; $
+    Syntax Error: Expecting one of var procdr begin $
 6    var fourth : int;
+    Syntax Error: Expecting ;, Received var 
+    Syntax Error: Expecting one of procdr begin $
 7    var fifth : real;
 8    begin
 9      if fourth = 0
 10      then 
-11      sizt := 5
-12      else unique := 9
-13    end;
-14    procdr SecondTest (tertiary : int; quarteary: arr [0 .. 5] of real);
-15    var seventh : real;
-16    begin
-17      seventh := seconds + second 
-18    end;
+11      if fourth = 2
+12      then
+13      sizt := 6
+14      else 
+15      unique := 56
+16    end;
+    Syntax Error: Expecting ., Received ; 
+17    procdr Second Test (tertiary : int; quarteary: arr [0 .. 5] of real);
+    Syntax Error: Expecting $, Received procdr 
+18    var seventh : real;
 19    begin
-20      first := second
-21    end .
-22    $    Successfully parsed !
- 
+20      seventh := seconds + second 
+21    end;
+22    begin
+23      first := second
+24    end .
+25    $

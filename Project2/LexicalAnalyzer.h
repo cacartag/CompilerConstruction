@@ -185,6 +185,7 @@ void termp();
 void factor();
 void factorp();
 void sgn();
+void stmntp();
 void match(const char * t);
 int checkSynch(int * synchSet, int tokenType, int length);
 tokenNode getToken();
