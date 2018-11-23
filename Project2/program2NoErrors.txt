@@ -14,7 +14,7 @@ begin
   else 
   unique := 56
 end;
-procdr Second Test (tertiary : int; quarteary: arr [0 .. 5] of real);
+procdr SecondTest (tertiary : int; quarteary: arr [0 .. 5] of real);
 var seventh : real;
 begin
   seventh := seconds + second 

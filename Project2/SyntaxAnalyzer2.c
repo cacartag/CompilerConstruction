@@ -43,7 +43,7 @@ void prgrm()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of prgrm $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of prgrm $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {3,200};
@@ -79,7 +79,7 @@ void prgrmp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {4,9,10,200};
@@ -110,7 +110,7 @@ void prgrmpp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,10,200};
@@ -135,7 +135,7 @@ void id_list()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,200};
@@ -164,7 +164,7 @@ void id_listp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) , $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) , $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,82,200};
@@ -193,7 +193,7 @@ void decls()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of var $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of var $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {4,200};
@@ -228,7 +228,7 @@ void declsp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {4,9,10,200};
@@ -267,7 +267,7 @@ void type()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of arr int real $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of arr int real $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {5,7,8,200};
@@ -295,7 +295,7 @@ void stndrd_type()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of int real $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of int real $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {7,8,200};
@@ -321,7 +321,7 @@ void subprgrm_decls()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,200};
@@ -350,7 +350,7 @@ void subprgrm_declsp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,10,200};
@@ -375,7 +375,7 @@ void subprgrm_decl()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,200};
@@ -409,7 +409,7 @@ void subprgrm_declp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of var procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {4,9,10,200};
@@ -438,7 +438,7 @@ void subprgrm_declpp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,10,200};
@@ -464,7 +464,7 @@ void subprgrm_head()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of procdr $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {9,200};
@@ -493,7 +493,7 @@ void subprgrm_headp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ( ; $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ( ; $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {80,79,200};
@@ -519,7 +519,7 @@ void args()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ( $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ( $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {80,200};
@@ -546,7 +546,7 @@ void param_lst()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,200};
@@ -577,7 +577,7 @@ void param_lstp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,79,200};
@@ -603,7 +603,7 @@ void cmpnd_stmnt()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of begin $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {10,200};
@@ -652,7 +652,7 @@ void cmpnd_stmntp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id begin end if while call $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id begin end if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,10,11,1,13,21,200};
@@ -693,7 +693,7 @@ void opt_stmnt()
       ;
       printf("reached inside of opt_stmnt\n");
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,10,1,13,21,200};
@@ -739,7 +739,7 @@ void stmnt_lst()
       ;
       printf("Inside statement list\n");
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,10,1,13,21,200};
@@ -768,7 +768,7 @@ void stmnt_lstp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ; end $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ; end $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {79,11,200};
@@ -833,7 +833,7 @@ void stmnt()
       //printf("did not match any statement\n");
       //printf("%s\n",tok->lexeme);
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,10,1,13,21,200};
@@ -881,7 +881,7 @@ void variable()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,200};
@@ -912,7 +912,7 @@ void variablep()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of [ assignop $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of [ assignop $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {84,163,200};
@@ -938,7 +938,7 @@ void procdr_stmnt()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of call $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {21,200};
@@ -970,7 +970,7 @@ void procdr_stmntp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ( . else $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ( . else $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {80,78,12,200};
@@ -1015,7 +1015,7 @@ void express_lst()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,80,23,19,161,161,200};
@@ -1044,7 +1044,7 @@ void express_lstp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) , $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) , $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,82,200};
@@ -1091,7 +1091,7 @@ void express()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,80,23,19,161,161,200};
@@ -1145,7 +1145,7 @@ void expressp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then do relop $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then do relop $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,79,82,85,11,2,14,160,200};
@@ -1193,7 +1193,7 @@ void simp_express()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,80,23,19,161,161,200};
@@ -1247,7 +1247,7 @@ void simp_expressp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then else do relop addop $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then else do relop addop $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,79,82,85,11,2,12,14,160,161,200};
@@ -1289,7 +1289,7 @@ void term()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,80,23,19,200};
@@ -1346,7 +1346,7 @@ void termp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,79,82,85,11,2,12,14,160,161,162,200};
@@ -1387,7 +1387,7 @@ void factor()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {20,80,23,19,200};
@@ -1449,7 +1449,7 @@ void factorp()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , [ ] end assignop then else do relop addop mulop $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of ) ; , [ ] end assignop then else do relop addop mulop $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {81,79,82,84,85,11,163,2,12,14,160,161,162,200};
@@ -1477,7 +1477,7 @@ void sgn()
     default:
       ;
       char synTempStr[100];
-      sprintf(synTempStr,"Syntax Error: Expecting one of + - $\n");
+      sprintf(synTempStr,"Syntax Error: Expecting one of + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
       int synchSet[] = {161,161,200};
