@@ -81,7 +81,22 @@
 #define ASSIGNOP 163
  
 #define END_OF_FILE 200
- 
+
+// node types defined
+#define BOOL 250
+#define PGM 251
+#define PGMPARAM 252
+#define AINT 253
+#define AREAL 254
+#define ERR 255
+#define PROC 256
+#define PROCINT 257
+#define PROCREAL 258
+
+#define GREEN_NODE 300
+#define BLUE_NODE 301
+
+
 struct terminal { 
   char * symbol; 
   struct terminal * next; 
@@ -113,8 +128,9 @@ struct syntaxError
 
 struct Node
 {
-  uint8_t greenBlue;
-  uint8_t type;
+  uint8_t * idLex;
+  uint16_t greenBlue;
+  uint16_t type;
   struct Node * previous;
   struct Node * next;
 };
@@ -205,6 +221,10 @@ void match(const char * t);
 int checkSynch(int * synchSet, int tokenType, int length);
 tokenNode getToken();
 void listingPrintf(char * synTempStr);
+
+void initializeInfrastructure();
+int checkAddBlueNode(char * idLex, int type);
+int checkAddGreenNode(char * idLex, int type);
 
 // need to add detection for token types of mult, add, and assign
 #endif	
