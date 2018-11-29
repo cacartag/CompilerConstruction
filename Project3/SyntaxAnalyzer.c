@@ -32,7 +32,7 @@ void prgrm()
 
     case 3: // terminal is prgrm
       match("prgrm");
-      checkAddGreenNode(tok->lexeme, PGMPARAM);
+      checkAddGreenNode(tok->lexeme, PGM);
       match("id");
       match("(");
       id_list();
@@ -129,6 +129,7 @@ void id_list()
   {
 
     case 20: // terminal is id
+      checkAddBlueNode(tok->lexeme,PGMPARAM);
       match("id");
       id_listp();
     break;
@@ -155,6 +156,7 @@ void id_listp()
 
     case 82: // terminal is ,
       match(",");
+      checkAddBlueNode(tok->lexeme,PGMPARAM);
       match("id");
       id_listp();
     break;
@@ -184,6 +186,7 @@ void decls()
 
     case 4: // terminal is var
       match("var");
+      char * idTemp = tok->lexeme;
       match("id");
       match(":");
       type();

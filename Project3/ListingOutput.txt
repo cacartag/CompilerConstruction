@@ -1,35 +1,20 @@
-1    prgrm example(one);
+1    prgrm example(one,two);
 2    var first : int; 
 3    var second : real;
-4    var thirdisthelongger : int; 
-
-    LEXERR: LONG_STRING: thirdisthel
-    Syntax Error: Expecting id, Received thirdisthel 
-    Syntax Error: Expecting :, Received thirdisthel 
-    Syntax Error: Expecting one of arr int real $, Received: ongger
-    Syntax Error: Expecting ;, Received int 
-    Syntax Error: Expecting one of var procdr begin $, Received: ;
+4    var third : int;
 5    procdr FirstTest (primary: int; secondary: real);
 6    var fourth : int;
 7    var fifth : real;
 8    begin
 9      fourth := primary 
 10    end;
-11    procdr Secondistoolong Test (tertiary : int; quarteary: arr [0 .. 5] of
-    LEXERR: LONG_STRING: Secondistoo
-    Syntax Error: Expecting id, Received Secondistoo 
-    Syntax Error: Expecting one of ( ; $, Received: Secondistoo
-    Syntax Error: Expecting one of var procdr begin $, Received: (
-12     real);
-13    var seventh : real;
-    Syntax Error: Expecting ;, Received var 
-    Syntax Error: Expecting one of procdr begin $, Received: seventh
-14    begin
-15      seventh := seconds + second 
-16    end;
-    Syntax Error: Expecting ., Received ; 
-17    begin
-    Syntax Error: Expecting $, Received begin 
-18      first := second
-19    end .
-20    $
+11    procdr Second(tertiary : int; quarteary: arr [0 .. 5] of real);
+12    var seventh : real;
+13    begin
+14      seventh := seconds + second 
+15    end;
+16    begin
+17      first := second
+18    end .
+19    $    Successfully parsed !
+ 

@@ -14,39 +14,65 @@ void initializeInfrastructure()
 
 int checkAddBlueNode(char * idLex, int type)
 {
- 
-  return 0; 
+  infraEye = infraTail;
+  
+  //printf("Sanity Check blue node\n");
+   
+  while((infraEye != NULL) && (infraEye->type != HEAD))
+  {
+      //   
+    if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE) && (infraEye->type == type))
+    {
+      printf("Semantic Error: ID: %s already exists in this scope\n", idLex);
+      return 1;
+    }
+    
+    infraEye = infraEye->previous;
+  }
+  
+  nodeInfrastructure temp = (nodeInfrastructure)malloc(sizeof(struct Node));
+  temp->idLex = malloc(100);
+  temp->previous = infraTail;
+  temp->next = NULL;
+  strcpy(temp->idLex, idLex);
+  temp->greenBlue = BLUE_NODE;
+  temp->type = type;
+  
+  infraTail->next = temp;
+  infraTail = temp;
+  
+  return 0;
 }
 
 int checkAddGreenNode(char * idLex, int type)
 {
-    infraEye = infraTail;
-    
-    printf("Sanity Check\n");
-    
-    while((infraEye != NULL) && (infraEye->type != HEAD))
+  infraEye = infraTail;
+  
+  //printf("Sanity Check green node\n");
+  
+  while((infraEye != NULL) && (infraEye->type != HEAD))
+  {
+    if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE) && (infraEye->type == type))
     {
-      if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE) && (infraEye->type == type))
-      {
-        printf("Semantic Error: ID: %s already exists in this scope\n", idLex);
-        return 1;
-      }
-      
-      infraEye = infraEye->previous;
+      printf("Semantic Error: ID: %s already exists in this scope\n", idLex);
+      return 1;
     }
     
-    nodeInfrastructure temp = (nodeInfrastructure)malloc(sizeof(struct Node));
-    temp->idLex = malloc(100);
-    temp->previous = infraTail;
-    temp->next = NULL;
-    strcpy(temp->idLex, idLex);
-    temp->greenBlue = GREEN_NODE;
-    temp->type = PGM;
-    
-    infraTail->next = temp;
-    
-    return 0;
-    
+    infraEye = infraEye->previous;
+  }
+  
+  nodeInfrastructure temp = (nodeInfrastructure)malloc(sizeof(struct Node));
+  temp->idLex = malloc(100);
+  temp->previous = infraTail;
+  temp->next = NULL;
+  strcpy(temp->idLex, idLex);
+  temp->greenBlue = GREEN_NODE;
+  temp->type = type;
+  
+  infraTail->next = temp;
+  infraTail = temp;
+  
+  return 0;  
 }
 
 void printInfrastructure()
