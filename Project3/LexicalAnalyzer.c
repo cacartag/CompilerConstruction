@@ -898,6 +898,19 @@ char * NumberToString(int Number)
   if(Number == 163) return "ASSIGNOP";
   if(Number == 200) return "EOF";
   
+  if(Number == 250) return "BOOL";
+  if(Number == 251) return "PGM";
+  if(Number == 252) return "PGMPARAM";
+  if(Number == 253) return "AINT";
+  if(Number == 254) return "AREAL";
+  if(Number == 255) return "ERR";
+  if(Number == 256) return "PROC";
+  if(Number == 257) return "PROCINT";
+  if(Number == 258) return "PROCREAL";
+  
+  if(Number == 300) return "GREEN_NODE";
+  if(Number == 301) return "BLUE_NODE";
+  
   return "NO_MATCH";
 }
 

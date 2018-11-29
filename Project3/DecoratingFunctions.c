@@ -83,7 +83,7 @@ void printInfrastructure()
   //printf("Inside printing \n");
   while(infraHead != NULL)
   {
-    printf("%s\n", infraHead->idLex);
+    printf("%s    %s\n", infraHead->idLex,NumberToString(infraHead->type));
     
     infraHead = infraHead->next;
   }

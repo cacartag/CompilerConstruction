@@ -260,7 +260,17 @@ int type()
       match("num");
       match("]");
       match("of");
-      return stndrd_type();
+      int tempType = stndrd_type();
+      if(tempType == ERR)
+      {
+          return ERR;
+      } else if (tempType == INTEGER)
+      {
+          return AINT;
+      } else if (tempType == REAL)
+      {
+          return AREAL;
+      }
     break;
 
     case 7: // terminal is int
@@ -466,6 +476,7 @@ void subprgrm_head()
 
     case 9: // terminal is procdr
       match("procdr");
+      checkAddGreenNode(tok->lexeme, PROC);
       match("id");
       subprgrm_headp();
     break;
@@ -546,9 +557,11 @@ void param_lst()
   {
 
     case 20: // terminal is id
+      ;
+      char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      type();
+      checkAddBlueNode(idTemp,type());
       param_lstp();
     break;
 
@@ -574,9 +587,10 @@ void param_lstp()
 
     case 79: // terminal is ;
       match(";");
+      char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      type();
+      checkAddBlueNode(idTemp,type());
       param_lstp();
     break;
 
