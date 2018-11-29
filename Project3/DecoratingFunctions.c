@@ -1,5 +1,5 @@
 #include "LexicalAnalyzer.h"
-#define HEAD 125
+#define HEAD 500
 
 void initializeInfrastructure()
 {
@@ -20,7 +20,11 @@ int checkAddBlueNode(char * idLex, int type)
 
 int checkAddGreenNode(char * idLex, int type)
 {
-    if((infraEye != NULL) && (infraEye->type != HEAD))
+    infraEye = infraTail;
+    
+    printf("Sanity Check\n");
+    
+    while((infraEye != NULL) && (infraEye->type != HEAD))
     {
       if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE) && (infraEye->type == type))
       {
@@ -32,6 +36,7 @@ int checkAddGreenNode(char * idLex, int type)
     }
     
     nodeInfrastructure temp = (nodeInfrastructure)malloc(sizeof(struct Node));
+    temp->idLex = malloc(100);
     temp->previous = infraTail;
     temp->next = NULL;
     strcpy(temp->idLex, idLex);
@@ -44,4 +49,17 @@ int checkAddGreenNode(char * idLex, int type)
     
 }
 
+void printInfrastructure()
+{
+  infraHead = infraHead->next;
+  
+  //printf("Inside printing \n");
+  while(infraHead != NULL)
+  {
+    printf("%s\n", infraHead->idLex);
+    
+    infraHead = infraHead->next;
+  }
+
+}
 

@@ -49,7 +49,9 @@ int main(int argc, char * argv[])
   
   OutputTokens(sourceTokens);
   tokenNode tempHead = sourceTokens;
+  //printf("first \n");
   sourceTokens = sourceTokens->next;
+  //printf("second \n");
   parse();
   //printf("back to main\n");
   OutputListings(tempHead, pFile);  

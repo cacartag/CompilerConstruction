@@ -225,6 +225,7 @@ void listingPrintf(char * synTempStr);
 void initializeInfrastructure();
 int checkAddBlueNode(char * idLex, int type);
 int checkAddGreenNode(char * idLex, int type);
+void printInfrastructure();
 
 // need to add detection for token types of mult, add, and assign
 #endif	

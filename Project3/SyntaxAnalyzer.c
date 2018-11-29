@@ -32,6 +32,7 @@ void prgrm()
 
     case 3: // terminal is prgrm
       match("prgrm");
+      checkAddGreenNode(tok->lexeme, PGMPARAM);
       match("id");
       match("(");
       id_list();
@@ -1593,6 +1594,7 @@ void parse()
 
     syntax tempSyntax = syntaxHead;
     
+     printInfrastructure();
     //while(tempSyntax->next != NULL)
     //{
     //  tempSyntax = tempSyntax->next;
