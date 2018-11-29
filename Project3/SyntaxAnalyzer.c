@@ -187,9 +187,10 @@ void decls()
     case 4: // terminal is var
       match("var");
       char * idTemp = tok->lexeme;
+      printf("%s\n",idTemp);
       match("id");
       match(":");
-      type();
+      checkAddBlueNode(idTemp,type());
       match(";");
       declsp();
     break;
@@ -216,9 +217,11 @@ void declsp()
 
     case 4: // terminal is var
       match("var");
+      char * idTemp = tok->lexeme;
+      printf("%s\n",idTemp);
       match("id");
       match(":");
-      type();
+      checkAddBlueNode(idTemp,type());
       match(";");
       declsp();
     break;
@@ -244,7 +247,7 @@ void declsp()
   }
 }
 
-void type()
+int type()
 {
  switch( tok->type )
   {
@@ -257,15 +260,15 @@ void type()
       match("num");
       match("]");
       match("of");
-      stndrd_type();
+      return stndrd_type();
     break;
 
     case 7: // terminal is int
-      stndrd_type();
+      return stndrd_type();
     break;
 
     case 8: // terminal is real
-      stndrd_type();
+      return stndrd_type();
     break;
 
     default:
@@ -283,17 +286,19 @@ void type()
   }
 }
 
-void stndrd_type()
+int stndrd_type()
 {
  switch( tok->type )
   {
 
     case 7: // terminal is int
       match("int");
+      return INTEGER;
     break;
 
     case 8: // terminal is real
       match("real");
+      return REAL;
     break;
 
     default:

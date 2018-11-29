@@ -79,6 +79,7 @@ void printInfrastructure()
 {
   infraHead = infraHead->next;
   
+  printf("\n\n");
   //printf("Inside printing \n");
   while(infraHead != NULL)
   {
