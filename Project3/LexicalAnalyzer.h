@@ -207,14 +207,14 @@ void procdr_stmnt();
 void procdr_stmntp();
 void express_lst();
 void express_lstp();
-void express();
+int express();
 void expressp();
 void simp_express();
 void simp_expressp();
 void term();
 void termp();
-void factor();
-void factorp();
+int factor();
+int factorp(int inherit);
 void sgn();
 void stmntp();
 void match(const char * t);
@@ -226,6 +226,7 @@ void initializeInfrastructure();
 int checkAddBlueNode(char * idLex, int type);
 int checkAddGreenNode(char * idLex, int type);
 void printInfrastructure();
+int checkArray(tokenNode first, tokenNode second);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

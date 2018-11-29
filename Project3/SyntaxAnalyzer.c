@@ -255,9 +255,12 @@ int type()
     case 5: // terminal is arr
       match("arr");
       match("[");
+      tokenNode firstNum = tok;
       match("num");
       match("..");
+      tokenNode secondNum = tok;
       match("num");
+      checkArray(firstNum, secondNum);
       match("]");
       match("of");
       int tempType = stndrd_type();
@@ -293,6 +296,8 @@ int type()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 
@@ -323,6 +328,8 @@ int stndrd_type()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 
@@ -1079,7 +1086,7 @@ void express_lstp()
   }
 }
 
-void express()
+int express()
 {
  switch( tok->type )
   {
@@ -1381,30 +1388,37 @@ void termp()
   }
 }
 
-void factor()
+int factor()
 {
+ int tempType;
  switch( tok->type )
   {
 
     case 20: // terminal is id
+      ;
+      tempType = tok->type;
       match("id");
-      factorp();
+      return factorp(tempType);
     break;
 
     case 80: // terminal is (
       match("(");
-      express();
+      int tempExpress = express();
       match(")");
+      return tempExpress;
     break;
 
     case INTEGER: // terminal is num, changing to int
+      ;
+      tempType = tok->type;
       match("num");
+      return tempType;
       //printf("%s\n", tok->lexeme);
     break;
 
     case 19: // terminal is not
       match("not");
-      factor();
+      return factor();
     break;
 
     default:
@@ -1419,54 +1433,82 @@ void factor()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 
-void factorp()
+int factorp(int inherit)
 {
  switch( tok->type )
   {
 
     case 84: // terminal is [
       match("[");
-      express();
+      int tempExpress = express();
+      if((inherit == ERR) ||(tempExpress == ERR))
+      {
+        return ERR;
+      } else if ((inherit == AINT) && (tempExpress == INTEGER))
+      {
+        return INTEGER;
+      } else if ((inherit == AREAL) && (tempExpress == INTEGER))
+      {
+        return REAL;
+      } else {
+        printf("Semantic Error: type mismatch\n");
+        return ERR;
+      }
+      
       match("]");
     break;
 
     case 81 : // terminal is ), epsilon do nothing
+      return inherit;
     break;
 
     case 79 : // terminal is ;, epsilon do nothing
+      return inherit;
     break;
 
     case 82 : // terminal is ,, epsilon do nothing
+      return inherit;
     break;
 
     case 85 : // terminal is ], epsilon do nothing
+      return inherit;
     break;
 
     case 11 : // terminal is end, epsilon do nothing
+      return inherit;
     break;
 
     case 163 : // terminal is assignop, epsilon do nothing
+     return inherit;
     break;
 
     case 2 : // terminal is then, epsilon do nothing
+      return inherit;
     break;
 
     case 12 : // terminal is else, epsilon do nothing
+      return inherit;
     break;
 
     case 14 : // terminal is do, epsilon do nothing
+      return inherit;
     break;
 
     case 160 : // terminal is relop, epsilon do nothing
+      return inherit;
     break;
 
     case 161 : // terminal is addop, epsilon do nothing
+      return inherit;
     break;
 
     case 162 : // terminal is mulop, epsilon do nothing
+      return inherit;
     break;
 
     default:
@@ -1481,6 +1523,8 @@ void factorp()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 

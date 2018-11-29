@@ -90,3 +90,24 @@ void printInfrastructure()
 
 }
 
+int checkArray(tokenNode first, tokenNode second)
+{
+    //printf("checking array %s %s\n", first->lexeme, second->lexeme);
+    
+    if(atoi(first->lexeme) > atoi(second->lexeme))
+    {
+      printf("Semantic Error: First number in array greater than second\n");
+      
+      return 1;
+    }
+    
+    if((first->type != INTEGER) || (second->type != INTEGER))
+    {
+        printf("Semantic Error: Numbers in array not integers\n");
+        
+        return 1;
+    }
+    
+    return 0;
+}
+
