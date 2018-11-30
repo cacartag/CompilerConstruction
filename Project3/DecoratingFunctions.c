@@ -1,4 +1,4 @@
-#include "LexicalAnalyzer.h"
+#include "LexicalAnalyzer.h" 
 #define HEAD 500
 
 void initializeInfrastructure()
@@ -109,5 +109,18 @@ int checkArray(tokenNode first, tokenNode second)
     }
     
     return 0;
+}
+
+int checkMulOperator(int operation)
+{
+  if(operation == MUL_SYMBOL || operation == DIV_SYMBOL || operation == MOD || operation == DIV)
+  {
+      return 1;
+  } else if(operation == AND)
+  {
+      return 0;
+  }
+  
+  return -1;
 }
 

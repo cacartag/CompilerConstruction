@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> 
 #include <stdint.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -1225,7 +1225,7 @@ void simp_express()
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
-
+ 
       int synchSet[] = {20,80,23,19,161,161,200};
 
       while( checkSynch(synchSet, tok->type, 7) )
@@ -1289,31 +1289,31 @@ void simp_expressp()
   }
 }
 
-void term()
+int term()
 {
  switch( tok->type )
   {
 
     case 20: // terminal is id
-      factor();
-      termp();
+      //factor();
+      return termp(factor());
     break;
 
     case 80: // terminal is (
-      factor();
-      termp();
+      //factor();
+      return termp(factor());
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
       //printf("inside term\n");
-      factor();
+      //factor();
       //printf("after factor, %s\n", tok->lexeme);
-      termp();
+      return termp(factor());
     break;
 
     case 19: // terminal is not
-      factor();
-      termp();
+      //factor();
+      return termp(factor());
     break;
 
     default:
@@ -1321,56 +1321,89 @@ void term()
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
-
+ 
       int synchSet[] = {20,80,23,19,200};
 
       while( checkSynch(synchSet, tok->type, 5) )
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 
-void termp()
+int termp(int inherit)
 {
+  
  switch( tok->type )
   {
 
     case 162: // terminal is mulop
+      ;
+      int tempOperator = tok->attribute->attr;
       match("mulop");
-      factor();
-      termp();
+      int factorType = factor();
+      int termpInherit;
+      if((inherit == ERR) || (factorType == ERR))
+      {
+        termpInherit = ERR;
+      }
+      else if((inherit == INTEGER) && (factorType == INTEGER) && (checkMulOperator(tempOperator) == 1))
+      {
+        termpInherit = INTEGER;
+      } else if((inherit == REAL) && (factorType == REAL) && (checkMulOperator(tempOperator) == 1))
+      {
+        termpInherit = REAL;
+      } else if((inherit == BOOL) && (factorType == BOOL) && (checkMulOperator(tempOperator) == 0))
+      {
+        termpInherit = BOOL;
+      } else {
+          printf("Semantic Error: mixed mode not allowed\n");
+          termpInherit = ERR;
+      }
+      
+      return termp(termpInherit);
     break;
 
     case 81 : // terminal is ), epsilon do nothing
+      return inherit;
     break;
 
     case 79 : // terminal is ;, epsilon do nothing
+      return inherit;
     break;
 
     case 82 : // terminal is ,, epsilon do nothing
+      return inherit;
     break;
 
     case 85 : // terminal is ], epsilon do nothing
+      return inherit;
     break;
 
     case 11 : // terminal is end, epsilon do nothing
+      return inherit;
     break;
 
     case 2 : // terminal is then, epsilon do nothing
+      return inherit;
     break;
 
     case 12 : // terminal is else, epsilon do nothing
-    //printf("broke for else\n");
+      return inherit;
     break;
 
     case 14 : // terminal is do, epsilon do nothing
+      return inherit;
     break;
 
     case 160 : // terminal is relop, epsilon do nothing
+      return inherit;
     break;
 
     case 161 : // terminal is addop, epsilon do nothing
+      return inherit;
     break;
 
     default:
@@ -1385,6 +1418,8 @@ void termp()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 

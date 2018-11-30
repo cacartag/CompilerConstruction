@@ -1,4 +1,4 @@
-#ifndef LEXICALANALYZER_H
+#ifndef LEXICALANALYZER_H 
 #define	LEXICALANALYZER_H
 
 #include <stdio.h>
@@ -211,8 +211,8 @@ int express();
 void expressp();
 void simp_express();
 void simp_expressp();
-void term();
-void termp();
+int term();
+int termp(int inherit);
 int factor();
 int factorp(int inherit);
 void sgn();
@@ -227,6 +227,7 @@ int checkAddBlueNode(char * idLex, int type);
 int checkAddGreenNode(char * idLex, int type);
 void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);
+int checkMulOperator(int operation);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

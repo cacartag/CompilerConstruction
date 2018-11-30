@@ -8,14 +8,7 @@
 8    begin
 9      fourth := primary 
 10    end;
-11    procdr Second(tertiary : int; quarteary: arr [0.2 .. 5] of real);
-    Syntax Error: Expecting num, Received 0.2 
-    Syntax Error: Expecting .., Received 0.2 
-    Syntax Error: Expecting num, Received .. 
-    Syntax Error: Expecting ], Received .. 
-    Syntax Error: Expecting of, Received 5 
-    Syntax Error: Expecting one of int real $, Received: ]
-    Syntax Error: Expecting one of ) ; $, Received: real
+11    procdr Second(tertiary : int; quarteary: arr [0 .. 5] of real);
 12    var seventh : real;
 13    begin
 14      seventh := seconds + second 
