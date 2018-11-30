@@ -6,6 +6,7 @@ procdr FirstTest (primary: int; secondary: real);
 var fourth : int;
 var fifth : real;
 begin
+  if fourth = 0 then
   fourth := primary 
 end;
 procdr Second(tertiary : int; quarteary: arr [0 .. 5] of real);

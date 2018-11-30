@@ -1,0 +1,92 @@
+prgrm test (input, output);
+
+  var a : int;
+
+  var b : real;
+
+  var c : arr [1 .. 2] of int;
+
+
+
+  procdr fun1(x:int; y:real; 
+
+                  z:arr [1 .. 2] of int; 
+
+                  q: real);
+
+    var d: int;
+
+    begin
+
+      a:= 2;
+
+      z[a] := 4;
+
+      c[2] := 3;
+
+      c[2] := c[1]
+
+     end;
+
+
+
+   procdr fun2(j: int; y: int);
+
+     var e: real;
+
+
+
+     procdr fun3(n: int; z: real);
+
+       var e: int;
+
+       begin
+
+         a:= e;
+
+         e:= c[e];
+
+         fun3 := 3
+
+       end;
+
+
+
+     begin
+
+       a:= fun1;
+
+       x:= fun3;
+
+       e := e ;
+
+       a:= (a mod y) div x;
+
+       while ((a >= 4) and ((b <= e) 
+
+                       or (not (a = c[a])))) do
+
+         begin
+
+           a:= c[a] + 1
+
+         end;
+
+       fun2 := 2 
+
+     end;
+
+
+
+begin
+
+  b:= 5;
+
+  b:= 4;
+
+  if (a < 2) then a:= 1 else a := a + 2;
+
+  if (b > 4) then a := c[a]
+
+end.
+$

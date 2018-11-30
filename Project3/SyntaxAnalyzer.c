@@ -39,6 +39,7 @@ void prgrm()
       match(")");
       match(";");
       prgrmp();
+      printf("after prgrm\n");
     break;
 
     default:
@@ -64,16 +65,19 @@ void prgrmp()
     case 4: // terminal is var
       decls();
       prgrmpp();
+      printf("after programpp\n");
     break;
 
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
+            //printf("after compound statement\n");
       match(".");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
+            //printf("after compound statement\n");
       match(".");
     break;
 
@@ -100,11 +104,14 @@ void prgrmpp()
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
+      printf("after compound statement for sure\n");
       match(".");
+      printf("after match\n");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
+      //      printf("after compound statement\n");
       match(".");
     break;
 
@@ -366,8 +373,11 @@ void subprgrm_declsp()
 
     case 9: // terminal is procdr
       subprgrm_decl();
+      printf("after subprgrm_decl\n");
       match(";");
+      printf("after ; match\n");
       subprgrm_declsp();
+      printf("after subprgrm_declsp\n");
     break;
 
     case 10 : // terminal is begin, epsilon do nothing
@@ -375,6 +385,7 @@ void subprgrm_declsp()
 
     default:
       ;
+      printf("error in subprgrm_declsp\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -383,8 +394,10 @@ void subprgrm_declsp()
 
       while( checkSynch(synchSet, tok->type, 3) )
       {
+          printf("In %s %i\n",tok->lexeme,tok->line);
         tok = getToken();
       }
+      printf("Final token: %s\n",tok->lexeme);
   }
 }
 
@@ -396,6 +409,7 @@ void subprgrm_decl()
     case 9: // terminal is procdr
       subprgrm_head();
       subprgrm_declp();
+      printf("after subprgrm_declp\n");
     break;
 
     default:
@@ -421,15 +435,18 @@ void subprgrm_declp()
     case 4: // terminal is var
       decls();
       subprgrm_declpp();
+      printf("after subprgrm_declpp\n");
     break;
 
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
+            printf("after compound statement\n");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
+            printf("after compound statement\n");
     break;
 
     default:
@@ -455,6 +472,7 @@ void subprgrm_declpp()
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
+            printf("after compound statement\n");
     break;
 
     case 10: // terminal is begin
@@ -652,7 +670,9 @@ void cmpnd_stmntp()
 
     case 20: // terminal is id
       opt_stmnt();
+      printf("returned from opt_stmnt\n");
       match("end");
+      printf("after end \n");
     break;
 
     case 10: // terminal is begin
@@ -701,18 +721,22 @@ void opt_stmnt()
 
     case 20: // terminal is id
       stmnt_lst();
+      printf("stmnt_lst returned\n");
     break;
 
     case 10: // terminal is begin
       stmnt_lst();
+            //printf("stmnt_lst returned\n");
     break;
 
     case 1: // terminal is if
       stmnt_lst();
+            //printf("stmnt_lst returned\n");
     break;
 
     case 13: // terminal is while
       stmnt_lst();
+            //printf("stmnt_lst returned\n");
     break;
 
     case 21: // terminal is call
@@ -743,6 +767,7 @@ void stmnt_lst()
     case 20: // terminal is id
       stmnt();
       stmnt_lstp();
+      printf("stmnt_lstp returned\n");
     break;
 
     case 10: // terminal is begin
@@ -783,12 +808,14 @@ void stmnt_lst()
 
 void stmnt_lstp()
 {
+ printf("inside stmnt_lstp\n");
  switch( tok->type )
   {
 
     case 79: // terminal is ;
       match(";");
       stmnt();
+      printf("returned from statement\n");
       stmnt_lstp();
     break;
 
@@ -797,6 +824,7 @@ void stmnt_lstp()
 
     default:
       ;
+      printf("There's an error inside stmnt_lstp\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of ; end $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -805,6 +833,7 @@ void stmnt_lstp()
 
       while( checkSynch(synchSet, tok->type, 3) )
       {
+        printf("inside while loop stmnt_lstp\n");
         tok = getToken();
       }
   }
@@ -822,6 +851,7 @@ void stmnt()
       match("assignop");
       //printf("%s\n", tok->lexeme);
       express();
+      printf("returned from express\n");
     break;
 
     case 10: // terminal is begin
@@ -931,6 +961,7 @@ void variablep()
     case 84: // terminal is [
       match("[");
       express();
+
       match("]");
     break;
 
@@ -1014,31 +1045,37 @@ void procdr_stmntp()
 
 void express_lst()
 {
+    printf("express_lst\n");
  switch( tok->type )
   {
 
     case 20: // terminal is id
       express();
+
       express_lstp();
     break;
 
     case 80: // terminal is (
       express();
+
       express_lstp();
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
       express();
+
       express_lstp();
     break;
 
     case 19: // terminal is not
       express();
+
       express_lstp();
     break;
 
     case 161: // terminal is +
       express();
+
       express_lstp();
     break;
 
@@ -1059,6 +1096,7 @@ void express_lst()
 
 void express_lstp()
 {
+    printf("express_lstp\n");
  switch( tok->type )
   {
 
@@ -1088,6 +1126,7 @@ void express_lstp()
 
 int express()
 {
+    printf("express \n");
  switch( tok->type )
   {
 
@@ -1120,6 +1159,7 @@ int express()
 
     default:
       ;
+      printf("error in express\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -1128,14 +1168,16 @@ int express()
 
       while( checkSynch(synchSet, tok->type, 7) )
       {
-
+        printf("in while loop\n");
         tok = getToken();
       }
+      printf("token is %s, in line %i\n",tok->lexeme, tok->line);
   }
 }
 
 void expressp()
 {
+    printf("expressp\n");
  switch( tok->type )
   {
 
@@ -1243,7 +1285,9 @@ void simp_expressp()
     case 161: // terminal is addop
       match("addop");
       term();
+      printf("after factor\n");
       simp_expressp();
+      printf("returned from sim_expressp\n");
     break;
 
     case 81 : // terminal is ), epsilon do nothing
@@ -1475,27 +1519,31 @@ int factor()
 
 int factorp(int inherit)
 {
+  int factorType = ERR;
+  printf("factorp \n");
  switch( tok->type )
   {
 
     case 84: // terminal is [
+      
       match("[");
       int tempExpress = express();
       if((inherit == ERR) ||(tempExpress == ERR))
       {
-        return ERR;
+        factorType = ERR;
       } else if ((inherit == AINT) && (tempExpress == INTEGER))
       {
-        return INTEGER;
+        factorType = INTEGER;
       } else if ((inherit == AREAL) && (tempExpress == INTEGER))
       {
-        return REAL;
+        factorType = REAL;
       } else {
         printf("Semantic Error: type mismatch\n");
-        return ERR;
+        factorType = ERR;
       }
-      
       match("]");
+      printf("after type mismatch\n");
+      return factorType;
     break;
 
     case 81 : // terminal is ), epsilon do nothing
@@ -1644,11 +1692,11 @@ void match(const char * t)
     }
 
   }
-  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$\0") ) )
+  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && ( strcmp(t, "$") ) )
   {
     tok = getToken();
   }
-  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$\0") ) )
+  else if ( !( strcmp((const char *)(tok->lexeme), t) ) && !( strcmp(t, "$") ) )
   {
       ;
       char synTempStr[100];
@@ -1656,8 +1704,9 @@ void match(const char * t)
       listingPrintf(synTempStr);
       
   }
-  else if ( strcmp((const char *)(tok->lexeme), t) )
+  else if ( strcmp((const char *)(tok->lexeme), t) && (strcmp(tok->lexeme,"$")))
   {
+      printf("tried to grab another token\n");
       ;
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
@@ -1691,7 +1740,13 @@ void parse()
     
     tok = getToken();
     prgrm();
+    
+    printf("before printing\n");
+    printf("%s\n", tok->lexeme);
+    printf("after printing\n");
     match("$");
+    
+    printf("after match\n");
 
     syntax tempSyntax = syntaxHead;
     
