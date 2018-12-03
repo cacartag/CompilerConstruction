@@ -209,8 +209,8 @@ void express_lst();
 void express_lstp();
 int express();
 void expressp();
-void simp_express();
-void simp_expressp();
+int simp_express();
+int simp_expressp(int inherit);
 int term();
 int termp(int inherit);
 int factor();
@@ -228,6 +228,7 @@ int checkAddGreenNode(char * idLex, int type);
 void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);
 int checkMulOperator(int operation);
+int checkAddOperator(int operation);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

@@ -79,7 +79,6 @@
 79    
 80    
 81    begin
-    Syntax Error: Expecting one of procdr begin $, Received: begin¥
 82    
 83      b:= 5;
 84    
@@ -90,6 +89,5 @@
 89      if (b > 4) then a := c[a]
 90    
 91    end.
-92    $    Syntax Error: Expecting one of begin $, Received: $
-    Successfully parsed !
+92    $    Successfully parsed !
  

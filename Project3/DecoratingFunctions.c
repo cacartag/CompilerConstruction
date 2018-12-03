@@ -124,3 +124,16 @@ int checkMulOperator(int operation)
   return -1;
 }
 
+int checkAddOperator(int operation)
+{
+  if(operation == ADD_SYMBOL || operation == DIV_SYMBOL)
+  {
+    return 1;
+  } else if(operation == OR)
+  {
+	return 0;
+  }
+  
+  return -1;
+}
+

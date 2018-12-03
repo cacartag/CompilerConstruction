@@ -1161,37 +1161,32 @@ void expressp()
   }
 }
 
-void simp_express()
+int simp_express()
 {
  switch( tok->type )
   {
 
     case 20: // terminal is id
-      term();
-      simp_expressp();
+      return simp_expressp(term());
     break;
 
     case 80: // terminal is (
-      term();
-      simp_expressp();
+       return simp_expressp(term());
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      term();
-      simp_expressp();
+      return simp_expressp(term());
     break;
 
     case 19: // terminal is not
-      term();
-      simp_expressp();
+      return simp_expressp(term());
     break;
 
     case 161: // terminal is +
       sgn();
-      term();
-      simp_expressp();
+      return simp_expressp(term());
     break;
-
+	
     default:
       ;
       char synTempStr[100];
@@ -1204,45 +1199,75 @@ void simp_express()
       {
         tok = getToken();
       }
+	  
+	  return ERR;
   }
 }
 
-void simp_expressp()
+int simp_expressp(int inherit)
 {
  switch( tok->type )
   {
 
     case 161: // terminal is addop
+	  ;
+	  int tempOperator = tok->attribute->attr;
       match("addop");
-      term();
-      simp_expressp();
+	  int termType = term();
+	  int sepInherit;
+	  if((inherit == ERR) || (termType == ERR))
+	  {
+		sepInherit = ERR;
+	  } else if((inherit == REAL) && (termType == REAL) && (checkAddOperator(tempOperator) == 1))
+	  {
+		sepInherit = REAL;
+	  } else if((inherit == INTEGER) && (termType == INTEGER) && (checkAddOperator(tempOperator) == 1))
+	  {
+		sepInherit = INTEGER;
+	  } else if ((inherit == BOOL) && (termType == BOOL) && (checkAddOperator(tempOperator) == 1))
+	  {
+		sepInherit = BOOL;
+	  } else {
+		printf("Semantic Error: mixed mode not allowed\n");
+		sepInherit = ERR;
+	  }
+      return simp_expressp(sepInherit);
     break;
 
     case 81 : // terminal is ), epsilon do nothing
+	  return inherit;
     break;
 
     case 79 : // terminal is ;, epsilon do nothing
+      return inherit;
     break;
 
     case 82 : // terminal is ,, epsilon do nothing
+	  return inherit;
     break;
 
     case 85 : // terminal is ], epsilon do nothing
+	  return inherit;
     break;
 
     case 11 : // terminal is end, epsilon do nothing
+	  return inherit;
     break;
 
     case 2 : // terminal is then, epsilon do nothing
+	  return inherit;
     break;
 
     case 12 : // terminal is else, epsilon do nothing
+	  return inherit;
     break;
 
     case 14 : // terminal is do, epsilon do nothing
+	  return inherit;
     break;
 
     case 160 : // terminal is relop, epsilon do nothing
+	  return inherit;
     break;
 
     default:
@@ -1257,6 +1282,8 @@ void simp_expressp()
       {
         tok = getToken();
       }
+	  
+	  return ERR;
   }
 }
 
@@ -1460,7 +1487,7 @@ int factorp(int inherit)
       } else if ((inherit == AREAL) && (tempExpress == INTEGER))
       {
         factorType = REAL;
-      } else {
+      } else { 
         printf("Semantic Error: type mismatch\n");
         factorType = ERR;
       }
