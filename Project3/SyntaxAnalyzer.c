@@ -18,8 +18,6 @@ tokenNode getToken(){
   } else {
     tok = sourceTokens;
   }
-  
-  //printf("retrieved %s\n", tok->lexeme);
 
   return tok;
 }
@@ -39,7 +37,6 @@ void prgrm()
       match(")");
       match(";");
       prgrmp();
-      printf("after prgrm\n");
     break;
 
     default:
@@ -65,19 +62,16 @@ void prgrmp()
     case 4: // terminal is var
       decls();
       prgrmpp();
-      printf("after programpp\n");
     break;
 
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-            //printf("after compound statement\n");
       match(".");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
-            //printf("after compound statement\n");
       match(".");
     break;
 
@@ -104,14 +98,11 @@ void prgrmpp()
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-      printf("after compound statement for sure\n");
       match(".");
-      printf("after match\n");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
-      //      printf("after compound statement\n");
       match(".");
     break;
 
@@ -194,7 +185,6 @@ void decls()
     case 4: // terminal is var
       match("var");
       char * idTemp = tok->lexeme;
-      printf("%s\n",idTemp);
       match("id");
       match(":");
       checkAddBlueNode(idTemp,type());
@@ -225,7 +215,6 @@ void declsp()
     case 4: // terminal is var
       match("var");
       char * idTemp = tok->lexeme;
-      printf("%s\n",idTemp);
       match("id");
       match(":");
       checkAddBlueNode(idTemp,type());
@@ -373,11 +362,8 @@ void subprgrm_declsp()
 
     case 9: // terminal is procdr
       subprgrm_decl();
-      printf("after subprgrm_decl\n");
       match(";");
-      printf("after ; match\n");
       subprgrm_declsp();
-      printf("after subprgrm_declsp\n");
     break;
 
     case 10 : // terminal is begin, epsilon do nothing
@@ -385,7 +371,6 @@ void subprgrm_declsp()
 
     default:
       ;
-      printf("error in subprgrm_declsp\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of procdr begin $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -394,10 +379,8 @@ void subprgrm_declsp()
 
       while( checkSynch(synchSet, tok->type, 3) )
       {
-          printf("In %s %i\n",tok->lexeme,tok->line);
         tok = getToken();
       }
-      printf("Final token: %s\n",tok->lexeme);
   }
 }
 
@@ -409,7 +392,6 @@ void subprgrm_decl()
     case 9: // terminal is procdr
       subprgrm_head();
       subprgrm_declp();
-      printf("after subprgrm_declp\n");
     break;
 
     default:
@@ -435,18 +417,15 @@ void subprgrm_declp()
     case 4: // terminal is var
       decls();
       subprgrm_declpp();
-      printf("after subprgrm_declpp\n");
     break;
 
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-            printf("after compound statement\n");
     break;
 
     case 10: // terminal is begin
       cmpnd_stmnt();
-            printf("after compound statement\n");
     break;
 
     default:
@@ -472,7 +451,6 @@ void subprgrm_declpp()
     case 9: // terminal is procdr
       subprgrm_decls();
       cmpnd_stmnt();
-            printf("after compound statement\n");
     break;
 
     case 10: // terminal is begin
@@ -643,7 +621,6 @@ void cmpnd_stmnt()
   {
 
     case 10: // terminal is begin
-      //printf("reached compound statement\n");
       match("begin");
       cmpnd_stmntp();
     break;
@@ -670,9 +647,7 @@ void cmpnd_stmntp()
 
     case 20: // terminal is id
       opt_stmnt();
-      printf("returned from opt_stmnt\n");
       match("end");
-      printf("after end \n");
     break;
 
     case 10: // terminal is begin
@@ -721,22 +696,18 @@ void opt_stmnt()
 
     case 20: // terminal is id
       stmnt_lst();
-      printf("stmnt_lst returned\n");
     break;
 
     case 10: // terminal is begin
       stmnt_lst();
-            //printf("stmnt_lst returned\n");
     break;
 
     case 1: // terminal is if
       stmnt_lst();
-            //printf("stmnt_lst returned\n");
     break;
 
     case 13: // terminal is while
       stmnt_lst();
-            //printf("stmnt_lst returned\n");
     break;
 
     case 21: // terminal is call
@@ -745,7 +716,6 @@ void opt_stmnt()
 
     default:
       ;
-      printf("reached inside of opt_stmnt\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -767,7 +737,6 @@ void stmnt_lst()
     case 20: // terminal is id
       stmnt();
       stmnt_lstp();
-      printf("stmnt_lstp returned\n");
     break;
 
     case 10: // terminal is begin
@@ -792,7 +761,6 @@ void stmnt_lst()
 
     default:
       ;
-      printf("Inside statement list\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -808,14 +776,12 @@ void stmnt_lst()
 
 void stmnt_lstp()
 {
- printf("inside stmnt_lstp\n");
  switch( tok->type )
   {
 
     case 79: // terminal is ;
       match(";");
       stmnt();
-      printf("returned from statement\n");
       stmnt_lstp();
     break;
 
@@ -824,7 +790,6 @@ void stmnt_lstp()
 
     default:
       ;
-      printf("There's an error inside stmnt_lstp\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of ; end $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -833,7 +798,6 @@ void stmnt_lstp()
 
       while( checkSynch(synchSet, tok->type, 3) )
       {
-        printf("inside while loop stmnt_lstp\n");
         tok = getToken();
       }
   }
@@ -845,38 +809,24 @@ void stmnt()
   {
 
     case 20: // terminal is id
-      //printf("%s\n", tok->lexeme);
-      //printf("inside terminal id\n");
       variable();
       match("assignop");
-      //printf("%s\n", tok->lexeme);
       express();
-      printf("returned from express\n");
     break;
 
     case 10: // terminal is begin
-      //printf("first\n");
       cmpnd_stmnt();
     break;
 
     case 1: // terminal is if
-      //printf("Reached inside statement\n");
       match("if");
-      //printf("processed if \n");
       express();
-      //printf("processed express\n");
-      //printf("current lexeme %s\n",tok->lexeme);
-      //printf("%s\n",tok->lexeme);
-      //printf("before matching then\n");
       match("then");
-      //printf("processed then\n");
-      //printf("before processing then statement\n");
       stmnt();
       stmntp();
     break;
 
     case 13: // terminal is while
-      //printf("third\n");
       match("while");
       express();
       match("do");
@@ -884,14 +834,11 @@ void stmnt()
     break;
 
     case 21: // terminal is call
-      //printf("second\n");
       procdr_stmnt();
     break;
 
     default:
       ;
-      //printf("did not match any statement\n");
-      //printf("%s\n",tok->lexeme);
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id begin if while call $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -934,7 +881,6 @@ void variable()
 
     case 20: // terminal is id
       match("id");
-      //printf("variable: %s\n",tok->lexeme);
       variablep();
     break;
 
@@ -966,8 +912,6 @@ void variablep()
     break;
 
     case 163 : // terminal is assignop, epsilon do nothing
-    //printf("broke for assignop\n");
-    //printf("%s\n", tok->lexeme);
     break;
 
     default:
@@ -1045,7 +989,6 @@ void procdr_stmntp()
 
 void express_lst()
 {
-    printf("express_lst\n");
  switch( tok->type )
   {
 
@@ -1096,7 +1039,6 @@ void express_lst()
 
 void express_lstp()
 {
-    printf("express_lstp\n");
  switch( tok->type )
   {
 
@@ -1126,7 +1068,7 @@ void express_lstp()
 
 int express()
 {
-    printf("express \n");
+
  switch( tok->type )
   {
 
@@ -1141,9 +1083,7 @@ int express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      //printf("reached in num\n");
       simp_express();
-      //printf("after simp_express, %s\n",tok->lexeme);
       expressp();
     break;
 
@@ -1159,7 +1099,6 @@ int express()
 
     default:
       ;
-      printf("error in express\n");
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
@@ -1168,24 +1107,18 @@ int express()
 
       while( checkSynch(synchSet, tok->type, 7) )
       {
-        printf("in while loop\n");
         tok = getToken();
       }
-      printf("token is %s, in line %i\n",tok->lexeme, tok->line);
   }
 }
 
 void expressp()
 {
-    printf("expressp\n");
  switch( tok->type )
   {
 
     case 160: // terminal is relop
-      //printf("evaluating for relop\n");
-      //printf("current lexeme is %s\n", tok->lexeme);
       match("relop");
-      //printf("current lexeme is %s\n", tok->lexeme);
       simp_express();
     break;
 
@@ -1211,7 +1144,6 @@ void expressp()
     break;
     
     case 12 : // terminal is else, epsilon do nothing
-    //printf("broke for else\n");
     break;
 
     default:
@@ -1245,9 +1177,7 @@ void simp_express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      //printf("inside simp_express\n");
       term();
-      //printf("after term, %s\n",tok->lexeme);
       simp_expressp();
     break;
 
@@ -1285,9 +1215,7 @@ void simp_expressp()
     case 161: // terminal is addop
       match("addop");
       term();
-      printf("after factor\n");
       simp_expressp();
-      printf("returned from sim_expressp\n");
     break;
 
     case 81 : // terminal is ), epsilon do nothing
@@ -1309,7 +1237,6 @@ void simp_expressp()
     break;
 
     case 12 : // terminal is else, epsilon do nothing
-    //printf("broke for else\n");
     break;
 
     case 14 : // terminal is do, epsilon do nothing
@@ -1349,9 +1276,7 @@ int term()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      //printf("inside term\n");
       //factor();
-      //printf("after factor, %s\n", tok->lexeme);
       return termp(factor());
     break;
 
@@ -1492,7 +1417,6 @@ int factor()
       tempType = tok->type;
       match("num");
       return tempType;
-      //printf("%s\n", tok->lexeme);
     break;
 
     case 19: // terminal is not
@@ -1520,7 +1444,6 @@ int factor()
 int factorp(int inherit)
 {
   int factorType = ERR;
-  printf("factorp \n");
  switch( tok->type )
   {
 
@@ -1542,7 +1465,6 @@ int factorp(int inherit)
         factorType = ERR;
       }
       match("]");
-      printf("after type mismatch\n");
       return factorType;
     break;
 
@@ -1706,7 +1628,6 @@ void match(const char * t)
   }
   else if ( strcmp((const char *)(tok->lexeme), t) && (strcmp(tok->lexeme,"$")))
   {
-      printf("tried to grab another token\n");
       ;
       char synTempStr[100];
       sprintf(synTempStr,"Syntax Error: Expecting %s, Received %s \n", t, tok->lexeme);
@@ -1740,22 +1661,11 @@ void parse()
     
     tok = getToken();
     prgrm();
-    
-    printf("before printing\n");
-    printf("%s\n", tok->lexeme);
-    printf("after printing\n");
     match("$");
-    
-    printf("after match\n");
 
     syntax tempSyntax = syntaxHead;
     
      printInfrastructure();
-    //while(tempSyntax->next != NULL)
-    //{
-    //  tempSyntax = tempSyntax->next;
-    //  printf("%i %s %s",tempSyntax->line, tempSyntax->lexemeTest, tempSyntax->syntaxErr);
-    //}
 
 }
 
