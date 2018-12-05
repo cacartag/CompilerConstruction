@@ -1,3 +1,12 @@
+/*
+  Name: LexicalAnalyzer.c
+  Engineer: Christopher Cartagena
+  Description: Serves to parse file looking for tokens
+  also checks basic requirements for tokens and outputs errors
+  if not met
+  
+*/
+
 #include "LexicalAnalyzer.h"
 
 uint32_t currentLine = 1;
@@ -45,26 +54,11 @@ int main(int argc, char * argv[])
     currentLine = currentLine + 1;
   }
 
-  //AddToTokenLinked(&sourceTokens, "EOF", END_OF_FILE, 0);
-  
   OutputTokens(sourceTokens);
   tokenNode tempHead = sourceTokens;
-  //printf("first \n");
   sourceTokens = sourceTokens->next;
-  //printf("second \n");
   parse();
-  //printf("back to main\n");
   OutputListings(tempHead, pFile);  
-  //printf("done listing\n");
-  //FILE * sFile = fopen("SymbolTable.txt","w");
-  //
-  //while (symbolTableHead->next != NULL)
-  //{
-  //  symbolTableHead = symbolTableHead->next;
-  //  fprintf(sFile,"%s\n",symbolTableHead->lexeme);
-  //}
-
-  //  getToken();
   
   return 0;
 } 
@@ -989,6 +983,7 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile)
     fprintf(tempFile,"%i    %s",tempLine,sourceLine);
     PrintLexicalErrors(tempSourceTokens, tempLine, tempFile);
     PrintSyntaxErrors(tempLine, tempFile);
+    PrintSemanticErrors(tempLine, tempFile);
     
     tempLine = tempLine + 1;
   }
@@ -1006,6 +1001,22 @@ void PrintSyntaxErrors(int tempLine, FILE * pFile)
     if(tempLine == tempHead->line)
     {
       fprintf(pFile,"    %s", tempHead->syntaxErr);
+    }
+   
+  }
+}
+
+void PrintSemanticErrors(int tempLine, FILE * pFile)
+{
+  semantic tempHead = semanticHead;
+  
+  while(tempHead->next != NULL)
+  {
+    tempHead = tempHead->next;
+    
+    if(tempLine == tempHead->line)
+    {
+      fprintf(pFile,"    %s", tempHead->semanticErr);
     }
    
   }

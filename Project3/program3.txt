@@ -1,6 +1,6 @@
 prgrm test (input, output);
 
-  var abcdedfeklsajfei : int;
+  var a : int;
 
   var b : real;
 

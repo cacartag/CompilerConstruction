@@ -1,3 +1,7 @@
+/*
+
+*/
+
 #ifndef LEXICALANALYZER_H 
 #define	LEXICALANALYZER_H
 
@@ -183,6 +187,7 @@ void OutputListings(tokenNode sourceTokens, FILE * pFile);
 void PrintLexicalErrors(tokenNode sourceTokens, int tempLine, FILE * pFile);
 void AddToSymbolTable(tokenNode *sourceTokens, uint8_t * lexeme, uint32_t type, uint32_t attribute);
 void PrintSyntaxErrors(int tempLine, FILE * pFile);
+void PrintSemanticErrors(int tempLine, FILE * pFile);
 
 
 void parse();
@@ -231,6 +236,7 @@ void match(const char * t);
 int checkSynch(int * synchSet, int tokenType, int length);
 tokenNode getToken();
 void listingPrintf(char * synTempStr);
+void listingPrintfSemantic(char * semTempStr);
 
 void initializeInfrastructure();
 int checkAddBlueNode(char * idLex, int type);

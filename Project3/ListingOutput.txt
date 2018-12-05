@@ -1,101 +1,57 @@
-1    prgrm test (input, output);
-2    
-3      var abcdedfeklsajfei : int;
-
-    Lexical Error: LONG_STRING: abcdedfekls
-    Syntax Error: Expecting id, Received abcdedfekls 
-    Syntax Error: Expecting :, Received abcdedfekls 
-    Syntax Error: Expecting one of arr int real $, Received: ajfei
-    Syntax Error: Expecting ;, Received int 
-    Syntax Error: Expecting one of var procdr begin $, Received: ;
-4    
-5      var b : real;
-    Syntax Error: Expecting one of procdr begin $, Received: var
-6    
-7      var c : arr [1 .. 2] of int;
-8    
-9    
-10    
-11      procdr fun1(x:int; y:real; 
-    Syntax Error: Expecting $, Received procdr 
-12    
-13                      z:arr [1 .. 2] of int; 
+1    prgrm example (input, output);
+2      var a : int;
+3      var b : real;
+4      var c : arr [1..2] of int;
+5    
+6      procdr ex1(x:int;
+7                      z:arr [1..2] of int; q: real);
+8        var d: int;
+9        begin
+10          a:= 1;
+11          z[a] := 5;
+12          c[3] := 13
+13         end;
 14    
-15                      q: real);
-16    
-17        var d: int;
-18    
-19        begin
+15       procdr ex2(x: int; y: int);
+    Semantic Error: ID: x already exists in this scope
+16         var e: real;
+17    
+18         procdr ex3(n: int; z: real);
+19           var e: int;
 20    
-21          a:= 2;
-22    
-23          z[a] := 4;
-24    
-25          c[2] := 3;
-26    
-27          c[2] := c[1]
-28    
-29         end;
-30    
-31    
-32    
-33       procdr fun2(j: int; y: int);
-34    
-35         var e: real;
-36    
-37    
-38    
-39         procdr fun3(n: int; z: real);
-40    
-41           var e: int;
-42    
-43           begin
-44    
-45             a:= e;
-46    
-47             e:= c[e];
-48    
-49             fun3 := 3
-50    
-51           end;
-52    
-53    
-54    
-55         begin
-56    
-57           a:= fun1;
-58    
-59           x:= fun3;
-60    
-61           e := e ;
-62    
-63           a:= (a mod y) div x;
-64    
-65           while ((a >= 4) and ((b <= e) 
-66    
-67                           or (not (a = c[a])))) do
-68    
-69             begin
-70    
-71               a:= c[a] + 1
-72    
-73             end;
-74    
-75           fun2 := 2 
-76    
-77         end;
-78    
-79    
-80    
-81    begin
-82    
-83      b:= 5;
-84    
-85      b:= 4;
-86    
-87      if (a < 2) then a:= 1 else a := a + 2;
-88    
-89      if (b > 4) then a := c[a]
-90    
-91    end.
-92    $
+21           begin
+22             a:= e;
+23             e:= c[f]
+    Semantic Error: type mismatch
+24           end;
+25    
+26         begin
+27           e := e + 5;
+    Semantic Error: mixed mode not allowed
+28           a:= (a mod y) div x;
+    Semantic Error: mixed mode not allowed
+29           while ((a >= 4) and ((b <= e) 
+    Semantic Error: mixed mode not allowed, in relational operator
+    Semantic Error: mixed mode not allowed, in relational operator
+30                           or (not (a = c[a])))) do
+    Semantic Error: type mismatch
+31             begin
+32               a:= c[a] + 1
+    Semantic Error: type mismatch
+33             end
+34         end;
+35    
+36    begin
+37      call ex2(c[4], c[5]);
+    for calling Syntax Error: Expecting one of id ( num not + - $, Received: )
+    Semantic Error: type mismatch
+    Semantic Error: type mismatch
+38      call ex2(c[4],2);
+    Syntax Error: Expecting ), Received ex2 
+    Syntax Error: Expecting one of ; end $, Received: (
+    Syntax Error: Expecting end, Received ; 
+39      if (a < 2) then a:= 1 else a := a + 2
+    Syntax Error: Expecting ., Received if 
+    Syntax Error: Expecting $, Received ( 
+40    end.
+41    $

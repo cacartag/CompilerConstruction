@@ -1127,8 +1127,9 @@ int expressp(int inherit)
       {
         expresspType = BOOL;
       } else {
-        //char semTempStr[100];
-        printf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator\n");
+        char semTempStr[100];
+        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator\n");
+        listingPrintfSemantic(semTempStr);
         expresspType = ERR;
       }
       
@@ -1252,7 +1253,9 @@ int simp_expressp(int inherit)
 	  {
 		sepInherit = BOOL;
 	  } else {
-		printf("Semantic Error: mixed mode not allowed\n");
+        char semTempStr[100];
+		sprintf(semTempStr,"Semantic Error: mixed mode not allowed\n");
+        listingPrintfSemantic(semTempStr);
 		sepInherit = ERR;
 	  }
       return simp_expressp(sepInherit);
@@ -1379,8 +1382,10 @@ int termp(int inherit)
       {
         termpInherit = BOOL;
       } else {
-          printf("Semantic Error: mixed mode not allowed\n");
-          termpInherit = ERR;
+        char semTempStr[100];
+        sprintf(semTempStr,"Semantic Error: mixed mode not allowed\n");
+        listingPrintfSemantic(semTempStr);
+        termpInherit = ERR;
       }
       
       return termp(termpInherit);
@@ -1451,6 +1456,7 @@ int factor()
 
     case 20: // terminal is id
       ;
+      printf("getting token type for %s, line: %i\n", tok->lexeme, tok->line);
       tempType = tok->type;
       match("id");
       return factorp(tempType);
@@ -1512,7 +1518,9 @@ int factorp(int inherit)
       {
         factorType = REAL;
       } else { 
-        printf("Semantic Error: type mismatch\n");
+        char semTempStr[100];
+        sprintf(semTempStr,"Semantic Error: type mismatch\n");
+        listingPrintfSemantic(semTempStr);
         factorType = ERR;
       }
       match("]");
@@ -1748,6 +1756,4 @@ void listingPrintfSemantic(char * semTempStr)
     semanticErrors->next = tempSemantic;
     semanticErrors = semanticErrors->next;
 }
-
-
 

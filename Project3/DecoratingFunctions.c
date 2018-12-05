@@ -23,7 +23,9 @@ int checkAddBlueNode(char * idLex, int type)
       //   
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE) && (infraEye->type == type))
     {
-      printf("Semantic Error: ID: %s already exists in this scope\n", idLex);
+      char semTempStr[100];
+      sprintf(semTempStr,"Semantic Error: ID: %s already exists in this scope\n", idLex);
+      listingPrintfSemantic(semTempStr);
       return 1;
     }
     
@@ -54,7 +56,9 @@ int checkAddGreenNode(char * idLex, int type)
   {
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE) && (infraEye->type == type))
     {
-      printf("Semantic Error: ID: %s already exists in this scope\n", idLex);
+      char semTempStr[100];
+      sprintf(semTempStr,"Semantic Error: ID: %s already exists in this scope\n", idLex);
+      listingPrintfSemantic(semTempStr);
       return 1;
     }
     
@@ -96,16 +100,18 @@ int checkArray(tokenNode first, tokenNode second)
     
     if(atoi(first->lexeme) > atoi(second->lexeme))
     {
-      printf("Semantic Error: First number in array greater than second\n");
-      
+      char semTempStr[100];
+      sprintf(semTempStr,"Semantic Error: First number in array greater than second\n");
+      listingPrintfSemantic(semTempStr);
       return 1;
     }
     
     if((first->type != INTEGER) || (second->type != INTEGER))
     {
-        printf("Semantic Error: Numbers in array not integers\n");
-        
-        return 1;
+      char semTempStr[100];
+      sprintf(semTempStr,"Semantic Error: Numbers in array not integers\n");
+      listingPrintfSemantic(semTempStr);
+      return 1;
     }
     
     return 0;
