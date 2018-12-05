@@ -1128,7 +1128,7 @@ int expressp(int inherit)
         expresspType = BOOL;
       } else {
         char semTempStr[100];
-        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator, inherit: %s, seType: %s\n", NumberToString(inherit),NumberToString(seType));
+        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator\n");
         listingPrintfSemantic(semTempStr);
         expresspType = ERR;
       }
@@ -1508,6 +1508,7 @@ int factorp(int inherit)
       
       match("[");
       int tempExpress = express();
+      printf("tempExpress: %s, Line: %i\n", NumberToString(tempExpress), tok->line);
       if((inherit == ERR) ||(tempExpress == ERR))
       {
         factorType = ERR;
