@@ -1,14 +1,23 @@
 1    prgrm test (input, output);
 2    
-3      var a : int;
+3      var abcdedfeklsajfei : int;
+
+    Lexical Error: LONG_STRING: abcdedfekls
+    Syntax Error: Expecting id, Received abcdedfekls 
+    Syntax Error: Expecting :, Received abcdedfekls 
+    Syntax Error: Expecting one of arr int real $, Received: ajfei
+    Syntax Error: Expecting ;, Received int 
+    Syntax Error: Expecting one of var procdr begin $, Received: ;
 4    
 5      var b : real;
+    Syntax Error: Expecting one of procdr begin $, Received: var
 6    
 7      var c : arr [1 .. 2] of int;
 8    
 9    
 10    
 11      procdr fun1(x:int; y:real; 
+    Syntax Error: Expecting $, Received procdr 
 12    
 13                      z:arr [1 .. 2] of int; 
 14    
@@ -89,5 +98,4 @@
 89      if (b > 4) then a := c[a]
 90    
 91    end.
-92    $    Successfully parsed !
- 
+92    $

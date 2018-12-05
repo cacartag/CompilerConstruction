@@ -125,6 +125,13 @@ struct syntaxError
   struct syntaxError * next;
 };
 
+struct semanticError
+{
+  uint32_t line;
+  char * semanticErr;
+  struct semanticError * next;
+};
+
 
 struct Node
 {
@@ -138,6 +145,7 @@ struct Node
 typedef struct token *tokenNode;
 typedef union attrib *attributes;
 typedef struct syntaxError *syntax;
+typedef struct semanticError *semantic;
 typedef struct Node *nodeInfrastructure;
 
 tokenNode sourceTokens;
@@ -145,6 +153,8 @@ tokenNode symbolTable;
 tokenNode symbolTableHead;
 syntax syntaxErrors;
 syntax syntaxHead;
+semantic semanticErrors;
+semantic semanticHead;
 
 nodeInfrastructure infraHead;
 nodeInfrastructure infraTail;
@@ -208,7 +218,7 @@ void procdr_stmntp();
 void express_lst();
 void express_lstp();
 int express();
-void expressp();
+int expressp(int inherit);
 int simp_express();
 int simp_expressp(int inherit);
 int term();

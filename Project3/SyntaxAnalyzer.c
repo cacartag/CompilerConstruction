@@ -1073,28 +1073,23 @@ int express()
   {
 
     case 20: // terminal is id
-      simp_express();
-      expressp();
+      expressp(simp_express());
     break;
 
     case 80: // terminal is (
-      simp_express();
-      expressp();
+      expressp(simp_express());
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      simp_express();
-      expressp();
+      expressp(simp_express());
     break;
 
     case 19: // terminal is not
-      simp_express();
-      expressp();
+      expressp(simp_express());
     break;
 
     case 161: // terminal is +
-      simp_express();
-      expressp();
+      expressp(simp_express());
     break;
 
     default:
@@ -1109,41 +1104,68 @@ int express()
       {
         tok = getToken();
       }
+      return ERR;
   }
 }
 
-void expressp()
+int expressp(int inherit)
 {
  switch( tok->type )
   {
 
     case 160: // terminal is relop
       match("relop");
-      simp_express();
+      int seType = simp_express();
+      int expresspType;
+      if((inherit == ERR) || (seType == ERR))
+      {
+        expresspType = ERR;
+      } else if ((inherit == INTEGER) && (seType == INTEGER))
+      {
+        expresspType = BOOL;   
+      } else if((inherit == REAL) && (seType == REAL))
+      {
+        expresspType = BOOL;
+      } else {
+        //char semTempStr[100];
+        printf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator\n");
+        expresspType = ERR;
+      }
+      
+      return expresspType;
+      
     break;
 
     case 81 : // terminal is ), epsilon do nothing
+      return inherit;
     break;
 
     case 79 : // terminal is ;, epsilon do nothing
+      return inherit;
     break;
 
     case 82 : // terminal is ,, epsilon do nothing
+      return inherit;
     break;
 
     case 85 : // terminal is ], epsilon do nothing
+      return inherit;
     break;
 
     case 11 : // terminal is end, epsilon do nothing
+      return inherit;
     break;
 
     case 2 : // terminal is then, epsilon do nothing
+      return inherit;
     break;
 
     case 14 : // terminal is do, epsilon do nothing
+      return inherit;
     break;
     
     case 12 : // terminal is else, epsilon do nothing
+      return inherit;
     break;
 
     default:
@@ -1158,6 +1180,8 @@ void expressp()
       {
         tok = getToken();
       }
+      
+      return ERR;
   }
 }
 
@@ -1684,15 +1708,18 @@ void parse()
     syntaxErrors = (syntax)malloc(sizeof(struct syntaxError));
     syntaxHead = syntaxErrors;
     
+    semanticErrors = (semantic)malloc(sizeof(struct semanticError));
+    semanticHead = semanticErrors;
+    
     initializeInfrastructure();
     
     tok = getToken();
     prgrm();
     match("$");
-
+    
     syntax tempSyntax = syntaxHead;
     
-     printInfrastructure();
+    printInfrastructure();
 
 }
 
@@ -1709,4 +1736,18 @@ void listingPrintf(char * synTempStr)
     syntaxErrors->next = tempSyntax;
     syntaxErrors = syntaxErrors->next;
 }
+
+void listingPrintfSemantic(char * semTempStr)
+{
+    semantic tempSemantic = (semantic)(malloc(sizeof(struct semanticError)));
+    tempSemantic->line = tok->line;
+    tempSemantic->semanticErr = malloc(100);
+    strcpy(tempSemantic->semanticErr, semTempStr);
+    tempSemantic->next = NULL;
+    
+    semanticErrors->next = tempSemantic;
+    semanticErrors = semanticErrors->next;
+}
+
+
 

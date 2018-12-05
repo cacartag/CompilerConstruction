@@ -854,7 +854,7 @@ char * NumberToString(int Number)
   if(Number == 21) return "CALL";
   if(Number == 22) return "VALUE";
 
-  if(Number == 30) return "LEXERR";
+  if(Number == 30) return "Lexical Error";
 
   if(Number == 31) return "LONG_STRING";
   if(Number == 32) return "LEADING_ZERO";
