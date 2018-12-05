@@ -143,3 +143,20 @@ int checkAddOperator(int operation)
   return -1;
 }
 
+int variableTypeRetrieval(char * lexeme)
+{
+  infraEye = infraTail;
+  
+  while((infraEye != NULL) && (infraEye->type != HEAD))
+  {
+    if(!strcmp(lexeme, infraEye->idLex))
+    {
+      return infraEye->type;
+    }
+    
+    infraEye = infraEye->previous;
+  }
+    
+  return ERR;
+}
+

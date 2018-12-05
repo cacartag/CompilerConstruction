@@ -245,6 +245,7 @@ void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);
 int checkMulOperator(int operation);
 int checkAddOperator(int operation);
+int variableTypeRetrieval(char * lexeme);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

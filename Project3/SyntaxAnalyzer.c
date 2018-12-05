@@ -1128,7 +1128,7 @@ int expressp(int inherit)
         expresspType = BOOL;
       } else {
         char semTempStr[100];
-        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator\n");
+        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in relational operator, inherit: %s, seType: %s\n", NumberToString(inherit),NumberToString(seType));
         listingPrintfSemantic(semTempStr);
         expresspType = ERR;
       }
@@ -1456,8 +1456,8 @@ int factor()
 
     case 20: // terminal is id
       ;
-      printf("getting token type for %s, line: %i, type: %s\n", tok->lexeme, tok->line, NumberToString(tok->type));
-      tempType = tok->type;
+      tempType = variableTypeRetrieval(tok->lexeme);
+      printf("getting token type for %s, line: %i, type: %s\n", tok->lexeme, tok->line, NumberToString(tempType));
       match("id");
       return factorp(tempType);
     break;
@@ -1471,7 +1471,7 @@ int factor()
 
     case INTEGER: // terminal is num, changing to int
       ;
-      tempType = tok->type;
+      tempType = variableTypeRetrieval(tok->lexeme);
       match("num");
       return tempType;
     break;
