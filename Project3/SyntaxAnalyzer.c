@@ -1456,7 +1456,7 @@ int factor()
 
     case 20: // terminal is id
       ;
-      printf("getting token type for %s, line: %i\n", tok->lexeme, tok->line);
+      printf("getting token type for %s, line: %i, type: %s\n", tok->lexeme, tok->line, NumberToString(tok->type));
       tempType = tok->type;
       match("id");
       return factorp(tempType);

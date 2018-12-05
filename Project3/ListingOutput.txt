@@ -43,7 +43,7 @@
 35    
 36    begin
 37      call ex2(c[4], c[5]);
-    for calling Syntax Error: Expecting one of id ( num not + - $, Received: )
+    Syntax Error: Expecting one of id ( num not + - $, Received: )
     Semantic Error: type mismatch
     Semantic Error: type mismatch
 38      call ex2(c[4],2);
