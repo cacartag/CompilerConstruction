@@ -216,8 +216,8 @@ void opt_stmnt();
 void stmnt_lst();
 void stmnt_lstp();
 void stmnt();
-void variable();
-void variablep();
+int variable();
+int variablep(int inherit);
 void procdr_stmnt();
 void procdr_stmntp();
 void express_lst();
@@ -245,7 +245,7 @@ void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);
 int checkMulOperator(int operation);
 int checkAddOperator(int operation);
-int variableTypeRetrieval(char * lexeme);
+int variableTypeRetrieval(tokenNode lexeme);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

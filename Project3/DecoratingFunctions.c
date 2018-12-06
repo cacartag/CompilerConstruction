@@ -143,20 +143,30 @@ int checkAddOperator(int operation)
   return -1;
 }
 
-int variableTypeRetrieval(char * lexeme)
+int variableTypeRetrieval(tokenNode tok)
 {
   infraEye = infraTail;
   
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
-    if(!strcmp(lexeme, infraEye->idLex))
+    if(!strcmp(tok->lexeme, infraEye->idLex))
     {
       return infraEye->type;
     }
     
     infraEye = infraEye->previous;
   }
-    
+  
+  if(tok->type == INTEGER)
+  {
+	return INTEGER;
+  } else {
+  
+    char semTempStr[100];
+    sprintf(semTempStr,"Semantic Error: Could not find type for %s\n", tok->lexeme);
+    listingPrintfSemantic(semTempStr);
+  }
+  
   return ERR;
 }
 

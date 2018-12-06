@@ -22,6 +22,7 @@
 21           begin
 22             a:= e;
 23             e:= c[f]
+    Semantic Error: Could not find type for f
 24           end;
 25    
 26         begin

@@ -874,14 +874,16 @@ void stmntp()
   }
 }
 
-void variable()
+int variable()
 {
  switch( tok->type )
   {
 
     case 20: // terminal is id
+	  ;
+	  int tempType = variableTypeRetrieval(tok);
       match("id");
-      variablep();
+      return variablep(tempType);
     break;
 
     default:
@@ -896,22 +898,42 @@ void variable()
       {
         tok = getToken();
       }
+	  
+	return ERR;
   }
 }
 
-void variablep()
+int variablep(int inherit)
 {
+  int variablepType;
  switch( tok->type )
   {
 
     case 84: // terminal is [
       match("[");
-      express();
-
+      int expressType = express();
+	  if((inherit == ERR)||(expressType == ERR))
+	  {
+		variablepType = ERR;
+	  } else if((inherit == AINT) && (expressType == INTEGER))
+	  {
+		variablepType = INTEGER;
+	  } else if((inherit == AREAL) && (expressType == INTEGER))
+	  {
+		variablepType = REAL;  
+	  } else {
+		char semTempStr[100];
+		sprintf(semTempStr,"Semantic Error: error in array index value retrieval, first: %s, second: %s\n",NumberToString(inherit),NumberToString(expressType));
+		listingPrintfSemantic(semTempStr);
+		variablepType = ERR;
+	  }
+	  
       match("]");
+	  return variablepType;
     break;
 
     case 163 : // terminal is assignop, epsilon do nothing
+	  return inherit;
     break;
 
     default:
@@ -926,6 +948,8 @@ void variablep()
       {
         tok = getToken();
       }
+	  
+	  return ERR;
   }
 }
 
@@ -1456,8 +1480,8 @@ int factor()
 
     case 20: // terminal is id
       ;
-      tempType = variableTypeRetrieval(tok->lexeme);
-      printf("getting token type for %s, line: %i, type: %s\n", tok->lexeme, tok->line, NumberToString(tempType));
+      tempType = variableTypeRetrieval(tok);
+      //printf("getting token type for %s, line: %i, type: %s\n", tok->lexeme, tok->line, NumberToString(tempType));
       match("id");
       return factorp(tempType);
     break;
@@ -1471,7 +1495,8 @@ int factor()
 
     case INTEGER: // terminal is num, changing to int
       ;
-      tempType = variableTypeRetrieval(tok->lexeme);
+      tempType = variableTypeRetrieval(tok);
+	  //printf("lexeme: %s, type: %s, line: %i\n", tok->lexeme, NumberToString(tempType), tok->line);
       match("num");
       return tempType;
     break;
@@ -1508,7 +1533,7 @@ int factorp(int inherit)
       
       match("[");
       int tempExpress = express();
-      printf("tempExpress: %s, Line: %i\n", NumberToString(tempExpress), tok->line);
+      //printf("tempExpress: %s, Line: %i\n", NumberToString(tempExpress), tok->line);
       if((inherit == ERR) ||(tempExpress == ERR))
       {
         factorType = ERR;
