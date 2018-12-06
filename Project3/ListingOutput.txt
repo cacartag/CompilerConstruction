@@ -37,13 +37,8 @@
 35    
 36    begin
 37      call ex2(c[4], c[5]);
-    Syntax Error: Expecting one of id ( num not + - $, Received: )
 38      call ex2(c[4],2);
-    Syntax Error: Expecting ), Received ex2 
-    Syntax Error: Expecting one of ; end $, Received: (
-    Syntax Error: Expecting end, Received ; 
 39      if (a < 2) then a:= 1 else a := a + 2
-    Syntax Error: Expecting ., Received if 
-    Syntax Error: Expecting $, Received ( 
 40    end.
-41    $
+41    $    Successfully parsed !
+ 

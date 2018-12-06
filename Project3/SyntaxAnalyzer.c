@@ -1045,7 +1045,7 @@ void express_lstp()
     case 82: // terminal is ,
       match(",");
       express();
-      express_lst();
+      express_lstp();
     break;
 
     case 81 : // terminal is ), epsilon do nothing
