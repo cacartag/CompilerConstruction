@@ -12,7 +12,7 @@ void initializeInfrastructure()
   infraEye = infraHead;
 }
 
-int checkAddBlueNode(char * idLex, int type)
+int checkAddBlueNode(char * idLex, int type, int procParam)
 {
   infraEye = infraTail;
   

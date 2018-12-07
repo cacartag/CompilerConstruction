@@ -140,6 +140,7 @@ struct semanticError
 struct Node
 {
   uint8_t * idLex;
+  uint8_t * procParam;
   uint16_t greenBlue;
   uint16_t type;
   struct Node * previous;
@@ -239,7 +240,7 @@ void listingPrintf(char * synTempStr);
 void listingPrintfSemantic(char * semTempStr);
 
 void initializeInfrastructure();
-int checkAddBlueNode(char * idLex, int type);
+int checkAddBlueNode(char * idLex, int type, int procParam);
 int checkAddGreenNode(char * idLex, int type);
 void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);

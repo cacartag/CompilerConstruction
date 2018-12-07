@@ -127,7 +127,7 @@ void id_list()
   {
 
     case 20: // terminal is id
-      checkAddBlueNode(tok->lexeme,PGMPARAM);
+      checkAddBlueNode(tok->lexeme,PGMPARAM,0);
       match("id");
       id_listp();
     break;
@@ -154,7 +154,7 @@ void id_listp()
 
     case 82: // terminal is ,
       match(",");
-      checkAddBlueNode(tok->lexeme,PGMPARAM);
+      checkAddBlueNode(tok->lexeme,PGMPARAM,0);
       match("id");
       id_listp();
     break;
@@ -187,7 +187,7 @@ void decls()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type());
+      checkAddBlueNode(idTemp,type(),0);
       match(";");
       declsp();
     break;
@@ -217,7 +217,7 @@ void declsp()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type());
+      checkAddBlueNode(idTemp,type(),0);
       match(";");
       declsp();
     break;
@@ -564,7 +564,7 @@ void param_lst()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type());
+      checkAddBlueNode(idTemp,type(),1);
       param_lstp();
     break;
 
@@ -593,7 +593,7 @@ void param_lstp()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type());
+      checkAddBlueNode(idTemp,type(),1);
       param_lstp();
     break;
 

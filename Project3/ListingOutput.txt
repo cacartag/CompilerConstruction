@@ -27,8 +27,10 @@
 26         begin
 27           e := e + 5;
 28           a:= (a mod y) div x;
-29           while ((a >= 4) and ((a <= 5) 
+29           while ((a >= 4) and ((b <= e) 
+    Semantic Error: mixed mode not allowed, in relational operator
 30                           or (not (a = c[a])))) do
+    Semantic Error: expression is not of type boolean, about: do
 31             begin
 32               a:= c[a] + 1
 33             end
