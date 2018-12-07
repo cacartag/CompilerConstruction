@@ -20,13 +20,13 @@ prgrm example (input, output);
 
        begin
          a:= e;
-         e:= c[f]
+         e:= c[2]
        end;
 
      begin
        e := e + 5;
        a:= (a mod y) div x;
-       while ((a >= 4) and ((b <= e) 
+       while ((a >= 4) and ((a <= 5) 
                        or (not (a = c[a])))) do
          begin
            a:= c[a] + 1

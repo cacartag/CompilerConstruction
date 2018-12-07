@@ -21,15 +21,13 @@
 20    
 21           begin
 22             a:= e;
-23             e:= c[f]
-    Semantic Error: Could not find type for f
+23             e:= c[2]
 24           end;
 25    
 26         begin
 27           e := e + 5;
 28           a:= (a mod y) div x;
-29           while ((a >= 4) and ((b <= e) 
-    Semantic Error: mixed mode not allowed, in relational operator
+29           while ((a >= 4) and ((a <= 5) 
 30                           or (not (a = c[a])))) do
 31             begin
 32               a:= c[a] + 1

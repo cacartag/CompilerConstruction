@@ -805,13 +805,21 @@ void stmnt_lstp()
 
 void stmnt()
 {
+  int expressionType;
  switch( tok->type )
   {
 
     case 20: // terminal is id
-      variable();
+      ;
+      int variableType = variable();
       match("assignop");
-      express();
+      expressionType = express();
+      if (variableType != expressionType)
+      {
+        char semTempStr[100];
+        sprintf(semTempStr,"Semantic Error: variable and assigment types do not match\n");
+        listingPrintfSemantic(semTempStr);
+      }
     break;
 
     case 10: // terminal is begin
@@ -820,7 +828,13 @@ void stmnt()
 
     case 1: // terminal is if
       match("if");
-      express();
+      expressionType = express();
+      if(expressionType != BOOL)
+      {
+        char semTempStr[100];
+        sprintf(semTempStr,"Semantic Error: expression is not of type boolean, about: %s\n",tok->lexeme);
+        listingPrintfSemantic(semTempStr);
+      }
       match("then");
       stmnt();
       stmntp();
@@ -828,7 +842,13 @@ void stmnt()
 
     case 13: // terminal is while
       match("while");
-      express();
+      expressionType = express();
+      if(expressionType != BOOL)
+      {
+        char semTempStr[100];
+        sprintf(semTempStr, "Semantic Error: expression is not of type boolean, about: %s\n",tok->lexeme);
+        listingPrintfSemantic(semTempStr);
+      }
       match("do");
       stmnt();
     break;
@@ -1273,12 +1293,12 @@ int simp_expressp(int inherit)
 	  } else if((inherit == INTEGER) && (termType == INTEGER) && (checkAddOperator(tempOperator) == 1))
 	  {
 		sepInherit = INTEGER;
-	  } else if ((inherit == BOOL) && (termType == BOOL) && (checkAddOperator(tempOperator) == 1))
+	  } else if ((inherit == BOOL) && (termType == BOOL) && (checkAddOperator(tempOperator) == 0))
 	  {
 		sepInherit = BOOL;
 	  } else {
         char semTempStr[100];
-		sprintf(semTempStr,"Semantic Error: mixed mode not allowed\n");
+		sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in simple expression\n");
         listingPrintfSemantic(semTempStr);
 		sepInherit = ERR;
 	  }
@@ -1407,7 +1427,7 @@ int termp(int inherit)
         termpInherit = BOOL;
       } else {
         char semTempStr[100];
-        sprintf(semTempStr,"Semantic Error: mixed mode not allowed\n");
+        sprintf(semTempStr,"Semantic Error: mixed mode not allowed, in term\n");
         listingPrintfSemantic(semTempStr);
         termpInherit = ERR;
       }
