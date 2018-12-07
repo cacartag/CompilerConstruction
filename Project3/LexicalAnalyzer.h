@@ -140,7 +140,7 @@ struct semanticError
 struct Node
 {
   uint8_t * idLex;
-  uint8_t * procParam;
+  uint8_t procParam;
   uint16_t greenBlue;
   uint16_t type;
   struct Node * previous;

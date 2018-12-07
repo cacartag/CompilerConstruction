@@ -39,6 +39,7 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   strcpy(temp->idLex, idLex);
   temp->greenBlue = BLUE_NODE;
   temp->type = type;
+  temp->procParam = procParam;
   
   infraTail->next = temp;
   infraTail = temp;
