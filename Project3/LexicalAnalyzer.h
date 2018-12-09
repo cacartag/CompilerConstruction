@@ -250,6 +250,7 @@ int checkMulOperator(int operation);
 int checkAddOperator(int operation);
 int variableTypeRetrieval(tokenNode lexeme);
 void closeScope();
+int checkIfProcedureExists();
 
 // need to add detection for token types of mult, add, and assign
 #endif	

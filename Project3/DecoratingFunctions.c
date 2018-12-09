@@ -46,32 +46,47 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   temp->procParam = procParam;
   temp->closed = 0;
   
-  if(procParam == 1 )
+  if(procParam == 1)
   {
+    nodeInfrastructure tempCopy = (nodeInfrastructure)malloc(sizeof(struct Node));
+    tempCopy->idLex = malloc(100);
+    tempCopy->next = NULL;
+    strcpy(tempCopy->idLex, idLex);
+    tempCopy->greenBlue = BLUE_NODE;
+    tempCopy->type = type;
+    tempCopy->procParam = procParam;
+    tempCopy->closed = 0;
+    
+    //printf("Reached initialization\n");
+      
     if(tempGreenNode->procParam != 1)
     {
       tempGreenNode->procParam = 1;
-    
-      tempGreenNode->paramList = temp;
+      tempGreenNode->paramList = tempCopy;
+      
+     // printf("next is no longer null\n");
     }
     else
     {
-      infraEye = tempGreenNode->paramList;
+      nodeInfrastructure tempEye = tempGreenNode->paramList;
       
-      while(infraEye->next != NULL)
+      printf("before while statement\n");
+      while(tempEye->next != NULL)
       {
-        infraEye = infraEye->next;
+        printf("in while statement\n");
+        tempEye = tempEye->next;
       }
+     // printf("after while statement\n");
       
-      infraEye->next = temp;
+      tempEye->next = tempCopy;
     }
-  }
-  else
-  {
-    infraTail->next = temp;
-    infraTail = temp;
-  }
+    
+    //printf("after initialization\n");
+  } else {
   
+  infraTail->next = temp;
+  infraTail = temp;
+  }
   return 0;
 }
 
@@ -237,6 +252,27 @@ void closeScope()
     infraEye->next = NULL;
     infraTail = infraEye;
   }
+}
+
+int checkIfProcedureExists(uint8_t * idLex)
+{
+  infraEye = infraTail;
+
+  while((infraEye != NULL) && (infraEye->type != HEAD))
+  {
+    if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE))
+    {
+      return 1;
+    }
+    
+    infraEye = infraEye->previous;
+  }    
+  
+  char semTempStr[100];
+  sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+  listingPrintfSemantic(semTempStr);
+  
+  return 0;  
 }
 
 
