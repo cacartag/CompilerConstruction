@@ -9,6 +9,8 @@
 9        begin
 10          a:= 1;
 11          z[a] := 5;
+    Semantic Error: Could not find type for z
+    Semantic Error: variable and assigment types do not match
 12          c[3] := 13
 13         end;
 14    
@@ -28,6 +30,9 @@
     Semantic Error: mixed mode not allowed, in simple expression
     Semantic Error: variable and assigment types do not match
 28           a:= (a mod y) div x;
+    Semantic Error: Could not find type for y
+    Semantic Error: Could not find type for x
+    Semantic Error: variable and assigment types do not match
 29           while ((a >= 4) and ((b <= e) 
 30                           or (not (a = c[a])))) do
 31             begin

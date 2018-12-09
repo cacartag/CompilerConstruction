@@ -15,9 +15,13 @@ void initializeInfrastructure()
 int checkAddBlueNode(char * idLex, int type, int procParam)
 {
   infraEye = infraTail;
+  nodeInfrastructure tempGreenNode;
   
-  //printf("Sanity Check blue node\n");
-   
+  if(procParam == 1)
+  {
+    tempGreenNode = infraTail;
+  }
+
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
       //   
@@ -42,8 +46,31 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   temp->procParam = procParam;
   temp->closed = 0;
   
-  infraTail->next = temp;
-  infraTail = temp;
+  if(procParam == 1 )
+  {
+    if(tempGreenNode->procParam != 1)
+    {
+      tempGreenNode->procParam = 1;
+    
+      tempGreenNode->paramList = temp;
+    }
+    else
+    {
+      infraEye = tempGreenNode->paramList;
+      
+      while(infraEye->next != NULL)
+      {
+        infraEye = infraEye->next;
+      }
+      
+      infraEye->next = temp;
+    }
+  }
+  else
+  {
+    infraTail->next = temp;
+    infraTail = temp;
+  }
   
   return 0;
 }
@@ -51,9 +78,7 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
 int checkAddGreenNode(char * idLex, int type)
 {
   infraEye = infraTail;
-  
-  //printf("Sanity Check green node\n");
-  
+
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE) && (infraEye->type == type))
@@ -71,6 +96,7 @@ int checkAddGreenNode(char * idLex, int type)
   temp->idLex = malloc(100);
   temp->previous = infraTail;
   temp->next = NULL;
+  temp->paramList = NULL;
   strcpy(temp->idLex, idLex);
   temp->greenBlue = GREEN_NODE;
   temp->type = type;
@@ -87,10 +113,23 @@ void printInfrastructure()
   infraHead = infraHead->next;
   
   printf("\n\n");
-  //printf("Inside printing \n");
+
   while(infraHead != NULL)
   {
     printf("%s    %s\n", infraHead->idLex,NumberToString(infraHead->type));
+    
+    if(infraHead->procParam == 1)
+    {
+      nodeInfrastructure tempEye = infraHead->paramList;
+      
+      while(tempEye != NULL)
+      {
+        printf("%s   %s,  this is a parameter\n", tempEye->idLex, NumberToString(tempEye->type));
+        
+        tempEye = tempEye->next;
+      }
+
+    }
     
     infraHead = infraHead->next;
   }
@@ -198,8 +237,6 @@ void closeScope()
     infraEye->next = NULL;
     infraTail = infraEye;
   }
-  
-
 }
 
 

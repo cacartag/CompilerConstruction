@@ -141,6 +141,7 @@ struct Node
 {
   uint8_t * idLex;
   uint8_t procParam;
+  struct Node * paramList;
   uint16_t greenBlue;
   uint16_t type;
   uint16_t closed;
