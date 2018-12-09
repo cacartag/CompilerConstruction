@@ -15,16 +15,21 @@ void initializeInfrastructure()
 int checkAddBlueNode(char * idLex, int type, int procParam)
 {
   infraEye = infraTail;
-  nodeInfrastructure tempGreenNode;
-  
+
   if(procParam == 1)
   {
-    tempGreenNode = infraTail;
+    nodeInfrastructure tempEye = infraTail;
+    
+    while(tempEye->greenBlue != GREEN_NODE)
+    {
+      tempEye = tempEye->previous;
+    }
+    
+    addProcessParameter(tempEye,idLex, type);
   }
-
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
-      //   
+
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE) && (infraEye->type == type))
     {
       char semTempStr[100];
@@ -45,49 +50,40 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   temp->type = type;
   temp->procParam = procParam;
   temp->closed = 0;
+
+    infraTail->next = temp;
+    infraTail = temp;
   
-  if(procParam == 1)
-  {
-    nodeInfrastructure tempCopy = (nodeInfrastructure)malloc(sizeof(struct Node));
-    tempCopy->idLex = malloc(100);
-    tempCopy->next = NULL;
-    strcpy(tempCopy->idLex, idLex);
-    tempCopy->greenBlue = BLUE_NODE;
-    tempCopy->type = type;
-    tempCopy->procParam = procParam;
-    tempCopy->closed = 0;
-    
-    //printf("Reached initialization\n");
-      
-    if(tempGreenNode->procParam != 1)
-    {
-      tempGreenNode->procParam = 1;
-      tempGreenNode->paramList = tempCopy;
-      
-     // printf("next is no longer null\n");
-    }
-    else
-    {
-      nodeInfrastructure tempEye = tempGreenNode->paramList;
-      
-      printf("before while statement\n");
-      while(tempEye->next != NULL)
-      {
-        printf("in while statement\n");
-        tempEye = tempEye->next;
-      }
-     // printf("after while statement\n");
-      
-      tempEye->next = tempCopy;
-    }
-    
-    //printf("after initialization\n");
-  } else {
-  
-  infraTail->next = temp;
-  infraTail = temp;
-  }
   return 0;
+}
+
+void addProcessParameter(nodeInfrastructure tempGreenNode, char * idLex, int type)
+{
+  nodeInfrastructure tempCopy = (nodeInfrastructure)malloc(sizeof(struct Node));
+  tempCopy->idLex = malloc(100);
+  tempCopy->next = NULL;
+  strcpy(tempCopy->idLex, idLex);
+  tempCopy->greenBlue = BLUE_NODE;
+  tempCopy->type = type;
+  tempCopy->procParam = 1;
+  tempCopy->closed = 0;
+  
+  if(tempGreenNode->procParam != 1)
+  {
+    tempGreenNode->procParam = 1;
+    tempGreenNode->paramList = tempCopy;
+  }
+  else
+  {
+    nodeInfrastructure tempEye = tempGreenNode->paramList;
+
+    while(tempEye->next != NULL)
+    {
+      tempEye = tempEye->next;
+    }
+
+    tempEye->next = tempCopy;
+  }
 }
 
 int checkAddGreenNode(char * idLex, int type)

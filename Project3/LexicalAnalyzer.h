@@ -251,6 +251,7 @@ int checkAddOperator(int operation);
 int variableTypeRetrieval(tokenNode lexeme);
 void closeScope();
 int checkIfProcedureExists();
+void addProcessParameter(nodeInfrastructure tempGreenNode, char * idLex, int type);
 
 // need to add detection for token types of mult, add, and assign
 #endif	
