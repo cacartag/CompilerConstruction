@@ -243,6 +243,7 @@ void listingPrintfSemantic(char * semTempStr);
 
 void initializeInfrastructure();
 int checkAddBlueNode(char * idLex, int type, int procParam);
+void addProcessParameter(nodeInfrastructure tempGreenNode, char * idLex, int type);
 int checkAddGreenNode(char * idLex, int type);
 void printInfrastructure();
 int checkArray(tokenNode first, tokenNode second);
@@ -251,7 +252,7 @@ int checkAddOperator(int operation);
 int variableTypeRetrieval(tokenNode lexeme);
 void closeScope();
 int checkIfProcedureExists();
-void addProcessParameter(nodeInfrastructure tempGreenNode, char * idLex, int type);
+
 
 // need to add detection for token types of mult, add, and assign
 #endif	

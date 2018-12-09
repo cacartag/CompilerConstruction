@@ -34,7 +34,7 @@ prgrm example (input, output);
      end;
 
 begin
-  call ex2(c[4], c[5]);
+  call ex8(c[4], c[5]);
   call ex2(c[4],2);
   if (a < 2) then a:= 1 else a := a + 2
 end.

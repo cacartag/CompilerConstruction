@@ -982,7 +982,7 @@ void procdr_stmnt()
 
     case 21: // terminal is call
       match("call");
-      //checkIfProcedureExists(tok->lexeme);
+      checkIfProcedureExists(tok->lexeme);
       match("id");
       procdr_stmntp();
     break;

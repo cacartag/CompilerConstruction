@@ -51,8 +51,8 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   temp->procParam = procParam;
   temp->closed = 0;
 
-    infraTail->next = temp;
-    infraTail = temp;
+  infraTail->next = temp;
+  infraTail = temp;
   
   return 0;
 }
