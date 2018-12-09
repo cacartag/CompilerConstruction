@@ -143,6 +143,7 @@ struct Node
   uint8_t procParam;
   uint16_t greenBlue;
   uint16_t type;
+  uint16_t closed;
   struct Node * previous;
   struct Node * next;
 };
@@ -247,6 +248,7 @@ int checkArray(tokenNode first, tokenNode second);
 int checkMulOperator(int operation);
 int checkAddOperator(int operation);
 int variableTypeRetrieval(tokenNode lexeme);
+void closeScope();
 
 // need to add detection for token types of mult, add, and assign
 #endif	

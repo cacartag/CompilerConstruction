@@ -337,6 +337,7 @@ void subprgrm_decls()
     case 9: // terminal is procdr
       subprgrm_decl();
       match(";");
+      closeScope();
       subprgrm_declsp();
     break;
 
@@ -363,6 +364,7 @@ void subprgrm_declsp()
     case 9: // terminal is procdr
       subprgrm_decl();
       match(";");
+      closeScope();
       subprgrm_declsp();
     break;
 

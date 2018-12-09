@@ -40,6 +40,7 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   temp->greenBlue = BLUE_NODE;
   temp->type = type;
   temp->procParam = procParam;
+  temp->closed = 0;
   
   infraTail->next = temp;
   infraTail = temp;
@@ -73,6 +74,7 @@ int checkAddGreenNode(char * idLex, int type)
   strcpy(temp->idLex, idLex);
   temp->greenBlue = GREEN_NODE;
   temp->type = type;
+  temp->closed = 0;
   
   infraTail->next = temp;
   infraTail = temp;
@@ -170,4 +172,35 @@ int variableTypeRetrieval(tokenNode tok)
   
   return ERR;
 }
+
+void closeScope()
+{
+  infraEye = infraTail;
+  nodeInfrastructure temp;
+  int postGreen = 0;
+  
+  if(infraEye->greenBlue == GREEN_NODE)
+  {
+    temp = infraEye;
+    postGreen = 1;
+  }
+  
+  while(infraEye->greenBlue != GREEN_NODE || infraEye->closed == 1)
+  {
+    infraEye = infraEye->previous;
+  }
+  infraEye->closed = 1;
+  
+  if(postGreen == 1)
+  {
+    infraEye->next = temp;
+  } else {
+    infraEye->next = NULL;
+    infraTail = infraEye;
+  }
+  
+
+}
+
+
 

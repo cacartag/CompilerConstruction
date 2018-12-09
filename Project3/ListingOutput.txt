@@ -13,7 +13,6 @@
 13         end;
 14    
 15       procdr ex2(x: int; y: int);
-    Semantic Error: ID: x already exists in this scope
 16         var e: real;
 17    
 18         procdr ex3(n: int; z: real);
@@ -26,11 +25,11 @@
 25    
 26         begin
 27           e := e + 5;
+    Semantic Error: mixed mode not allowed, in simple expression
+    Semantic Error: variable and assigment types do not match
 28           a:= (a mod y) div x;
 29           while ((a >= 4) and ((b <= e) 
-    Semantic Error: mixed mode not allowed, in relational operator
 30                           or (not (a = c[a])))) do
-    Semantic Error: expression is not of type boolean, about: do
 31             begin
 32               a:= c[a] + 1
 33             end
