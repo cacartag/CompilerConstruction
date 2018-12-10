@@ -307,14 +307,29 @@ int checkIfProcedureExists(uint8_t * idLex)
 
   if((foundGreenNode == 1)&&(numberOfFunctionParameters == numberOfRetrievedArgs))
   {
-    return 1;
+	int matchAllTypes = 0;
+	greenEye = greenNode->paramList;
+	tempEye = parametersCurrentCall->next;
+	
+	while(greenEye != NULL)
+	{
+		printf("greenEye: %s , tempEye: %s\n", NumberToString(greenEye->type), NumberToString(tempEye->type));
+		
+		if(greenEye->type != tempEye->type)
+		{
+          char semTempStr[100];
+          sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+          listingPrintfSemantic(semTempStr);
+		  
+		  return 0;
+		}	
+		
+		greenEye = greenEye->next;
+		tempEye = tempEye->next;
+	}
   }
   
-  char semTempStr[100];
-  sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
-  listingPrintfSemantic(semTempStr);
-  
-  return 0;  
+  return 1;  
 }
 
 void addParametersToCurrentProcedure(int type)

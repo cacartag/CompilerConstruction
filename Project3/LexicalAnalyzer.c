@@ -21,9 +21,9 @@ int main(int argc, char * argv[])
   sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
   sourceTokens->next = NULL;  
   
-  symbolTable = (tokenNode)(malloc(sizeof(struct token)));
-  symbolTable->next = NULL;
-  symbolTableHead = symbolTable;
+  //symbolTable = (tokenNode)(malloc(sizeof(struct token)));
+  //symbolTable->next = NULL;
+  //symbolTableHead = symbolTable;
   
   RetrieveReservedWords(&reservedHead);
   
@@ -175,7 +175,7 @@ int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenN
       if (type == ID)
       {
         // printf("ID is %s\n",id);
-        AddToSymbolTable(&symbolTable, id, type, attribute);
+        //AddToSymbolTable(&symbolTable, id, type, attribute);
       }
     }
 
