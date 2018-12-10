@@ -166,7 +166,7 @@ semantic semanticHead;
 nodeInfrastructure infraHead;
 nodeInfrastructure infraTail;
 nodeInfrastructure infraEye;
-
+nodeInfrastructure parametersCurrentCall;
 
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
@@ -222,7 +222,7 @@ void stmnt();
 int variable();
 int variablep(int inherit);
 void procdr_stmnt();
-void procdr_stmntp();
+void procdr_stmntp(uint8_t * tempId);
 void express_lst();
 void express_lstp();
 int express();
@@ -251,8 +251,9 @@ int checkMulOperator(int operation);
 int checkAddOperator(int operation);
 int variableTypeRetrieval(tokenNode lexeme);
 void closeScope();
-int checkIfProcedureExists();
-
+int checkIfProcedureExists(uint8_t * tempId);
+void addParametersToCurrentProcedure(int type);
+void deleteParametersToCurrentProcedure();
 
 // need to add detection for token types of mult, add, and assign
 #endif	

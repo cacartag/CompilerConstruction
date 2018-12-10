@@ -3,6 +3,11 @@
 
 void initializeInfrastructure()
 {
+  parametersCurrentCall = (nodeInfrastructure)malloc(sizeof(struct Node));
+  parametersCurrentCall->previous = NULL;
+  parametersCurrentCall->next = NULL;
+  parametersCurrentCall->type = HEAD;
+  
   infraHead = (nodeInfrastructure)malloc(sizeof(struct Node));
   infraHead->previous = NULL;
   infraHead->next = NULL;
@@ -253,22 +258,85 @@ void closeScope()
 int checkIfProcedureExists(uint8_t * idLex)
 {
   infraEye = infraTail;
+  
+  nodeInfrastructure greenNode;
+  int foundGreenNode = 0;
 
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == GREEN_NODE))
     {
-      return 1;
+      foundGreenNode = 1;
+      greenNode = infraEye;
+      //return 1;
     }
     
     infraEye = infraEye->previous;
   }    
+  
+  if(foundGreenNode == 0)
+  {
+        char semTempStr[100];
+  sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+  listingPrintfSemantic(semTempStr);
+  
+  return 0;
+  }
+
+  nodeInfrastructure tempEye = parametersCurrentCall;
+  
+  tempEye = tempEye->next;  
+  
+  int numberOfFunctionParameters = 1;
+  int numberOfRetrievedArgs = 0;
+
+  while(tempEye != NULL )
+  {
+    //printf("type:%s\n",NumberToString(tempEye->type));
+    numberOfRetrievedArgs = numberOfRetrievedArgs + 1;
+    tempEye = tempEye->next;
+  }
+  
+  nodeInfrastructure greenEye = greenNode->paramList;
+  
+  while(greenEye->next != NULL)
+  {
+    numberOfFunctionParameters = numberOfFunctionParameters + 1;
+    greenEye = greenEye->next;
+  }
+
+  if((foundGreenNode == 1)&&(numberOfFunctionParameters == numberOfRetrievedArgs))
+  {
+    return 1;
+  }
   
   char semTempStr[100];
   sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
   listingPrintfSemantic(semTempStr);
   
   return 0;  
+}
+
+void addParametersToCurrentProcedure(int type)
+{
+  //printf("adding parameter: %s\n", NumberToString(type));
+  nodeInfrastructure tempEye = parametersCurrentCall;
+
+  nodeInfrastructure temp = (nodeInfrastructure)malloc(sizeof(struct Node));
+  temp->next = NULL;
+  temp->type = type;
+  
+  while(tempEye->next != NULL)
+  {
+    tempEye = tempEye->next;
+  }
+  
+  tempEye->next = temp;
+}
+
+void deleteParametersToCurrentProcedure()
+{
+  parametersCurrentCall->next = NULL;
 }
 
 

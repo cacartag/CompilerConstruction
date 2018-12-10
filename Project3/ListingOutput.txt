@@ -36,8 +36,7 @@
 34         end;
 35    
 36    begin
-37      call ex8(c[4], c[5]);
-    Semantic Error: Could not find procedure ex8
+37      call ex2(c[4], b);
 38      call ex2(c[4],2);
 39      if (a < 2) then a:= 1 else a := a + 2
 40    end.

@@ -982,9 +982,9 @@ void procdr_stmnt()
 
     case 21: // terminal is call
       match("call");
-      checkIfProcedureExists(tok->lexeme);
+      uint8_t * tempId = tok->lexeme;
       match("id");
-      procdr_stmntp();
+      procdr_stmntp(tempId);
     break;
 
     default:
@@ -1002,7 +1002,7 @@ void procdr_stmnt()
   }
 }
 
-void procdr_stmntp()
+void procdr_stmntp(uint8_t * tempId)
 {
  switch( tok->type )
   {
@@ -1010,6 +1010,8 @@ void procdr_stmntp()
     case 80: // terminal is (
       match("(");
       express_lst();
+      checkIfProcedureExists(tempId);
+      deleteParametersToCurrentProcedure();
       match(")");
     break;
 
@@ -1040,32 +1042,27 @@ void express_lst()
   {
 
     case 20: // terminal is id
-      express();
-
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
     case 80: // terminal is (
-      express();
-
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      express();
-
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
     case 19: // terminal is not
-      express();
-
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
     case 161: // terminal is +
-      express();
-
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
@@ -1091,7 +1088,7 @@ void express_lstp()
 
     case 82: // terminal is ,
       match(",");
-      express();
+      addParametersToCurrentProcedure(express());
       express_lstp();
     break;
 
