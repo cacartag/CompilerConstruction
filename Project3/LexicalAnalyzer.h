@@ -100,6 +100,8 @@
 #define GREEN_NODE 300
 #define BLUE_NODE 301
 
+#define MAXSIZE 5
+
 
 struct terminal { 
   char * symbol; 
@@ -148,6 +150,14 @@ struct Node
   struct Node * previous;
   struct Node * next;
 };
+
+struct stack
+{
+    int stk[MAXSIZE];
+    int top;
+};
+typedef struct stack STACK;
+STACK s;
 
 typedef struct token *tokenNode;
 typedef union attrib *attributes;
@@ -256,6 +266,10 @@ int checkIfProcedureExists(uint8_t * tempId);
 void addParametersToCurrentProcedure(int type);
 void deleteParametersToCurrentProcedure();
 void addMemory(char * id, int type, int* sizeOfArray, int* globalMemory);
+void newScope(int * globalMemory);
+void push(int item);
+int  pop(void);
+void display(void);
 
 // need to add detection for token types of mult, add, and assign
 #endif	

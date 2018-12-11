@@ -349,9 +349,10 @@ void subprgrm_decls()
   {
 
     case 9: // terminal is procdr
+      newScope(&globalMemory);
       subprgrm_decl();
       match(";");
-      closeScope();
+      closeScope(&globalMemory);
       subprgrm_declsp();
     break;
 
@@ -376,9 +377,10 @@ void subprgrm_declsp()
   {
 
     case 9: // terminal is procdr
+      newScope(&globalMemory);
       subprgrm_decl();
       match(";");
-      closeScope();
+      closeScope(&globalMemory);
       subprgrm_declsp();
     break;
 

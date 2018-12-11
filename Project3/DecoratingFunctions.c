@@ -231,7 +231,7 @@ int variableTypeRetrieval(tokenNode tok)
   return ERR;
 }
 
-void closeScope()
+void closeScope(int * globalMemory)
 {
   infraEye = infraTail;
   nodeInfrastructure temp;
@@ -256,6 +256,8 @@ void closeScope()
     infraEye->next = NULL;
     infraTail = infraEye;
   }
+  
+  *globalMemory = pop();
 }
 
 int checkIfProcedureExists(uint8_t * idLex)
@@ -382,8 +384,69 @@ void addMemory(char * id, int type, int* sizeOfArray, int* globalMemory)
     printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
     *globalMemory = *globalMemory + (*sizeOfArray * 8);
   }
+  
+  *sizeOfArray = 0;
       
   
   //printf("");
+}
+
+void newScope(int * globalMemory)
+{
+  push(*globalMemory);
+  *globalMemory = 0;
+}
+
+void push (int item)
+{
+    if (s.top == (MAXSIZE - 1))
+    {
+        printf ("Stack is Full\n");
+        return;
+    }
+    else
+    {
+        s.top = s.top + 1;
+        s.stk[s.top] = item;
+    }
+    return;
+}
+
+/*  Function to delete an element from the stack */
+int pop ()
+{
+    int num;
+    if (s.top == - 1)
+    {
+        printf ("Stack is Empty\n");
+        return (s.top);
+    }
+    else
+    {
+        num = s.stk[s.top];
+        //printf ("poped element is = %dn", s.stk[s.top]);
+        s.top = s.top - 1;
+    }
+    return(num);
+}
+
+/*  Function to display the status of the stack */
+void display ()
+{
+    int i;
+    if (s.top == -1)
+    {
+        printf ("Stack is empty\n");
+        return;
+    }
+    else
+    {
+        printf ("\n The status of the stack is \n");
+        for (i = s.top; i >= 0; i--)
+        {
+            printf ("%d\n", s.stk[i]);
+        }
+    }
+    printf ("\n");
 }
 
