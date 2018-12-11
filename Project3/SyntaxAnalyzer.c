@@ -8,6 +8,9 @@
 
 tokenNode tok;
 
+int globalMemory = 0;
+int sizeOfArray = 0;
+
 tokenNode getToken(){
   tokenNode tok;
 
@@ -187,7 +190,11 @@ void decls()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type(),0);
+      int tempType = type();
+      if(checkAddBlueNode(idTemp,tempType,0) == 0)
+      {
+        addMemory(idTemp, tempType, &sizeOfArray, &globalMemory);      
+      }
       match(";");
       declsp();
     break;
@@ -217,7 +224,11 @@ void declsp()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type(),0);
+      int tempType = type();
+      if(checkAddBlueNode(idTemp,tempType,0) == 0)
+      {
+        addMemory(idTemp, tempType, &sizeOfArray, &globalMemory);      
+      }
       match(";");
       declsp();
     break;
@@ -256,7 +267,10 @@ int type()
       match("..");
       tokenNode secondNum = tok;
       match("num");
-      checkArray(firstNum, secondNum);
+      if(checkArray(firstNum, secondNum) == 0)
+      {
+        sizeOfArray = atoi(secondNum->lexeme) - atoi(firstNum->lexeme);
+      }
       match("]");
       match("of");
       int tempType = stndrd_type();
@@ -566,7 +580,11 @@ void param_lst()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type(),1);
+      int tempType = type();
+      if(checkAddBlueNode(idTemp,tempType,1) == 0)
+      {
+        addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
+      }
       param_lstp();
     break;
 
@@ -595,7 +613,11 @@ void param_lstp()
       char * idTemp = tok->lexeme;
       match("id");
       match(":");
-      checkAddBlueNode(idTemp,type(),1);
+      int tempType = type();
+      if(checkAddBlueNode(idTemp,tempType,1) == 0)
+      {
+        addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
+      }
       param_lstp();
     break;
 

@@ -1,7 +1,7 @@
 prgrm example (input, output);
   var a : int;
   var b : real;
-  var c : arr [1..2] of int;
+  var c : arr [1..6] of int;
 
   procdr ex1(x:int;
                   z:arr [1..2] of int; q: real);

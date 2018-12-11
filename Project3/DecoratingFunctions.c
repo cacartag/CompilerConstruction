@@ -357,5 +357,33 @@ void deleteParametersToCurrentProcedure()
   parametersCurrentCall->next = NULL;
 }
 
-
+void addMemory(char * id, int type, int* sizeOfArray, int* globalMemory)
+{
+  if(type == INTEGER)
+  {
+    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    *globalMemory = *globalMemory + 4;
+  }
+    
+  if(type == REAL)
+  {
+    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    *globalMemory = *globalMemory + 8;
+  }
+      
+  if(type == AINT)
+  {
+    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    *globalMemory = *globalMemory + (*sizeOfArray * 4);
+  }
+      
+  if(type == AREAL)
+  {
+    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    *globalMemory = *globalMemory + (*sizeOfArray * 8);
+  }
+      
+  
+  //printf("");
+}
 

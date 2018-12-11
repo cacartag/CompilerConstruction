@@ -168,6 +168,7 @@ nodeInfrastructure infraTail;
 nodeInfrastructure infraEye;
 nodeInfrastructure parametersCurrentCall;
 
+
 int WhiteSpaceMachine(int *bPosition, int *fPosition, uint8_t * buffer);
 int AnalyzeLine(tokenNode *reservedHead, tokenNode *sourceTokens, uint8_t *buffer);
 int IdResolutionMachine(int *bPosition, int *fPosition, uint8_t * buffer, tokenNode *reservedHead, tokenNode *sourceTokens);
@@ -254,6 +255,7 @@ void closeScope();
 int checkIfProcedureExists(uint8_t * tempId);
 void addParametersToCurrentProcedure(int type);
 void deleteParametersToCurrentProcedure();
+void addMemory(char * id, int type, int* sizeOfArray, int* globalMemory);
 
 // need to add detection for token types of mult, add, and assign
 #endif	
