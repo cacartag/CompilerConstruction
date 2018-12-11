@@ -24,7 +24,7 @@ prgrm example (input, output);
        end;
 
      begin
-       e := e + 5;
+       e := e + 4.5;
        a:= (a mod y) div x;
        while ((a >= 4) and ((b <= e) 
                        or (not (a = c[a])))) do
@@ -34,7 +34,7 @@ prgrm example (input, output);
      end;
 
 begin
-  call ex2(c[4], b);
+  call ex2(c[4], a);
   call ex2(c[4],2);
   if (a < 2) then a:= 1 else a := a + 2
 end.

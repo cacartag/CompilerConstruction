@@ -218,6 +218,9 @@ int variableTypeRetrieval(tokenNode tok)
   if(tok->type == INTEGER)
   {
 	return INTEGER;
+  } else if(tok->type == REAL) 
+  {
+    return REAL;
   } else {
   
     char semTempStr[100];

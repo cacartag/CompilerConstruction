@@ -24,9 +24,7 @@
 24           end;
 25    
 26         begin
-27           e := e + 5;
-    Semantic Error: mixed mode not allowed, in simple expression
-    Semantic Error: variable and assigment types do not match
+27           e := e + 4.5;
 28           a:= (a mod y) div x;
 29           while ((a >= 4) and ((b <= e) 
 30                           or (not (a = c[a])))) do
@@ -36,8 +34,7 @@
 34         end;
 35    
 36    begin
-37      call ex2(c[4], b);
-    Semantic Error: Could not find procedure ex2
+37      call ex2(c[4], a);
 38      call ex2(c[4],2);
 39      if (a < 2) then a:= 1 else a := a + 2
 40    end.

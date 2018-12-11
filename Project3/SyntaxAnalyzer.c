@@ -1055,6 +1055,12 @@ void express_lst()
       addParametersToCurrentProcedure(express());
       express_lstp();
     break;
+    
+    case REAL:  // adding for num
+      addParametersToCurrentProcedure(express());
+      express_lstp();
+    break;
+    
 
     case 19: // terminal is not
       addParametersToCurrentProcedure(express());
@@ -1125,6 +1131,10 @@ int express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
+      expressp(simp_express());
+    break;
+    
+    case REAL: // adding for num
       expressp(simp_express());
     break;
 
@@ -1244,6 +1254,10 @@ int simp_express()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
+      return simp_expressp(term());
+    break;
+    
+    case REAL: // adding for num
       return simp_expressp(term());
     break;
 
@@ -1374,10 +1388,13 @@ int term()
     break;
 
     case INTEGER: // terminal is num, changing to INTEGER
-      //factor();
       return termp(factor());
     break;
 
+    case REAL: // adding for num
+      return termp(factor());
+    break;
+    
     case 19: // terminal is not
       //factor();
       return termp(factor());
@@ -1514,6 +1531,14 @@ int factor()
     break;
 
     case INTEGER: // terminal is num, changing to int
+      ;
+      tempType = variableTypeRetrieval(tok);
+	  //printf("lexeme: %s, type: %s, line: %i\n", tok->lexeme, NumberToString(tempType), tok->line);
+      match("num");
+      return tempType;
+    break;
+    
+    case REAL: // terminal is num, changing to int
       ;
       tempType = variableTypeRetrieval(tok);
 	  //printf("lexeme: %s, type: %s, line: %i\n", tok->lexeme, NumberToString(tempType), tok->line);
@@ -1689,7 +1714,10 @@ void match(const char * t)
     {
       tok = getToken();
     }
-    else
+    else if (tok->type == REAL)
+    {
+      tok = getToken();
+    } else 
     {
       ;
       char synTempStr[100];
