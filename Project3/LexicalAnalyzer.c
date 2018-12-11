@@ -21,10 +21,6 @@ int main(int argc, char * argv[])
   sourceTokens = (tokenNode)(malloc(sizeof(struct token))); 
   sourceTokens->next = NULL;  
   
-  //symbolTable = (tokenNode)(malloc(sizeof(struct token)));
-  //symbolTable->next = NULL;
-  //symbolTableHead = symbolTable;
-  
   RetrieveReservedWords(&reservedHead);
   
   // removes the next character line at the end of the string

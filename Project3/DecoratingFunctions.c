@@ -1,8 +1,12 @@
 #include "LexicalAnalyzer.h" 
 #define HEAD 500
 
+FILE * pFile;
+
 void initializeInfrastructure()
 {
+  pFile = fopen("MemoryMapping.txt","w");
+    
   parametersCurrentCall = (nodeInfrastructure)malloc(sizeof(struct Node));
   parametersCurrentCall->previous = NULL;
   parametersCurrentCall->next = NULL;
@@ -15,6 +19,8 @@ void initializeInfrastructure()
   
   infraTail = infraHead;
   infraEye = infraHead;
+  
+  
 }
 
 int checkAddBlueNode(char * idLex, int type, int procParam)
@@ -361,27 +367,28 @@ void deleteParametersToCurrentProcedure()
 
 void addMemory(char * id, int type, int* sizeOfArray, int* globalMemory)
 {
+    
   if(type == INTEGER)
   {
-    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    fprintf(pFile,"ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
     *globalMemory = *globalMemory + 4;
   }
     
   if(type == REAL)
   {
-    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    fprintf(pFile,"ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
     *globalMemory = *globalMemory + 8;
   }
       
   if(type == AINT)
   {
-    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    fprintf(pFile,"ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
     *globalMemory = *globalMemory + (*sizeOfArray * 4);
   }
       
   if(type == AREAL)
   {
-    printf("ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
+    fprintf(pFile,"ID: %s, TYPE: %s, MEMORY: %i\n", id, NumberToString(type), *globalMemory);
     *globalMemory = *globalMemory + (*sizeOfArray * 8);
   }
   
