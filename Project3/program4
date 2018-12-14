@@ -1,22 +1,22 @@
-prgrm example (input, output);
-  var a : int;
+program example (input, output);
+  var a : integer;
   var b : real;
-  var c : arr [1..6] of int;
+  var c : array [1..6] of integer;
 
-  procdr ex1(x:int;
-                  z:arr [1..2] of int; q: real);
-    var d: int;
+  procedure ex1(x:integer;
+                  z:array [1..2] of integer; q: real);
+    var d: integer;
     begin
       a:= 1;
       z[a] := 5;
       c[3] := 13
      end;
 
-   procdr ex2(x: int; y: int);
+   procedure ex2(x: integer; y: integer);
      var e: real;
 
-     procdr ex3(n: int; z: real);
-       var e: int;
+     procedure ex3(n: integer; z: real);
+       var e: integer;
 
        begin
          a:= e;

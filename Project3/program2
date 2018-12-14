@@ -1,20 +1,20 @@
-prgrm example(one,two);
-var first : int; 
+program example(one,two);
+var first : integer; 
 var second : real;
-var third : int;
-procdr FirstTest (primary: int; secondary: real);
-var fourth : int;
+var third : integer;
+procedure FirstTest (primary: integer; secondary: real);
+var fourth : integer;
 var fifth : real;
 begin
   if fourth = 0 then
   fourth := primary 
 end;
-procdr Second(tertiary : int; quarteary: arr [0 .. 5] of real);
+procedure Second(tertiary : integer; quarteary: array [0 .. 5] of real);
 var seventh : real;
 begin
-  seventh := seconds + second 
+  seventh := second + second 
 end;
 begin
-  first := second
+  first := third
 end .
 $

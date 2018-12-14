@@ -32,7 +32,7 @@ void prgrm()
   {
 
     case 3: // terminal is prgrm
-      match("prgrm");
+      match("program");
       checkAddGreenNode(tok->lexeme, PGM);
       match("id");
       match("(");
@@ -260,7 +260,7 @@ int type()
   {
 
     case 5: // terminal is arr
-      match("arr");
+      match("array");
       match("[");
       tokenNode firstNum = tok;
       match("num");
@@ -317,7 +317,7 @@ int stndrd_type()
   {
 
     case 7: // terminal is int
-      match("int");
+      match("integer");
       return INTEGER;
     break;
 
@@ -353,6 +353,7 @@ void subprgrm_decls()
       subprgrm_decl();
       match(";");
       closeScope(&globalMemory);
+      printf("Current line: %i\n", tok->line);
       subprgrm_declsp();
     break;
 
@@ -381,6 +382,7 @@ void subprgrm_declsp()
       subprgrm_decl();
       match(";");
       closeScope(&globalMemory);
+      printf("Current Line: %i\n", tok->line);
       subprgrm_declsp();
     break;
 
@@ -496,7 +498,7 @@ void subprgrm_head()
   {
 
     case 9: // terminal is procdr
-      match("procdr");
+      match("procedure");
       checkAddGreenNode(tok->lexeme, PROC);
       match("id");
       subprgrm_headp();
@@ -1717,6 +1719,7 @@ void sgn()
 
 void match(const char * t)
 {
+  //printf("currently processing: %s\n", tok->lexeme);
     
   if(!strcmp(t,"id"))
   {

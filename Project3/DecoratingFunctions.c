@@ -38,7 +38,8 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
     
     addProcessParameter(tempEye,idLex, type);
   }
-  while((infraEye != NULL) && (infraEye->type != HEAD))
+  
+  while((infraEye != NULL) && (infraEye->type != HEAD)  && (infraEye->greenBlue != GREEN_NODE))
   {
 
     if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE) && (infraEye->type == type))
@@ -132,17 +133,18 @@ int checkAddGreenNode(char * idLex, int type)
 
 void printInfrastructure()
 {
-  infraHead = infraHead->next;
+  nodeInfrastructure tempHead = infraHead->next;
+  //infraHead = infraHead->next;
   
   printf("\n\n");
 
-  while(infraHead != NULL)
+  while(tempHead != NULL)
   {
-    printf("%s    %s\n", infraHead->idLex,NumberToString(infraHead->type));
+    printf("%s    %s\n", tempHead->idLex,NumberToString(tempHead->type));
     
-    if(infraHead->procParam == 1)
+    if(tempHead->procParam == 1)
     {
-      nodeInfrastructure tempEye = infraHead->paramList;
+      nodeInfrastructure tempEye = tempHead->paramList;
       
       while(tempEye != NULL)
       {
@@ -153,7 +155,7 @@ void printInfrastructure()
 
     }
     
-    infraHead = infraHead->next;
+    tempHead = tempHead->next;
   }
 
 }
@@ -211,10 +213,16 @@ int variableTypeRetrieval(tokenNode tok)
 {
   infraEye = infraTail;
   
+  if(tok->line == 35)
+  {
+    printf("\n\n\nLine 35: %s\n\n\n", tok->lexeme);
+  }
+  
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
     if(!strcmp(tok->lexeme, infraEye->idLex))
     {
+      printf("%s\n",NumberToString(infraEye->type));
       return infraEye->type;
     }
     
@@ -223,6 +231,7 @@ int variableTypeRetrieval(tokenNode tok)
   
   if(tok->type == INTEGER)
   {
+    printf("%s\n",NumberToString(infraEye->type));      
 	return INTEGER;
   } else if(tok->type == REAL) 
   {
@@ -239,35 +248,46 @@ int variableTypeRetrieval(tokenNode tok)
 
 void closeScope(int * globalMemory)
 {
+  printInfrastructure();
+    
   infraEye = infraTail;
   nodeInfrastructure temp;
   int postGreen = 0;
   
-  if(infraEye->greenBlue == GREEN_NODE)
+  // if previous node is a green node, this 
+  // part of the code stores that node in a temporary variable
+  while(infraEye->greenBlue == GREEN_NODE)
   {
+     printf("Encountered green node: %s\n", infraEye->idLex);
     temp = infraEye;
+    infraEye = infraEye->previous;
     postGreen = 1;
   }
   
+  // go backwards in link list until I see a green node, and see that 
+  // it has not been closed yet 
   while(infraEye->greenBlue != GREEN_NODE || infraEye->closed == 1)
   {
     infraEye = infraEye->previous;
   }
   infraEye->closed = 1;
   
+  printf("Currently closing: %s\n", infraEye->idLex);
   if(postGreen == 1)
   {
     infraEye->next = temp;
+    temp->previous = infraEye;
   } else {
     infraEye->next = NULL;
     infraTail = infraEye;
   }
-  
   *globalMemory = pop();
 }
 
 int checkIfProcedureExists(uint8_t * idLex)
 {
+  //printf("\n\n\nchecking procedure: %s\n", idLex);
+    
   infraEye = infraTail;
   
   nodeInfrastructure greenNode;
@@ -301,6 +321,7 @@ int checkIfProcedureExists(uint8_t * idLex)
   int numberOfFunctionParameters = 1;
   int numberOfRetrievedArgs = 0;
 
+  
   while(tempEye != NULL )
   {
     //printf("type:%s\n",NumberToString(tempEye->type));
@@ -308,23 +329,26 @@ int checkIfProcedureExists(uint8_t * idLex)
     tempEye = tempEye->next;
   }
   
+  //printf("\n\n\n");
   nodeInfrastructure greenEye = greenNode->paramList;
   
-  while(greenEye->next != NULL)
+  while(greenEye != NULL)
   {
+    //printf("type:%s\n",NumberToString(greenEye->type));
     numberOfFunctionParameters = numberOfFunctionParameters + 1;
     greenEye = greenEye->next;
   }
 
   if((foundGreenNode == 1)&&(numberOfFunctionParameters == numberOfRetrievedArgs))
   {
+    //printf("Function Parameter: %i, Retrieved Args: %i\n", numberOfFunctionParameters, numberOfRetrievedArgs);
 	int matchAllTypes = 0;
 	greenEye = greenNode->paramList;
 	tempEye = parametersCurrentCall->next;
 	
 	while(greenEye != NULL)
 	{
-		printf("greenEye: %s , tempEye: %s\n", NumberToString(greenEye->type), NumberToString(tempEye->type));
+		//printf("greenEye: %s , tempEye: %s\n", NumberToString(greenEye->type), NumberToString(tempEye->type));
 		
 		if(greenEye->type != tempEye->type)
 		{

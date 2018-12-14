@@ -1,42 +1,53 @@
-1    prgrm example (input, output);
-2      var a : int;
-3      var b : real;
-4      var c : arr [1..6] of int;
-5    
-6      procdr ex1(x:int;
-7                      z:arr [1..2] of int; q: real);
-8        var d: int;
-9        begin
-10          a:= 1;
-11          z[a] := 5;
-12          c[3] := 13
-13         end;
-14    
-15       procdr ex2(x: int; y: int);
-16         var e: real;
-17    
-18         procdr ex3(n: int; z: real);
-19           var e: int;
-20    
-21           begin
-22             a:= e;
-23             e:= c[2]
-24           end;
-25    
-26         begin
-27           e := e + 4.5;
-28           a:= (a mod y) div x;
-29           while ((a >= 4) and ((b <= e) 
-30                           or (not (a = c[a])))) do
-31             begin
-32               a:= c[a] + 1
-33             end
-34         end;
-35    
-36    begin
-37      call ex2(c[4], a);
-38      call ex2(c[4],2);
-39      if (a < 2) then a:= 1 else a := a + 2
-40    end.
-41    $    Successfully parsed !
- 
+1    
+2    program test (input, output);
+3      var a : integer;
+4      var b : real;
+5      var c : array [1..2] of integer;
+6    
+7      procedure proc1(x:integer; y:real; 
+8                      z:array [1..2] of integer; q: real);
+9        var d: integer;
+10        begin
+11          a:= 2;
+12          z[a] := 4;
+13          c[3] := 3
+14         end;
+15    
+16       procedure proc2(x: integer; y: integer);
+17         var e: real;
+18    
+19         procedure proc3(n: integer; z: real);
+20           var e: integer;
+21    
+22           procedure proc4(a: integer; z: array [1..3] of real);
+23             var x: integer;
+24             begin
+25               a:= e 
+26             end;
+27    
+28           begin
+29             a:= e;
+30             e:= c[e]
+31           end;
+32    
+33         begin
+34           call proc1(x, e, c, b);
+35           call proc3(c[1], e);
+36           e := e + 4.44;
+37           a:= (a mod y) div x;
+38           while ((a >= 4) and ((b <= e) 
+39                           or (not (a = c[a])))) do
+40             begin
+41               a:= c[a] + 1
+42             end
+43         end;
+44    
+45    begin
+46      call proc2(c[4], c[5]);
+47      call proc2(c[4],2);
+48      if (a < 2) then a:= 1 else a := a + 2;
+49      if (b > 4.2) then a := c[a]
+50    end.
+51    $
+    Successfully parsed !
+ 52    
