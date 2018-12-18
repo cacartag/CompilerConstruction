@@ -251,12 +251,17 @@ void closeScope(int * globalMemory)
   
   // if previous node is a green node, this 
   // part of the code stores that node in a temporary variable
-  while(infraEye->greenBlue == GREEN_NODE)
+  while(infraEye->greenBlue == GREEN_NODE && infraEye->closed != 1)
   {
-     //printf("Encountered green node: %s\n", infraEye->idLex);
     temp = infraEye;
     infraEye = infraEye->previous;
     postGreen = 1;
+  }
+  
+  // closes nested function scopes
+  while(infraEye->closed == 1)
+  {
+	infraEye = infraEye->previous;  
   }
   
   // go backwards in link list until I see a green node, and see that 

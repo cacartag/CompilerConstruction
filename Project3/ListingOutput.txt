@@ -43,29 +43,34 @@
 43               a:= c[a] + 1
 44             end
 45         end;
-46    
-47    begin
-48      call proc2(c[4], c[5,5]);
+46    	 
+47    
+48    	
+49    
+50    begin
+51      call proc2(c[4], c[5,5]);
     Syntax Error: Expecting ], Received , 
     Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: 5
     Syntax Error: Expecting one of ) , $, Received: ]
-49      call proc2(c[4], c[5],5);
-50      call proc2(c[4], c);
-51      call proc2(c[4]);
-52      call proc2();
+52      call proc2(c[4], c[5],5);
+53      call proc2(c[4], c);
+54      call proc2(c[4]);
+55      call proc2();
     Syntax Error: Expecting one of id ( num not + - $, Received: )
-53      call proc2;
+56      call proc2;
     Syntax Error: Expecting ), Received proc2 
-54      call proc3(c[4], c[5]);
-55        call proc4(c[4], c[5]);
-56          call proc5(c[4], c[5]);
+57      call proc3(c[4], c[5]);
+    Semantic Error: Could not find procedure proc3
+58      call proc4(c[4], c[5]);
+    Semantic Error: Could not find procedure proc4
+59      call proc5(c[4], c[5]);
     Semantic Error: Could not find procedure proc5
-57            call proc2(c[4], c[5]);
-58      call proc6(c[4],2);
+60      call proc2(c[4], c[5]);
+61      call proc6(c[4],2);
     Semantic Error: Could not find procedure proc6
-59      if (a < 2) then a:= 1 else a := a + 2;
-60      if (b > 4.2) then a := c[a]
-61    end.
-62    $
+62      if (a < 2) then a:= 1 else a := a + 2;
+63      if (b > 4.2) then a := c[a]
+64    end.
+65    $
     Successfully parsed !
- 63    
+ 66    

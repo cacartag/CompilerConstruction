@@ -43,6 +43,9 @@ program test (input, output);
            a:= c[a] + 1
          end
      end;
+	 
+
+	
 
 begin
   call proc2(c[4], c[5,5]);
@@ -52,9 +55,9 @@ begin
   call proc2();
   call proc2;
   call proc3(c[4], c[5]);
-    call proc4(c[4], c[5]);
-      call proc5(c[4], c[5]);
-        call proc2(c[4], c[5]);
+  call proc4(c[4], c[5]);
+  call proc5(c[4], c[5]);
+  call proc2(c[4], c[5]);
   call proc6(c[4],2);
   if (a < 2) then a:= 1 else a := a + 2;
   if (b > 4.2) then a := c[a]
