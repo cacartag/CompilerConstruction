@@ -3,7 +3,8 @@ program test (input, output);
   var a : integer;
   var b : real;
   var c : array [1..2] of integer;
-
+  var d : real;
+ 
   procedure proc1(x:integer; y:real; 
                   z:array [1..2] of integer; q: real);
     var d: integer;
@@ -15,6 +16,7 @@ program test (input, output);
 
    procedure proc2(x: integer; y: integer);
      var e: real;
+     var f: integer;
 
      procedure proc3(n: integer; z: real);
        var e: integer;
@@ -43,8 +45,17 @@ program test (input, output);
      end;
 
 begin
-  call proc2(c[4], c[5]);
-  call proc2(c[4],2);
+  call proc2(c[4], c[5,5]);
+  call proc2(c[4], c[5],5);
+  call proc2(c[4], c);
+  call proc2(c[4]);
+  call proc2();
+  call proc2;
+  call proc3(c[4], c[5]);
+    call proc4(c[4], c[5]);
+      call proc5(c[4], c[5]);
+        call proc2(c[4], c[5]);
+  call proc6(c[4],2);
   if (a < 2) then a:= 1 else a := a + 2;
   if (b > 4.2) then a := c[a]
 end.

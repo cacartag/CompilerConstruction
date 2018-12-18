@@ -213,16 +213,11 @@ int variableTypeRetrieval(tokenNode tok)
 {
   infraEye = infraTail;
   
-  if(tok->line == 35)
-  {
-    printf("\n\n\nLine 35: %s\n\n\n", tok->lexeme);
-  }
-  
   while((infraEye != NULL) && (infraEye->type != HEAD))
   {
     if(!strcmp(tok->lexeme, infraEye->idLex))
     {
-      printf("%s\n",NumberToString(infraEye->type));
+      //printf("%s\n",NumberToString(infraEye->type));
       return infraEye->type;
     }
     
@@ -231,7 +226,7 @@ int variableTypeRetrieval(tokenNode tok)
   
   if(tok->type == INTEGER)
   {
-    printf("%s\n",NumberToString(infraEye->type));      
+    //printf("%s\n",NumberToString(infraEye->type));      
 	return INTEGER;
   } else if(tok->type == REAL) 
   {
@@ -248,7 +243,7 @@ int variableTypeRetrieval(tokenNode tok)
 
 void closeScope(int * globalMemory)
 {
-  printInfrastructure();
+  //printInfrastructure();
     
   infraEye = infraTail;
   nodeInfrastructure temp;
@@ -258,7 +253,7 @@ void closeScope(int * globalMemory)
   // part of the code stores that node in a temporary variable
   while(infraEye->greenBlue == GREEN_NODE)
   {
-     printf("Encountered green node: %s\n", infraEye->idLex);
+     //printf("Encountered green node: %s\n", infraEye->idLex);
     temp = infraEye;
     infraEye = infraEye->previous;
     postGreen = 1;
@@ -272,7 +267,7 @@ void closeScope(int * globalMemory)
   }
   infraEye->closed = 1;
   
-  printf("Currently closing: %s\n", infraEye->idLex);
+  //printf("Currently closing: %s\n", infraEye->idLex);
   if(postGreen == 1)
   {
     infraEye->next = temp;

@@ -3,51 +3,69 @@
 3      var a : integer;
 4      var b : real;
 5      var c : array [1..2] of integer;
-6    
-7      procedure proc1(x:integer; y:real; 
-8                      z:array [1..2] of integer; q: real);
-9        var d: integer;
-10        begin
-11          a:= 2;
-12          z[a] := 4;
-13          c[3] := 3
-14         end;
-15    
-16       procedure proc2(x: integer; y: integer);
-17         var e: real;
-18    
-19         procedure proc3(n: integer; z: real);
-20           var e: integer;
-21    
-22           procedure proc4(a: integer; z: array [1..3] of real);
-23             var x: integer;
-24             begin
-25               a:= e 
-26             end;
-27    
-28           begin
-29             a:= e;
-30             e:= c[e]
-31           end;
-32    
-33         begin
-34           call proc1(x, e, c, b);
-35           call proc3(c[1], e);
-36           e := e + 4.44;
-37           a:= (a mod y) div x;
-38           while ((a >= 4) and ((b <= e) 
-39                           or (not (a = c[a])))) do
-40             begin
-41               a:= c[a] + 1
-42             end
-43         end;
-44    
-45    begin
-46      call proc2(c[4], c[5]);
-47      call proc2(c[4],2);
-48      if (a < 2) then a:= 1 else a := a + 2;
-49      if (b > 4.2) then a := c[a]
-50    end.
-51    $
+6      var d : real;
+7     
+8      procedure proc1(x:integer; y:real; 
+9                      z:array [1..2] of integer; q: real);
+10        var d: integer;
+11        begin
+12          a:= 2;
+13          z[a] := 4;
+14          c[3] := 3
+15         end;
+16    
+17       procedure proc2(x: integer; y: integer);
+18         var e: real;
+19         var f: integer;
+20    
+21         procedure proc3(n: integer; z: real);
+22           var e: integer;
+23    
+24           procedure proc4(a: integer; z: array [1..3] of real);
+25             var x: integer;
+26             begin
+27               a:= e 
+28             end;
+29    
+30           begin
+31             a:= e;
+32             e:= c[e]
+33           end;
+34    
+35         begin
+36           call proc1(x, e, c, b);
+37           call proc3(c[1], e);
+38           e := e + 4.44;
+39           a:= (a mod y) div x;
+40           while ((a >= 4) and ((b <= e) 
+41                           or (not (a = c[a])))) do
+42             begin
+43               a:= c[a] + 1
+44             end
+45         end;
+46    
+47    begin
+48      call proc2(c[4], c[5,5]);
+    Syntax Error: Expecting ], Received , 
+    Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: 5
+    Syntax Error: Expecting one of ) , $, Received: ]
+49      call proc2(c[4], c[5],5);
+50      call proc2(c[4], c);
+51      call proc2(c[4]);
+52      call proc2();
+    Syntax Error: Expecting one of id ( num not + - $, Received: )
+53      call proc2;
+    Syntax Error: Expecting ), Received proc2 
+54      call proc3(c[4], c[5]);
+55        call proc4(c[4], c[5]);
+56          call proc5(c[4], c[5]);
+    Semantic Error: Could not find procedure proc5
+57            call proc2(c[4], c[5]);
+58      call proc6(c[4],2);
+    Semantic Error: Could not find procedure proc6
+59      if (a < 2) then a:= 1 else a := a + 2;
+60      if (b > 4.2) then a := c[a]
+61    end.
+62    $
     Successfully parsed !
- 52    
+ 63    

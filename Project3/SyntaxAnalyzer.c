@@ -353,7 +353,7 @@ void subprgrm_decls()
       subprgrm_decl();
       match(";");
       closeScope(&globalMemory);
-      printf("Current line: %i\n", tok->line);
+      //printf("Current line: %i\n", tok->line);
       subprgrm_declsp();
     break;
 
@@ -382,7 +382,7 @@ void subprgrm_declsp()
       subprgrm_decl();
       match(";");
       closeScope(&globalMemory);
-      printf("Current Line: %i\n", tok->line);
+      //printf("Current Line: %i\n", tok->line);
       subprgrm_declsp();
     break;
 
