@@ -16,7 +16,8 @@
 16    
 17       procedure proc2(x: integer; y: integer);
 18         var e: real;
-19         var f: integer;
+19         var e: integer;
+    Semantic Error: ID: e already exists in this scope
 20    
 21         procedure proc3(n: integer; z: real);
 22           var e: integer;
@@ -52,13 +53,18 @@
     Syntax Error: Expecting ], Received , 
     Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: 5
     Syntax Error: Expecting one of ) , $, Received: ]
+    Semantic Error: Could not find procedure proc2
 52      call proc2(c[4], c[5],5);
+    Semantic Error: Could not find procedure proc2
 53      call proc2(c[4], c);
+    Semantic Error: Could not find procedure proc2
 54      call proc2(c[4]);
+    Semantic Error: Could not find procedure proc2
 55      call proc2();
     Syntax Error: Expecting one of id ( num not + - $, Received: )
 56      call proc2;
     Syntax Error: Expecting ), Received proc2 
+    Semantic Error: Could not find procedure proc2
 57      call proc3(c[4], c[5]);
     Semantic Error: Could not find procedure proc3
 58      call proc4(c[4], c[5]);

@@ -42,7 +42,7 @@ int checkAddBlueNode(char * idLex, int type, int procParam)
   while((infraEye != NULL) && (infraEye->type != HEAD)  && (infraEye->greenBlue != GREEN_NODE))
   {
 
-    if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE) && (infraEye->type == type))
+    if(!strcmp(idLex, infraEye->idLex) && (infraEye->greenBlue == BLUE_NODE))
     {
       char semTempStr[100];
       sprintf(semTempStr,"Semantic Error: ID: %s already exists in this scope\n", idLex);
@@ -286,7 +286,7 @@ void closeScope(int * globalMemory)
 
 int checkIfProcedureExists(uint8_t * idLex)
 {
-  //printf("\n\n\nchecking procedure: %s\n", idLex);
+  printf("\n\n\nchecking procedure: %s\n", idLex);
     
   infraEye = infraTail;
   
@@ -318,7 +318,7 @@ int checkIfProcedureExists(uint8_t * idLex)
   
   tempEye = tempEye->next;  
   
-  int numberOfFunctionParameters = 1;
+  int numberOfFunctionParameters = 0;
   int numberOfRetrievedArgs = 0;
 
   
@@ -329,7 +329,7 @@ int checkIfProcedureExists(uint8_t * idLex)
     tempEye = tempEye->next;
   }
   
-  //printf("\n\n\n");
+  printf("Number of retrieved arguments: %i \n", numberOfRetrievedArgs);
   nodeInfrastructure greenEye = greenNode->paramList;
   
   while(greenEye != NULL)
@@ -338,6 +338,8 @@ int checkIfProcedureExists(uint8_t * idLex)
     numberOfFunctionParameters = numberOfFunctionParameters + 1;
     greenEye = greenEye->next;
   }
+  
+  printf("Number of needed arguments: %i \n", numberOfFunctionParameters);
 
   if((foundGreenNode == 1)&&(numberOfFunctionParameters == numberOfRetrievedArgs))
   {
@@ -362,6 +364,12 @@ int checkIfProcedureExists(uint8_t * idLex)
 		greenEye = greenEye->next;
 		tempEye = tempEye->next;
 	}
+  } else {
+    char semTempStr[100];
+    sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+    listingPrintfSemantic(semTempStr);
+	
+	return 0;	
   }
   
   return 1;  

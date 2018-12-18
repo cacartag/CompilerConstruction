@@ -1828,7 +1828,7 @@ void parse()
     
     syntax tempSyntax = syntaxHead;
     
-    //printInfrastructure();
+    printInfrastructure();
 
 }
 
