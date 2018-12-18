@@ -35,47 +35,31 @@
 35         begin
 36           call proc1(x, e, c, b);
 37           call proc3(c[1], e);
-38           e := e + 4.44;
-39           a:= (a mod y) div x;
-40           while ((a >= 4) and ((b <= e) 
+38           e := e + 4;
+    Semantic Error: mixed mode not allowed, in simple expression
+    Semantic Error: variable and assigment types do not match
+39           a:= (a mod 4.44) div c;
+    Semantic Error: mixed mode not allowed, in term
+    Semantic Error: variable and assigment types do not match
+40           while ((a >= 4.4) and ((b <= e) 
+    Semantic Error: mixed mode not allowed, in relational operator
 41                           or (not (a = c[a])))) do
+    Semantic Error: expression is not of type boolean, about: do
 42             begin
-43               a:= c[a] + 1
+43               a:= c + 1
 44             end
+    Semantic Error: mixed mode not allowed, in simple expression
+    Semantic Error: variable and assigment types do not match
 45         end;
 46    	 
 47    
 48    	
 49    
 50    begin
-51      call proc2(c[4], c[5,5]);
-    Syntax Error: Expecting ], Received , 
-    Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: 5
-    Syntax Error: Expecting one of ) , $, Received: ]
-    Semantic Error: Argument 2 expecting INT, received ERR
-52      call proc2(c[4], c[5],5);
-    Semantic Error: Expecting 2 arguments, Received 3 arguments
-53      call proc2(c[4], c);
-    Semantic Error: Argument 2 expecting INT, received AINT
-54      call proc2(c[4]);
-    Semantic Error: Expecting 2 arguments, Received 1 arguments
-55      call proc2();
-    Syntax Error: Expecting one of id ( num not + - $, Received: )
-    Semantic Error: Expecting 2 arguments, Received 0 arguments
-56      call proc2;
-    Syntax Error: Expecting one of ( . else $, Received: ;
-57      call proc3(c[4], c[5]);
-    Syntax Error: Expecting one of ; end $, Received: (
-    Syntax Error: Expecting end, Received ; 
-    Semantic Error: Expecting 2 arguments, Received 0 arguments
-58      call proc4(c[4], c[5]);
-    Syntax Error: Expecting ., Received call 
-    Syntax Error: Expecting $, Received proc4 
-59      call proc5(c[4], c[5]);
-60      call proc2(c[4], c[5]);
-61      call proc6(c[4],2);
-62      if (a < 2) then a:= 1 else a := a + 2;
-63      if (b > 4.2) then a := c[a]
-64    end.
-65    $
-66    
+51    
+52      if (a < 2) then a:= 1 else a := a + 2;
+53      if (b > 4.2) then a := c[a]
+54    end.
+55    $
+    Successfully parsed !
+ 56    
