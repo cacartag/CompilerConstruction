@@ -286,7 +286,7 @@ void closeScope(int * globalMemory)
 
 int checkIfProcedureExists(uint8_t * idLex)
 {
-  printf("\n\n\nchecking procedure: %s\n", idLex);
+  //printf("\n\n\nchecking procedure: %s\n", idLex);
     
   infraEye = infraTail;
   
@@ -329,7 +329,7 @@ int checkIfProcedureExists(uint8_t * idLex)
     tempEye = tempEye->next;
   }
   
-  printf("Number of retrieved arguments: %i \n", numberOfRetrievedArgs);
+  //printf("Number of retrieved arguments: %i \n", numberOfRetrievedArgs);
   nodeInfrastructure greenEye = greenNode->paramList;
   
   while(greenEye != NULL)
@@ -339,12 +339,12 @@ int checkIfProcedureExists(uint8_t * idLex)
     greenEye = greenEye->next;
   }
   
-  printf("Number of needed arguments: %i \n", numberOfFunctionParameters);
+  //printf("Number of needed arguments: %i \n", numberOfFunctionParameters);
 
   if((foundGreenNode == 1)&&(numberOfFunctionParameters == numberOfRetrievedArgs))
   {
     //printf("Function Parameter: %i, Retrieved Args: %i\n", numberOfFunctionParameters, numberOfRetrievedArgs);
-	int matchAllTypes = 0;
+	int counter = 1;
 	greenEye = greenNode->paramList;
 	tempEye = parametersCurrentCall->next;
 	
@@ -355,7 +355,7 @@ int checkIfProcedureExists(uint8_t * idLex)
 		if(greenEye->type != tempEye->type)
 		{
           char semTempStr[100];
-          sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+          sprintf(semTempStr,"Semantic Error: Argument %i expecting %s, received %s\n", counter, NumberToString(greenEye->type), NumberToString(tempEye->type));
           listingPrintfSemantic(semTempStr);
 		  
 		  return 0;
@@ -363,10 +363,11 @@ int checkIfProcedureExists(uint8_t * idLex)
 		
 		greenEye = greenEye->next;
 		tempEye = tempEye->next;
+        counter = counter + 1;
 	}
   } else {
     char semTempStr[100];
-    sprintf(semTempStr,"Semantic Error: Could not find procedure %s\n", idLex);
+    sprintf(semTempStr,"Semantic Error: Expecting %i arguments, Received %i arguments\n", numberOfFunctionParameters, numberOfRetrievedArgs);
     listingPrintfSemantic(semTempStr);
 	
 	return 0;	

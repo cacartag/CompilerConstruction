@@ -587,7 +587,7 @@ void param_lst()
       int tempType = type();
       if(checkAddBlueNode(idTemp,tempType,1) == 0)
       {
-        addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
+        // addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
       }
       param_lstp();
     break;
@@ -620,7 +620,7 @@ void param_lstp()
       int tempType = type();
       if(checkAddBlueNode(idTemp,tempType,1) == 0)
       {
-        addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
+        // addMemory(idTemp,tempType,&sizeOfArray, &globalMemory);
       }
       param_lstp();
     break;
@@ -1011,6 +1011,10 @@ void procdr_stmnt()
       uint8_t * tempId = tok->lexeme;
       match("id");
       procdr_stmntp(tempId);
+      
+      printf("checking procedure: %s, line %i\n\0", tempId, tok->line);
+      checkIfProcedureExists(tempId);
+      deleteParametersToCurrentProcedure();
     break;
 
     default:
@@ -1036,8 +1040,6 @@ void procdr_stmntp(uint8_t * tempId)
     case 80: // terminal is (
       match("(");
       express_lst();
-      checkIfProcedureExists(tempId);
-      deleteParametersToCurrentProcedure();
       match(")");
     break;
 
@@ -1104,12 +1106,18 @@ void express_lst()
       sprintf(synTempStr,"Syntax Error: Expecting one of id ( num not + - $, Received: %s\n", tok->lexeme);
       listingPrintf(synTempStr);
 
-      int synchSet[] = {20,80,23,19,161,161,200};
+      //previous
+      // changed num to int and real
+      //int synchSet[] = {20,80,23,19,161,161,200};
+      //int synchSet[] = {20,80,7,8,19,161,200};
+      int synchSet[] = {81,200};
 
+      printf("synchonizing for line: %i\n", tok->line);
       while( checkSynch(synchSet, tok->type, 7) )
       {
         tok = getToken();
       }
+      printf("done synchronizing, ended at: %i, with token %s\n", tok->line, tok->lexeme);
   }
 }
 

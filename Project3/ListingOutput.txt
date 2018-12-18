@@ -7,7 +7,7 @@
 7     
 8      procedure proc1(x:integer; y:real; 
 9                      z:array [1..2] of integer; q: real);
-10        var d: integer;
+10        var g: integer;
 11        begin
 12          a:= 2;
 13          z[a] := 4;
@@ -16,8 +16,7 @@
 16    
 17       procedure proc2(x: integer; y: integer);
 18         var e: real;
-19         var e: integer;
-    Semantic Error: ID: e already exists in this scope
+19         var f: integer;
 20    
 21         procedure proc3(n: integer; z: real);
 22           var e: integer;
@@ -53,30 +52,30 @@
     Syntax Error: Expecting ], Received , 
     Syntax Error: Expecting one of ) ; , ] end then else do relop addop mulop $, Received: 5
     Syntax Error: Expecting one of ) , $, Received: ]
-    Semantic Error: Could not find procedure proc2
+    Semantic Error: Argument 2 expecting INT, received ERR
 52      call proc2(c[4], c[5],5);
-    Semantic Error: Could not find procedure proc2
+    Semantic Error: Expecting 2 arguments, Received 3 arguments
 53      call proc2(c[4], c);
-    Semantic Error: Could not find procedure proc2
+    Semantic Error: Argument 2 expecting INT, received AINT
 54      call proc2(c[4]);
-    Semantic Error: Could not find procedure proc2
+    Semantic Error: Expecting 2 arguments, Received 1 arguments
 55      call proc2();
     Syntax Error: Expecting one of id ( num not + - $, Received: )
+    Semantic Error: Expecting 2 arguments, Received 0 arguments
 56      call proc2;
-    Syntax Error: Expecting ), Received proc2 
-    Semantic Error: Could not find procedure proc2
+    Syntax Error: Expecting one of ( . else $, Received: ;
 57      call proc3(c[4], c[5]);
-    Semantic Error: Could not find procedure proc3
+    Syntax Error: Expecting one of ; end $, Received: (
+    Syntax Error: Expecting end, Received ; 
+    Semantic Error: Expecting 2 arguments, Received 0 arguments
 58      call proc4(c[4], c[5]);
-    Semantic Error: Could not find procedure proc4
+    Syntax Error: Expecting ., Received call 
+    Syntax Error: Expecting $, Received proc4 
 59      call proc5(c[4], c[5]);
-    Semantic Error: Could not find procedure proc5
 60      call proc2(c[4], c[5]);
 61      call proc6(c[4],2);
-    Semantic Error: Could not find procedure proc6
 62      if (a < 2) then a:= 1 else a := a + 2;
 63      if (b > 4.2) then a := c[a]
 64    end.
 65    $
-    Successfully parsed !
- 66    
+66    

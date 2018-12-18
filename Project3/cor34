@@ -7,7 +7,7 @@ program test (input, output);
  
   procedure proc1(x:integer; y:real; 
                   z:array [1..2] of integer; q: real);
-    var d: integer;
+    var g: integer;
     begin
       a:= 2;
       z[a] := 4;
