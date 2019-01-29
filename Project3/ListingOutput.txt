@@ -44,6 +44,7 @@
 40           while ((a >= 4.4) and ((b <= e) 
     Semantic Error: mixed mode not allowed, in relational operator
 41                           or (not (a = c[a])))) do
+    Semantic Error: Could not find type for a 
     Semantic Error: expression is not of type boolean, about: do
 42             begin
 43               a:= c + 1
